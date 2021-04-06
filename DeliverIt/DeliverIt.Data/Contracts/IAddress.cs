@@ -11,5 +11,8 @@ namespace DeliverIt.Data.Contracts
         string StreetName { get; }
         int CityID { get; }
         City City { get; }
+        HashSet<Employee> Employees { get; }
+        HashSet<Customer> Customers { get; }
+        HashSet<Warehouse> Warehouses { get; }
     }
 }

@@ -14,5 +14,11 @@ namespace DeliverIt.Data.Models
         public int CityID { get; set; }
 
         public City City { get; set; }
+
+        public HashSet<Employee> Employees { get; set; }
+
+        public HashSet<Customer> Customers { get; set; }
+
+        public HashSet<Warehouse> Warehouses { get; set; }
     }
 }

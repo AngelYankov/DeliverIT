@@ -10,5 +10,6 @@ namespace DeliverIt.Data.Models
         public string Name { get; set; }
         public int CountryId { get; set; }
         public Country Country { get; set; }
+        public HashSet<Address> Addresses { get; set; }
     }
 }

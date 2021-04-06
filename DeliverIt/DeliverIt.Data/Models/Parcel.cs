@@ -13,5 +13,8 @@ namespace DeliverIt.Data.Models
         public double Weight { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public Warehouse Warehouse { get; set; }
+        public int ShipmentId { get; set; }
+        public Shipment Shipment { get; set; }
     }
 }

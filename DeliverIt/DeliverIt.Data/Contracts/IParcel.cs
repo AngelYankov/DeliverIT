@@ -2,12 +2,15 @@
 {
     public interface IParcel
     {
-        int Id { get; set; }
-        int CustomerId { get; set; }
-        Customer Customer { get; set; }
-        int WarehouseId { get; set; }
-        double Weight { get; set; }
-        int CategoryId { get; set; }
-        Category Category { get; set; }
+        int Id { get; }
+        int CustomerId { get; }
+        Customer Customer { get; }
+        int WarehouseId { get; }
+        Warehouse Warehouse { get; }
+        double Weight { get; }
+        int CategoryId { get; }
+        Category Category { get; }
+        int ShipmentId { get; }
+        Shipment Shipment { get; }
     }
 }

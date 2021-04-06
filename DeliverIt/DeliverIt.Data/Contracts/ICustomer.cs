@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeliverIt.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace DeliverIt.Data.Contracts
         string LastName { get; }
         string Email { get; }
         int AddressId { get; }
-
+        Address Address { get; }
+        HashSet<Parcel> Parcels { get; }
     }
 }

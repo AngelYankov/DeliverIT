@@ -8,5 +8,7 @@ namespace DeliverIt.Data.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public HashSet<Parcel> Parcels { get; set; }
     }
 }

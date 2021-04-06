@@ -1,8 +1,11 @@
-﻿namespace DeliverIt.Data.Models
+﻿using System.Collections.Generic;
+
+namespace DeliverIt.Data.Models
 {
     public interface ICategory
     {
-        int Id { get; set; }
-        string Name { get; set; }
+        int Id { get; }
+        string Name { get; }
+        HashSet<Parcel> Parcels { get; }
     }
 }
