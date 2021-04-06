@@ -12,5 +12,7 @@ namespace DeliverIt.Data.Models
         public string StreetName { get; set; }
 
         public int CityID { get; set; }
+
+        public City City { get; set; }
     }
 }

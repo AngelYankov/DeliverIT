@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeliverIt.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,6 @@ namespace DeliverIt.Data.Contracts
     {
         int Id { get; }
         string Name { get; }
-        //HashSet<City> cities { get; }
+        HashSet<City> Cities { get; }
     }
 }

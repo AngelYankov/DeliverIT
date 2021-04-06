@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeliverIt.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,5 +10,6 @@ namespace DeliverIt.Data.Contracts
         int Id { get; }
         string StreetName { get; }
         int CityID { get; }
+        City City { get; }
     }
 }
