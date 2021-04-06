@@ -8,4 +8,8 @@
     <ProjectReference Include="..\DeliverIt.Data\DeliverIt.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModelsServices\" />
+  </ItemGroup>
+
 </Project>
