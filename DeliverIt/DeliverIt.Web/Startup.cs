@@ -1,3 +1,5 @@
+using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +27,7 @@ namespace DeliverIt.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<ICountryService, CountryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
