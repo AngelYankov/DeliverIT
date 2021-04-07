@@ -21,16 +21,16 @@ namespace DeliverIt.Data
             SeedCountries();
             SeedCities();
         }
-        static List<Address> Addresses { get; set; }
-        static List<Category> Categories { get; set; }
-        static List<City> Cities { get; set; }
-        static List<Country> Countries { get; set; }
-        static List<Customer> Customers { get; set; }
-        static List<Employee> Employees { get; set; }
-        static List<Parcel> Parcels{ get; set; }
-        static List<Shipment> Shipments{ get; set; }
-        static List<Status> Statuses{ get; set; }
-        static List<Warehouse> Warehouses{ get; set; }
+       public static List<Address> Addresses { get; set; }
+       public static List<Category> Categories { get; set; }
+       public static List<City> Cities { get; set; }
+       public static List<Country> Countries { get; set; }
+       public static List<Customer> Customers { get; set; }
+       public static List<Employee> Employees { get; set; }
+       public static List<Parcel> Parcels{ get; set; }
+       public static List<Shipment> Shipments{ get; set; }
+       public static List<Status> Statuses{ get; set; }
+       public static List<Warehouse> Warehouses{ get; set; }
 
         private static void SeedCountries()
         {
