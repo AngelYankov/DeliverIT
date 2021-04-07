@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,11 @@ namespace DeliverIt.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("DeliverIt", new OpenApiInfo { Title = "DeliverIt"});
+            });
+
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICountryService, CountryService>();
         }
@@ -37,6 +43,11 @@ namespace DeliverIt.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/DeliverIt/swagger.json", "DeliverIt");
+                });
+                app.UseSwagger();
             }
 
             app.UseRouting();
