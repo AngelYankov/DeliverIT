@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class City : ICity
+    public class City 
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Parcel : IParcel
+    public class Parcel 
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Shipment : IShipment
+    public class Shipment 
     {
         public int Id { get; set; }
         public DateTime Departure { get; set; }

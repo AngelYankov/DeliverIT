@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Employee : IEmployee
+    public class Employee 
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

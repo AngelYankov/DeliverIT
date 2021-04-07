@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeliverIt.Services.Contracts
 {
-    public interface ICustomersService
+    public interface ICustomerService
     {
         Customer Get(int id);
         IEnumerable<Customer> GetAll();

@@ -1,11 +1,10 @@
-﻿using DeliverIt.Data.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Customer : ICustomer
+    public class Customer 
     {
         public int Id { get; set; }
 

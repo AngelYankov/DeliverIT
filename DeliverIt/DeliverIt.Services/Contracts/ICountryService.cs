@@ -5,10 +5,9 @@ using System.Text;
 
 namespace DeliverIt.Services.Contracts
 {
-    public interface IWarehousesService
+    public interface ICountryService
     {
-        Warehouse Get(int id);
-        IEnumerable<Warehouse> GetAll();
-        // to do CRUD
+        Country Get(int id);
+        IEnumerable<Country> GetAll();
     }
 }
