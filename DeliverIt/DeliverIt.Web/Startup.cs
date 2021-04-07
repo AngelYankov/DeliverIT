@@ -27,6 +27,7 @@ namespace DeliverIt.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICountryService, CountryService>();
         }
 
