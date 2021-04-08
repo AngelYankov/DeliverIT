@@ -9,6 +9,8 @@ namespace DeliverIt.Services.Contracts
     {
         Warehouse Get(int id);
         IEnumerable<Warehouse> GetAll();
-        // to do CRUD
+        Warehouse Create(Warehouse warehouse);
+        Warehouse Update(int id, Address address);
+        bool Delete(int id);
     }
 }
