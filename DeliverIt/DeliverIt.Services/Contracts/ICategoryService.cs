@@ -5,9 +5,9 @@ namespace DeliverIt.Services.ModelsServices
 {
     public interface ICategoryService
     {
-        Category Get(int id);
         IEnumerable<Category> GetAll();
         Category Create(Category category);
+        Category Update(int id, string name);
         bool Delete(int id);
     }
 }

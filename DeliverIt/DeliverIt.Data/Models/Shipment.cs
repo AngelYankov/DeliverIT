@@ -9,7 +9,7 @@ namespace DeliverIt.Data.Models
     public class Shipment : Entity
     {
         public int Id { get; set; }
-        [DataType(DataType.Date, ErrorMessage = "Please enter a correct date format dd/mm/yyyy hh:mm"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date, ErrorMessage = "Please enter a correct date format dd/mm/yyyy hh:mm."), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Departure { get; set; }
         public DateTime Arrival { get; set; }
         public int StatusId { get; set; }
