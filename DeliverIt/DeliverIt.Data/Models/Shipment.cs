@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DeliverIt.Data.Audit;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Shipment 
+    public class Shipment : Entity
     {
         public int Id { get; set; }
         [DataType(DataType.Date, ErrorMessage = "Please enter a correct date format dd/mm/yyyy hh:mm"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

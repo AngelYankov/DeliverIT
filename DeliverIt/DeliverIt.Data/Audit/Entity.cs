@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Audit
 {
-    public class Entity
+    public abstract class Entity
     {
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
