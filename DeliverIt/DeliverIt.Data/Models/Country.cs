@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DeliverIt.Data.Audit;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Country 
+    public class Country : Entity
     {
         public int Id { get; set; }
 

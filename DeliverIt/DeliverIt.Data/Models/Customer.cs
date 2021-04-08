@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DeliverIt.Data.Audit;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class Customer 
+    public class Customer : Entity
     {
         public int Id { get; set; }
 
