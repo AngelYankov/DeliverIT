@@ -8,21 +8,21 @@ using System.Text;
 
 namespace DeliverIt.Services.Services
 {
-    public class CountryService : ICountryService
+    public class StatusService : IStatusService
     {
         public string Get(int id)
         {
-            var country = Database.Countries.FirstOrDefault(c => c.Id == id).Name;
-            if(country == null)
+            var status = Database.Statuses.FirstOrDefault(s => s.Id == id).Name;
+            if(status == null)
             {
                 throw new ArgumentNullException();
             }
-            return country;
+            return status;
         }
 
         public IList<string> GetAll()
         {
-            return Database.Countries.Select(c => c.Name).ToList();
+            return Database.Statuses.Select(s => s.Name).ToList();
         }
     }
 }

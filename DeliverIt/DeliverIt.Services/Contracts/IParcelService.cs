@@ -7,7 +7,7 @@ namespace DeliverIt.Services.Contracts
 {
     public interface IParcelService
     {
-        Parcel GetById(int id);
+        Parcel Get(int id);
         IEnumerable<Parcel> GetAll();
         Parcel Create(Parcel parcel);
         Parcel Update(int id, Parcel parcel);

@@ -7,7 +7,7 @@ namespace DeliverIt.Services.Contracts
 {
     public interface IShipmentService
     {
-        Shipment GetById(int id);
+        Shipment Get(int id);
         IEnumerable<Shipment> GetAll();
         Shipment Create(Shipment shipment);
         Shipment Update(int id, Shipment shipment);

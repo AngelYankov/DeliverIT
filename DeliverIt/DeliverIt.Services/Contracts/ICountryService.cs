@@ -7,7 +7,7 @@ namespace DeliverIt.Services.Contracts
 {
     public interface ICountryService
     {
-        Country Get(int id);
-        IEnumerable<Country> GetAll();
+        string Get(int id);
+        IList<string> GetAll();
     }
 }

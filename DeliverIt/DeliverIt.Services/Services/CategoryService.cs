@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DeliverIt.Services.Services
 {
-    class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         public Category Create(Category category)
         {
@@ -16,9 +16,9 @@ namespace DeliverIt.Services.Services
             category.CreatedOn = DateTime.UtcNow;
             return category;
         }
-        public IEnumerable<Category> GetAll()
+        public IList<string> GetAll()
         {
-            return Database.Categories;
+            return Database.Categories.Select(c => c.Name).ToList();
         }
         public Category Update(int id, string name)
         {

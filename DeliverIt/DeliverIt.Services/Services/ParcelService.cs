@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DeliverIt.Services.Services
 {
-    class ParcelService : IParcelService
+    public class ParcelService : IParcelService
     {
         public Parcel Create(Parcel parcel)
         {
@@ -20,9 +20,14 @@ namespace DeliverIt.Services.Services
             return Database.Parcels;
         }
 
-        public Parcel GetById(int id)
+        public Parcel Get(int id)
         {
-            return Database.Parcels.FirstOrDefault(c => c.Id == id);
+            var parcel = Database.Parcels.FirstOrDefault(c => c.Id == id);
+            if (parcel == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return parcel;
         }
 
         public Parcel Update(int id, Parcel parcel)

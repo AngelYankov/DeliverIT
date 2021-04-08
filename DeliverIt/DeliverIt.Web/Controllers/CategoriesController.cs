@@ -40,23 +40,29 @@ namespace DeliverIt.Web.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] Category model)
         {
-            var category = this.categoryService.Update(id, model.Name);
-            return Ok(category);
+            try
+            {
+                var category = this.categoryService.Update(id, model.Name);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                return NotFound("There is no such category.");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            bool deleted = this.categoryService.Delete(id);
-            if (deleted)
+            try
             {
+                bool deleted = this.categoryService.Delete(id);
                 return NoContent();
             }
-            else
+            catch (Exception)
             {
-                return BadRequest();
+                return BadRequest("There is no such category.");
             }
-
         }
     }
 }

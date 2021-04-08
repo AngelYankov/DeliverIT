@@ -1,4 +1,5 @@
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.ModelsServices;
 using DeliverIt.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,12 @@ namespace DeliverIt.Web
 
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IParcelService, ParcelService>();
+            services.AddScoped<IShipmentService, ShipmentService>();
+            services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<IWarehouseService, WarehouseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

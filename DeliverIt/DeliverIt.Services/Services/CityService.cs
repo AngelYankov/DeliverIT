@@ -10,14 +10,19 @@ namespace DeliverIt.Services.Services
 {
     public class CityService : ICityService
     {
-        public City Get(int id)
+        public string Get(int id)
         {
-            return Database.Cities.FirstOrDefault(c => c.Id == id);
+            var city = Database.Cities.FirstOrDefault(c => c.Id == id).Name;
+            if(city == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return city;
         }
 
-        public IEnumerable<City> GetAll()
+        public IList<string> GetAll()
         {
-            return Database.Cities;
+            return Database.Cities.Select(c => c.Name).ToList();
         }
     }
 }

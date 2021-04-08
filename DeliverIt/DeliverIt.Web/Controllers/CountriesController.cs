@@ -15,8 +15,7 @@ namespace DeliverIt.Web.Controllers
         [HttpGet("")]
         public IActionResult GetAll()
         {
-            var country = this.countryService.GetAll();
-            return Ok(country);
+            return Ok(this.countryService.GetAll());
         }
         [HttpGet("{id}")]
         public IActionResult Get(int id)

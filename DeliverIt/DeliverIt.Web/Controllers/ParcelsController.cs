@@ -10,18 +10,18 @@ namespace DeliverIt.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class ParcelsController : ControllerBase
     {
-        private readonly ICityService cityService; 
-        public CitiesController(ICityService cityService)
+        private readonly IParcelService parcelService;
+        public ParcelsController(IParcelService parcelService)
         {
-            this.cityService = cityService;
+            this.parcelService = parcelService;
         }
 
         [HttpGet("")]
         public IActionResult GetAll()
         {
-            return Ok(this.cityService.GetAll());
+            return Ok(this.parcelService.GetAll());
         }
 
         [HttpGet("{id}")]
@@ -29,12 +29,12 @@ namespace DeliverIt.Web.Controllers
         {
             try
             {
-                var city = this.cityService.Get(id);
-                return Ok(city);
+                var parcel = this.parcelService.Get(id);
+                return Ok(parcel);
             }
             catch (Exception)
             {
-                return NotFound("There is no such city.");
+                return NotFound("There is no such parcel.");
             }
         }
     }

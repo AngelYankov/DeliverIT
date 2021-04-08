@@ -7,7 +7,7 @@ namespace DeliverIt.Services.Contracts
 {
     public interface ICityService
     {
-        City Get(int id);
-        IEnumerable<City> GetAll();
+        string Get(int id);
+        IList<string> GetAll();
     }
 }

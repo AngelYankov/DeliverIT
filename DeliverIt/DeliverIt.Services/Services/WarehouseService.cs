@@ -3,6 +3,7 @@ using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DeliverIt.Services.Services
@@ -15,22 +16,27 @@ namespace DeliverIt.Services.Services
             warehouse.CreatedOn = DateTime.UtcNow;
             return warehouse;
         }
-        public bool Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public Warehouse Get(int id)
         {
-            throw new NotImplementedException();
+            var warehouse = Database.Warehouses.FirstOrDefault(w => w.Id == id);
+            if(warehouse == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return warehouse;
         }
 
         public IEnumerable<Warehouse> GetAll()
         {
-            throw new NotImplementedException();
+            return Database.Warehouses;
         }
 
         public Warehouse Update(int id, Address address)
+        {
+            throw new NotImplementedException();
+        }
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }

@@ -20,6 +20,8 @@ namespace DeliverIt.Data
             Warehouses = new List<Warehouse>();
             SeedCountries();
             SeedCities();
+            SeedStatuses();
+            SeedCategories();
         }
        public static List<Address> Addresses { get; set; }
        public static List<Category> Categories { get; set; }
@@ -74,6 +76,47 @@ namespace DeliverIt.Data
                 }
             });
         }
-
+        private static void SeedStatuses()
+        {
+            Statuses.AddRange(new List<Status>
+            {
+                new Status()
+                {
+                    Id=1,
+                    Name = "Preparing",
+                },
+                new Status()
+                {
+                    Id=2,
+                    Name = "On the way",
+                },
+                new Status()
+                {
+                    Id=3,
+                    Name = "Completed"
+                }
+            });
+        }
+        private static void SeedCategories()
+        {
+            Categories.AddRange(new List<Category>
+            {
+                new Category()
+                {
+                    Id=1,
+                    Name = "Electronics",
+                },
+                new Category()
+                {
+                    Id=2,
+                    Name = "Clothing",
+                },
+                new Category()
+                {
+                    Id=3,
+                    Name = "Medical"
+                }
+            });
+        }
     }
 }

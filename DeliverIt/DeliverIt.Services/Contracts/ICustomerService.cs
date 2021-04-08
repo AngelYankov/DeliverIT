@@ -7,8 +7,8 @@ namespace DeliverIt.Services.Contracts
 {
     public interface ICustomerService
     {
-        Customer Get(int id);
-        IEnumerable<Customer> GetAll();
+        string Get(int id);
+        IList<string> GetAll();
         Customer Create(Customer customer);
         Customer Update(int id, Customer customer);
         bool Delete(int id);

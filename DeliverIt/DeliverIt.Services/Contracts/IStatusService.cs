@@ -7,7 +7,7 @@ namespace DeliverIt.Services.Contracts
 {
     public interface IStatusService
     {
-        Status Get(int id);
-        IEnumerable<Status> GetAll();
+        string Get(int id);
+        IList<string> GetAll();
     }
 }
