@@ -8,6 +8,7 @@ namespace DeliverIt.Data.Models
 {
     public class Parcel : Entity
     {
+        [Key]
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
@@ -17,7 +18,8 @@ namespace DeliverIt.Data.Models
         public Category Category { get; set; }
         public int ShipmentId { get; set; }
         public Shipment Shipment { get; set; }
-        [Range(0.1, 500, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
+
+        [Required, Range(0.1, 500, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
         public double Weight { get; set; }
     }
 }

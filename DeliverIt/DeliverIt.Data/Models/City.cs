@@ -8,11 +8,13 @@ namespace DeliverIt.Data.Models
 {
     public class City : Entity
     {
+        [Key]
         public int Id { get; set; }
-        [StringLength(25, MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
+
+        [Required, StringLength(25, MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
         public string Name { get; set; }
         public int CountryId { get; set; }
         public Country Country { get; set; }
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
     }
 }
