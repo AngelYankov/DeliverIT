@@ -1,42 +1,29 @@
 ﻿using DeliverIt.Data.Models;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace DeliverIt.Data
 {
-    public static class Database 
+    public class DeliverItContext : DbContext
     {
-        static Database()
+        public DeliverItContext(DbContextOptions<DeliverItContext> options)
+            : base(options)
         {
-            Addresses = new List<Address>();
-            Categories = new List<Category>();
-            Cities = new List<City>();
-            Countries = new List<Country>();
-            Customers = new List<Customer>();
-            Employees = new List<Employee>();
-            Parcels = new List<Parcel>();
-            Shipments = new List<Shipment>();
-            Statuses = new List<Status>();
-            Warehouses = new List<Warehouse>();
-            SeedCountries();
-            SeedCities();
-            SeedStatuses();
-            SeedCategories();
         }
-       public static List<Address> Addresses { get; set; }
-       public static List<Category> Categories { get; set; }
-       public static List<City> Cities { get; set; }
-       public static List<Country> Countries { get; set; }
-       public static List<Customer> Customers { get; set; }
-       public static List<Employee> Employees { get; set; }
-       public static List<Parcel> Parcels{ get; set; }
-       public static List<Shipment> Shipments{ get; set; }
-       public static List<Status> Statuses{ get; set; }
-       public static List<Warehouse> Warehouses{ get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Parcel> Parcels { get; set; }
+        public DbSet<Shipment> Shipments { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<Warehouse> Warehouses { get; set; }
 
-        private static void SeedCountries()
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Countries.AddRange(new List<Country>
+            var countries = new List<Country>
             {
                 new Country()
                 {
@@ -51,34 +38,31 @@ namespace DeliverIt.Data
                 new Country()
                 {
                     Id=3,
-                    Name = "Sweden" 
+                    Name = "Sweden"
                 }
-            });
-        }
-        private static void SeedCities()
-        {
-            Cities.AddRange(new List<City>
+            };
+            var cities = new List<City>
             {
                 new City()
                 {
                     Id=1,
+                    CountryId=1,
                     Name = "Sofia",
                 },
                 new City()
                 {
                     Id=2,
+                    CountryId=2,
                     Name = "London",
                 },
                 new City()
                 {
                     Id=3,
+                    CountryId = 3,
                     Name = "Stockholm"
                 }
-            });
-        }
-        private static void SeedStatuses()
-        {
-            Statuses.AddRange(new List<Status>
+            };
+            var statuses = new List<Status>
             {
                 new Status()
                 {
@@ -95,11 +79,8 @@ namespace DeliverIt.Data
                     Id=3,
                     Name = "Completed"
                 }
-            });
-        }
-        private static void SeedCategories()
-        {
-            Categories.AddRange(new List<Category>
+            };
+            var categories = new List<Category>
             {
                 new Category()
                 {
@@ -116,7 +97,12 @@ namespace DeliverIt.Data
                     Id=3,
                     Name = "Medical"
                 }
-            });
+            };
+            modelBuilder.Entity<Country>().HasData(countries);
+            modelBuilder.Entity<City>().HasData(cities);
+            modelBuilder.Entity<Status>().HasData(statuses);
+            modelBuilder.Entity<Category>().HasData(categories);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

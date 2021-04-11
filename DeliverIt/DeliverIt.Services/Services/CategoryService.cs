@@ -10,19 +10,26 @@ namespace DeliverIt.Services.Services
 {
     public class CategoryService : ICategoryService
     {
+        private readonly DeliverItContext dbContext;
+
+        public CategoryService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         public Category Create(Category category)
         {
-            Database.Categories.Add(category);
+            dbContext.Categories.Add(category);
             category.CreatedOn = DateTime.UtcNow;
             return category;
         }
         public IList<string> GetAll()
         {
-            return Database.Categories.Select(c => c.Name).ToList();
+            return dbContext.Categories.Select(c => c.Name).ToList();
         }
         public Category Update(int id, string name)
         {
-            var category = Database.Categories.FirstOrDefault(c => c.Id == id);
+            var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
             if (category == null)
             {
                 throw new ArgumentNullException();
@@ -35,19 +42,18 @@ namespace DeliverIt.Services.Services
         }
         public bool Delete(int id)
         {
-            var category = Database.Categories.FirstOrDefault(c => c.Id == id);
+            var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
 
             if (category == null)
             {
                 throw new ArgumentNullException();
             }
+            dbContext.Categories.Remove(category);
+            category.IsDeleted = true;
 
-            category.IsDeleted = Database.Categories.Remove(category);
-
-            if (category.IsDeleted)
-            {
+            
                 category.DeletedOn = DateTime.UtcNow;
-            }
+            
             return category.IsDeleted;
         }
     }

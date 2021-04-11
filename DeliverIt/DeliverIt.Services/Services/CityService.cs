@@ -8,11 +8,18 @@ using System.Text;
 
 namespace DeliverIt.Services.Services
 {
+
     public class CityService : ICityService
     {
+        private readonly DeliverItContext dbContext;
+
+        public CityService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public string Get(int id)
         {
-            var city = Database.Cities.FirstOrDefault(c => c.Id == id).Name;
+            var city = dbContext.Cities.FirstOrDefault(c => c.Id == id).Name;
             if(city == null)
             {
                 throw new ArgumentNullException();
@@ -22,7 +29,7 @@ namespace DeliverIt.Services.Services
 
         public IList<string> GetAll()
         {
-            return Database.Cities.Select(c => c.Name).ToList();
+            return dbContext.Cities.Select(c => c.Name).ToList();
         }
     }
 }

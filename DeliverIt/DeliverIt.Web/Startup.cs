@@ -1,8 +1,10 @@
+using DeliverIt.Data;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.ModelsServices;
 using DeliverIt.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +24,10 @@ namespace DeliverIt.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DeliverItContext>(options =>
+            {
+                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverItDatabase;Integrated Security=True;");
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

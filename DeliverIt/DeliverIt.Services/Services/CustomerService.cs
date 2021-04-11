@@ -10,6 +10,12 @@ namespace DeliverIt.Services.Services
 {
     public class CustomerService : ICustomerService
     {
+        private readonly DeliverItContext dbContext;
+
+        public CustomerService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public Customer Create(Customer customer)
         {
             throw new NotImplementedException();
@@ -17,17 +23,17 @@ namespace DeliverIt.Services.Services
 
         public string Get(int id)
         {
-            var customer = Database.Customers.FirstOrDefault(c => c.Id == id).FirstName + " " + Database.Customers.FirstOrDefault(c => c.Id == id).FirstName;
+            var customer = dbContext.Customers.FirstOrDefault(c => c.Id == id);
             if(customer == null)
             {
                 throw new ArgumentNullException();
             }
-            return customer;
+            return customer.FirstName+" "+customer.LastName;
         }
 
         public IList<string> GetAll()
         {
-            return Database.Customers.Select(c => c.FirstName + " " + c.LastName).ToList();
+            return dbContext.Customers.Select(c => c.FirstName + " " + c.LastName).ToList();
         }
 
         public Customer Update(int id, Customer customer)

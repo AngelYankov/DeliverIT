@@ -10,6 +10,12 @@ namespace DeliverIt.Services.Services
 {
     public class ParcelService : IParcelService
     {
+        private readonly DeliverItContext dbContext;
+
+        public ParcelService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public Parcel Create(Parcel parcel)
         {
             throw new NotImplementedException();
@@ -17,12 +23,12 @@ namespace DeliverIt.Services.Services
 
         public IEnumerable<Parcel> GetAll()
         {
-            return Database.Parcels;
+            return dbContext.Parcels;
         }
 
         public Parcel Get(int id)
         {
-            var parcel = Database.Parcels.FirstOrDefault(c => c.Id == id);
+            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
             if (parcel == null)
             {
                 throw new ArgumentNullException();
@@ -37,20 +43,20 @@ namespace DeliverIt.Services.Services
 
         public bool Delete(int id)
         {
-            var parcel = Database.Parcels.FirstOrDefault(c => c.Id == id);
+            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
 
             if (parcel == null)
             {
                 throw new ArgumentNullException();
             }
-            var customerParcel = Database.Customers.SelectMany(c => c.Parcels).Where(p => p.Id == id);
+            var customerParcel = dbContext.Customers.SelectMany(c => c.Parcels).Where(p => p.Id == id);
 
-            parcel.IsDeleted = Database.Parcels.Remove(parcel);
+            dbContext.Parcels.Remove(parcel);
+            parcel.IsDeleted = true;
 
-            if (parcel.IsDeleted)
-            {
+            
                 parcel.DeletedOn = DateTime.UtcNow;
-            }
+            
             return parcel.IsDeleted;
         }
 

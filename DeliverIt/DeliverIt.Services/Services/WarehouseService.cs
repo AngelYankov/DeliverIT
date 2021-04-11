@@ -10,16 +10,22 @@ namespace DeliverIt.Services.Services
 {
     public class WarehouseService : IWarehouseService
     {
+        private readonly DeliverItContext dbContext;
+
+        public WarehouseService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public Warehouse Create(Warehouse warehouse)
         {
-            Database.Warehouses.Add(warehouse);
+            dbContext.Warehouses.Add(warehouse);
             warehouse.CreatedOn = DateTime.UtcNow;
             return warehouse;
         }
 
         public Warehouse Get(int id)
         {
-            var warehouse = Database.Warehouses.FirstOrDefault(w => w.Id == id);
+            var warehouse = dbContext.Warehouses.FirstOrDefault(w => w.Id == id);
             if(warehouse == null)
             {
                 throw new ArgumentNullException();
@@ -29,7 +35,7 @@ namespace DeliverIt.Services.Services
 
         public IEnumerable<Warehouse> GetAll()
         {
-            return Database.Warehouses;
+            return dbContext.Warehouses;
         }
 
         public Warehouse Update(int id, Address address)

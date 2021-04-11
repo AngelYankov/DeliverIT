@@ -10,9 +10,15 @@ namespace DeliverIt.Services.Services
 {
     public class StatusService : IStatusService
     {
+        private readonly DeliverItContext dbContext;
+
+        public StatusService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public string Get(int id)
         {
-            var status = Database.Statuses.FirstOrDefault(s => s.Id == id).Name;
+            var status = dbContext.Statuses.FirstOrDefault(s => s.Id == id).Name;
             if(status == null)
             {
                 throw new ArgumentNullException();
@@ -22,7 +28,7 @@ namespace DeliverIt.Services.Services
 
         public IList<string> GetAll()
         {
-            return Database.Statuses.Select(s => s.Name).ToList();
+            return dbContext.Statuses.Select(s => s.Name).ToList();
         }
     }
 }

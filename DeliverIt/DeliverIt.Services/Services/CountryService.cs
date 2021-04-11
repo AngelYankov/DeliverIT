@@ -10,9 +10,15 @@ namespace DeliverIt.Services.Services
 {
     public class CountryService : ICountryService
     {
+        private readonly DeliverItContext dbContext;
+
+        public CountryService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public string Get(int id)
         {
-            var country = Database.Countries.FirstOrDefault(c => c.Id == id).Name;
+            var country = dbContext.Countries.FirstOrDefault(c => c.Id == id).Name;
             if(country == null)
             {
                 throw new ArgumentNullException();
@@ -22,7 +28,7 @@ namespace DeliverIt.Services.Services
 
         public IList<string> GetAll()
         {
-            return Database.Countries.Select(c => c.Name).ToList();
+            return dbContext.Countries.Select(c => c.Name).ToList();
         }
     }
 }

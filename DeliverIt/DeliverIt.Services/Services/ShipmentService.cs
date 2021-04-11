@@ -10,17 +10,23 @@ namespace DeliverIt.Services.Services
 {
     public class ShipmentService : IShipmentService
     {
+        private readonly DeliverItContext dbContext;
+
+        public ShipmentService(DeliverItContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public Shipment Create(Shipment shipment)
         {
             throw new NotImplementedException();
         }
         public IEnumerable<Shipment> GetAll()
         {
-            return Database.Shipments;
+            return dbContext.Shipments;
         }
         public Shipment Get(int id)
         {
-            var shipment = Database.Shipments.FirstOrDefault(s => s.Id == id);
+            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
             if(shipment == null)
             {
                 throw new ArgumentNullException();
