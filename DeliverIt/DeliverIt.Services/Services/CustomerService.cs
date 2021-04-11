@@ -24,11 +24,11 @@ namespace DeliverIt.Services.Services
         public string Get(int id)
         {
             var customer = dbContext.Customers.FirstOrDefault(c => c.Id == id);
-            if(customer == null)
+            if (customer == null)
             {
                 throw new ArgumentNullException();
             }
-            return customer.FirstName+" "+customer.LastName;
+            return customer.FirstName + " " + customer.LastName;
         }
 
         public IList<string> GetAll()

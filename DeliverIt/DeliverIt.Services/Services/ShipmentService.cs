@@ -16,9 +16,20 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public Shipment Create(Shipment shipment)
+        //we should add it to a list of shipments for a specific warehouse?
+        public Shipment Create(Shipment shipment, int warehouseId)
         {
-            throw new NotImplementedException();
+            var warehouse = dbContext.Warehouses.FirstOrDefault(w => w.Id == warehouseId);
+            if(warehouse == null)
+            {
+                throw new ArgumentNullException();
+            }
+            dbContext.Shipments.Add(shipment);
+            dbContext.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
+            warehouse.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
+            shipment.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
+            shipment.CreatedOn = DateTime.UtcNow;
+            return shipment;
         }
         public IEnumerable<Shipment> GetAll()
         {
@@ -27,20 +38,38 @@ namespace DeliverIt.Services.Services
         public Shipment Get(int id)
         {
             var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
-            if(shipment == null)
+            if (shipment == null)
             {
                 throw new ArgumentNullException();
             }
             return shipment;
         }
-        public Shipment Update(int id, Shipment shipment)
+        //we should update it from a list of shipments for a specific warehouse
+        public Shipment Update(int id, Shipment model)
         {
-            throw new NotImplementedException();
+            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
+            if (shipment == null)
+            {
+                throw new ArgumentNullException();
+            }
+            shipment.StatusId = model.StatusId;
+            shipment.Arrival = model.Arrival;
+            shipment.Departure = model.Departure;
+            shipment.ModifiedOn = DateTime.UtcNow;
+            return shipment;
         }
-
+        //we should delete it from a list of shipments for a specific warehouse
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
+            if (shipment == null)
+            {
+                throw new ArgumentNullException();
+            }
+            dbContext.Shipments.Remove(shipment);
+            shipment.IsDeleted = true;
+            shipment.DeletedOn = DateTime.UtcNow;
+            return true;
         }
 
         public IEnumerable<Shipment> GetBy(string filter, string type)

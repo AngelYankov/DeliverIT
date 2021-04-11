@@ -9,7 +9,7 @@ namespace DeliverIt.Services.Contracts
     {
         Parcel Get(int id);
         IEnumerable<Parcel> GetAll();
-        Parcel Create(Parcel parcel);
+        Parcel Create(Parcel parcel, Customer customer);
         Parcel Update(int id, Parcel parcel);
         bool Delete(int id);
         IEnumerable<Parcel> GetBy(string filter, string type);

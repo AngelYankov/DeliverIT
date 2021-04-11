@@ -16,9 +16,12 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public Parcel Create(Parcel parcel)
+        public Parcel Create(Parcel parcel, Customer customer)
         {
-            throw new NotImplementedException();
+            dbContext.Parcels.Add(parcel);
+            customer.Parcels.Add(parcel);
+            parcel.CreatedOn = DateTime.UtcNow;
+            return parcel;
         }
 
         public IEnumerable<Parcel> GetAll()
@@ -36,9 +39,33 @@ namespace DeliverIt.Services.Services
             return parcel;
         }
 
-        public Parcel Update(int id, Parcel parcel)
+        public Parcel Update(int id, Parcel model)
         {
-            throw new NotImplementedException();
+            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
+            if (parcel == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            parcel.Category = model.Category ?? parcel.Category;
+            if (model.CustomerId != 0)
+            {
+                parcel.CustomerId = model.CustomerId;
+            }
+            if (model.ShipmentId != 0)
+            {
+                parcel.ShipmentId = model.ShipmentId;
+            }
+            if (model.WarehouseId != 0)
+            {
+                parcel.WarehouseId = model.WarehouseId;
+            }
+            if (model.Weight != 0)
+            {
+                parcel.Weight = model.Weight;
+            }
+            parcel.ModifiedOn = DateTime.UtcNow;
+            return parcel;
         }
 
         public bool Delete(int id)
@@ -49,14 +76,11 @@ namespace DeliverIt.Services.Services
             {
                 throw new ArgumentNullException();
             }
-            var customerParcel = dbContext.Customers.SelectMany(c => c.Parcels).Where(p => p.Id == id);
-
             dbContext.Parcels.Remove(parcel);
+            parcel.Customer.Parcels.Remove(parcel);
             parcel.IsDeleted = true;
+            parcel.DeletedOn = DateTime.UtcNow;
 
-            
-                parcel.DeletedOn = DateTime.UtcNow;
-            
             return parcel.IsDeleted;
         }
 
