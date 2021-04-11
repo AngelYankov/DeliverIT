@@ -20,7 +20,7 @@ namespace DeliverIt.Data
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
-
+        public DbSet<ShipmentWarehouse> ShipmentWarehouses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var countries = new List<Country>
@@ -102,6 +102,43 @@ namespace DeliverIt.Data
             modelBuilder.Entity<City>().HasData(cities);
             modelBuilder.Entity<Status>().HasData(statuses);
             modelBuilder.Entity<Category>().HasData(categories);
+            #region
+            modelBuilder.Entity<Parcel>()
+                .HasOne(p => p.Warehouse)
+                .WithMany(w => w.Parcels)
+                .HasForeignKey(p => p.WarehouseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Parcel>()
+                .HasOne(p => p.Customer)
+                .WithMany(c => c.Parcels)
+                .HasForeignKey(p => p.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Parcel>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Parcels)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Parcel>()
+                .HasOne(p => p.Shipment)
+                .WithMany(s => s.Parcels)
+                .HasForeignKey(p => p.ShipmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+            #region
+            modelBuilder.Entity<ShipmentWarehouse>()
+                .HasKey(sw => new { sw.ShipmentId, sw.WarehouseId });
+            modelBuilder.Entity<ShipmentWarehouse>()
+                .HasOne(sw => sw.Shipment)
+                .WithMany(sw => sw.ShipmentWarehouses)
+                .HasForeignKey(sw => sw.ShipmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ShipmentWarehouse>()
+                .HasOne(sw => sw.Warehouse)
+                .WithMany(sw => sw.ShipmentWarehouses)
+                .HasForeignKey(sw => sw.WarehouseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+            
             base.OnModelCreating(modelBuilder);
         }
     }

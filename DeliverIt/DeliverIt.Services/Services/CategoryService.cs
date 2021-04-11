@@ -20,7 +20,6 @@ namespace DeliverIt.Services.Services
         public Category Create(Category category)
         {
             dbContext.Categories.Add(category);
-            category.CreatedOn = DateTime.UtcNow;
             return category;
         }
         public IList<string> GetAll()
@@ -36,25 +35,18 @@ namespace DeliverIt.Services.Services
             }
 
             category.Name = name;
-            category.ModifiedOn = DateTime.UtcNow;
 
             return category;
         }
         public bool Delete(int id)
         {
             var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
-
             if (category == null)
             {
                 throw new ArgumentNullException();
             }
             dbContext.Categories.Remove(category);
-            category.IsDeleted = true;
-
-            
-                category.DeletedOn = DateTime.UtcNow;
-            
-            return category.IsDeleted;
+            return true;
         }
     }
 }

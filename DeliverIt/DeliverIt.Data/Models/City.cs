@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DeliverIt.Data.Models
 {
-    public class City : Entity
+    public class City
     {
         [Key]
         public int Id { get; set; }

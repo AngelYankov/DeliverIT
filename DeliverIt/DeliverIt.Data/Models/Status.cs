@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DeliverIt.Data.Models
 {
-    public class Status : Entity
+    public class Status 
     {
         [Key]
         public int Id { get; set; }

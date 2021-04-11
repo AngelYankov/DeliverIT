@@ -26,7 +26,7 @@ namespace DeliverIt.Web
         {
             services.AddDbContext<DeliverItContext>(options =>
             {
-                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverItDatabase;Integrated Security=True;");
+                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverIt;Integrated Security=True;");
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
