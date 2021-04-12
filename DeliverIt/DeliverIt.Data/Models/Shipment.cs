@@ -10,8 +10,11 @@ namespace DeliverIt.Data.Models
     {
         [Key]
         public int Id { get; set; }
+
         [DataType(DataType.Date, ErrorMessage = "Please enter a correct date format dd/mm/yyyy hh:mm."), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Departure { get; set; }
+
+        [DataType(DataType.Date, ErrorMessage = "Please enter a correct date format dd/mm/yyyy hh:mm."), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Arrival { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }

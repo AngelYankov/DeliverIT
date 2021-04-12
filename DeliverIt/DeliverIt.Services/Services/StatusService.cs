@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,16 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public string Get(int id)
+        public StatusDTO Get(int id)
         {
-            var status = dbContext.Statuses.FirstOrDefault(s => s.Id == id).Name;
+            var status = dbContext.Statuses.FirstOrDefault(s => s.Id == id);
             if(status == null)
             {
                 throw new ArgumentNullException();
             }
-            return status;
+
+            StatusDTO statusDTO = new StatusDTO(status);
+            return statusDTO;
         }
 
         public IList<string> GetAll()

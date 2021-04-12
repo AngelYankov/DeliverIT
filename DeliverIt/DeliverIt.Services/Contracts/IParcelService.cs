@@ -9,7 +9,7 @@ namespace DeliverIt.Services.Contracts
     public interface IParcelService
     {
         ParcelDTO Get(int id);
-        IEnumerable<Parcel> GetAll();
+        List<ParcelDTO> GetAll();
         Parcel Create(Parcel parcel, Customer customer);
         Parcel Update(int id, Parcel parcel);
         bool Delete(int id);

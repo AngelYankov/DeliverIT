@@ -5,43 +5,59 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using DeliverIt.Services.Models;
 
 namespace DeliverIt.Services.Services
 {
     public class ShipmentService : IShipmentService
     {
         private readonly DeliverItContext dbContext;
-
         public ShipmentService(DeliverItContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        //we should add it to a list of shipments for a specific warehouse?
+
         public Shipment Create(Shipment shipment, int warehouseId)
         {
             var warehouse = dbContext.Warehouses.FirstOrDefault(w => w.Id == warehouseId);
-            if(warehouse == null)
+            if (warehouse == null)
             {
                 throw new ArgumentNullException();
             }
             dbContext.Shipments.Add(shipment);
+            warehouse.Shipments.Add(shipment);
             shipment.CreatedOn = DateTime.UtcNow;
             return shipment;
         }
-        public IEnumerable<Shipment> GetAll()
+        public List<ShipmentDTO> GetAll()
         {
-            return dbContext.Shipments;
+            var shipments = new List<ShipmentDTO>();
+            foreach (var shipment in this.dbContext.Shipments)
+            {
+                var shipmentDTO = new ShipmentDTO(shipment);
+                shipments.Add(shipmentDTO);
+            }
+            return shipments;
         }
-        public Shipment Get(int id)
+        public ShipmentDTO Get(int id)
         {
-            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
+            var shipment = this.dbContext
+                               .Shipments
+                               .Include(s => s.Status)
+                               .Include(s => s.Warehouse)
+                                    .ThenInclude(w => w.Address)
+                               .FirstOrDefault(s => s.Id == id);
             if (shipment == null)
             {
                 throw new ArgumentNullException();
             }
-            return shipment;
+
+            ShipmentDTO shipmentDTO = new ShipmentDTO(shipment);
+
+            return shipmentDTO;
         }
-        //we should update it from a list of shipments for a specific warehouse
+
         public Shipment Update(int id, Shipment model)
         {
             var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
@@ -49,13 +65,27 @@ namespace DeliverIt.Services.Services
             {
                 throw new ArgumentNullException();
             }
-            shipment.StatusId = model.StatusId;
-            shipment.Arrival = model.Arrival;
-            shipment.Departure = model.Departure;
+            if (model.StatusId != 0)
+            {
+                var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId);
+                if(status == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                shipment.StatusId = model.StatusId;
+            }
+            if (model.Arrival != null)
+            {
+                shipment.Arrival = model.Arrival;
+            }
+            if (model.Departure != null)
+            {
+                shipment.Departure = model.Departure;
+            }
             shipment.ModifiedOn = DateTime.UtcNow;
             return shipment;
         }
-        //we should delete it from a list of shipments for a specific warehouse
+
         public bool Delete(int id)
         {
             var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
@@ -64,6 +94,7 @@ namespace DeliverIt.Services.Services
                 throw new ArgumentNullException();
             }
             dbContext.Shipments.Remove(shipment);
+            shipment.Warehouse.Shipments.Remove(shipment);
             shipment.IsDeleted = true;
             shipment.DeletedOn = DateTime.UtcNow;
             return true;
