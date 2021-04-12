@@ -1,10 +1,12 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeliverIt.Services.Services
 {
@@ -29,14 +31,24 @@ namespace DeliverIt.Services.Services
             return dbContext.Parcels;
         }
 
-        public Parcel Get(int id)
+        public ParcelDTO Get(int id)
         {
-            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
+            var parcel = this.dbContext
+                             .Parcels
+                             .Include(p => p.Category)
+                             .Include(p => p.Customer)
+                             .Include(p=>p.Warehouse)
+                                .ThenInclude(w=>w.Address)
+                                    .ThenInclude(a=>a.City)
+                             .FirstOrDefault(c => c.Id == id);
             if (parcel == null)
             {
                 throw new ArgumentNullException();
             }
-            return parcel;
+
+            ParcelDTO parcelDTO = new ParcelDTO(parcel);
+
+            return parcelDTO;
         }
 
         public Parcel Update(int id, Parcel model)

@@ -9,7 +9,7 @@ namespace DeliverIt.Services.Contracts
     {
         Shipment Get(int id);
         IEnumerable<Shipment> GetAll();
-        Shipment Create(Shipment shipment);
+        Shipment Create(Shipment shipment, int warehouseId);
         Shipment Update(int id, Shipment shipment);
         bool Delete(int id);
         IEnumerable<Shipment> GetBy(string filter, string type);

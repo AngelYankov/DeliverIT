@@ -24,16 +24,19 @@ namespace DeliverIt.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DeliverItContext>(options =>
-            {
-                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverIt;Integrated Security=True;");
-            });
-            services.AddControllers();
+            services.AddControllers()
+                    /*.AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    )*/;
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("DeliverIt", new OpenApiInfo { Title = "DeliverIt"});
             });
 
+            services.AddDbContext<DeliverItContext>(options =>
+            {
+                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverIt;Integrated Security=True;");
+            });
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ICategoryService, CategoryService>();

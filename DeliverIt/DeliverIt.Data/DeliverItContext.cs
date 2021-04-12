@@ -45,19 +45,19 @@ namespace DeliverIt.Data
             {
                 new City()
                 {
-                    Id=1,
-                    CountryId=1,
+                    Id = 1,
+                    CountryId = 1,
                     Name = "Sofia",
                 },
                 new City()
                 {
-                    Id=2,
-                    CountryId=2,
+                    Id = 2,
+                    CountryId = 2,
                     Name = "London",
                 },
                 new City()
                 {
-                    Id=3,
+                    Id = 3,
                     CountryId = 3,
                     Name = "Stockholm"
                 }
@@ -84,17 +84,17 @@ namespace DeliverIt.Data
             {
                 new Category()
                 {
-                    Id=1,
+                    Id = 1,
                     Name = "Electronics",
                 },
                 new Category()
                 {
-                    Id=2,
+                    Id = 2,
                     Name = "Clothing",
                 },
                 new Category()
                 {
-                    Id=3,
+                    Id = 3,
                     Name = "Medical"
                 }
             };
@@ -138,7 +138,7 @@ namespace DeliverIt.Data
                 .HasForeignKey(sw => sw.WarehouseId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
-            
+
             base.OnModelCreating(modelBuilder);
         }
     }

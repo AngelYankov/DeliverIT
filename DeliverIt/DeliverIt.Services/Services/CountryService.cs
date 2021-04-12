@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using DeliverIt.Services.Models;
 
 namespace DeliverIt.Services.Services
 {
@@ -16,14 +18,17 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public string Get(int id)
+        public CountryDTO Get(int id)
         {
-            var country = dbContext.Countries.FirstOrDefault(c => c.Id == id).Name;
+            var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id);
             if(country == null)
             {
                 throw new ArgumentNullException();
             }
-            return country;
+
+            CountryDTO countryDTO = new CountryDTO(country);
+
+            return countryDTO;
         }
 
         public IList<string> GetAll()
