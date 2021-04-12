@@ -15,7 +15,8 @@ namespace DeliverIt.Data.Models
         public DateTime Arrival { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }
+        public int WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
         public ICollection<Parcel> Parcels { get; set; } = new HashSet<Parcel>();
-        public ICollection<ShipmentWarehouse> ShipmentWarehouses { get; set; } = new HashSet<ShipmentWarehouse>();
     }
 }

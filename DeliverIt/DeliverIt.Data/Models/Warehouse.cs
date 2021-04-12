@@ -13,6 +13,6 @@ namespace DeliverIt.Data.Models
         public int AddressID { get; set; }
         public  Address Address { get; set; }
         public ICollection<Parcel> Parcels { get; set; } = new HashSet<Parcel>();
-        public ICollection<ShipmentWarehouse> ShipmentWarehouses { get; set; } = new HashSet<ShipmentWarehouse>();
+        public ICollection<Shipment> Shipments { get; set; } = new HashSet<Shipment>();
     }
 }

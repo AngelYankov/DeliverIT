@@ -25,9 +25,6 @@ namespace DeliverIt.Services.Services
                 throw new ArgumentNullException();
             }
             dbContext.Shipments.Add(shipment);
-            dbContext.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
-            warehouse.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
-            shipment.ShipmentWarehouses.Add(new ShipmentWarehouse(shipment.Id, warehouseId));
             shipment.CreatedOn = DateTime.UtcNow;
             return shipment;
         }
