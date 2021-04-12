@@ -17,9 +17,8 @@ namespace DeliverIt.Data.Models
         public int CityID { get; set; }
 
         public City City { get; set; }
-
+        public Warehouse Warehouse { get; set; }
         public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
         public ICollection<Customer> Customers { get; set; } = new HashSet<Customer>();
-        public ICollection<Warehouse> Warehouses { get; set; } = new HashSet<Warehouse>();
     }
 }

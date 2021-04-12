@@ -123,7 +123,10 @@ namespace DeliverIt.Data
                 .HasForeignKey(p => p.ShipmentId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
-
+            modelBuilder.Entity<Address>()
+                        .HasOne(a => a.Warehouse)
+                        .WithOne(w => w.Address)
+                        .HasForeignKey<Warehouse>(w => w.AddressId);
             base.OnModelCreating(modelBuilder);
         }
     }
