@@ -10,7 +10,7 @@ namespace DeliverIt.Services.Contracts
         Warehouse Get(int id);
         IEnumerable<Warehouse> GetAll();
         Warehouse Create(Warehouse warehouse);
-        Warehouse Update(int id, Address address);
+        Warehouse Update(int id, Warehouse model);
         bool Delete(int id);
     }
 }

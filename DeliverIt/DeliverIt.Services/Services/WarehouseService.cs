@@ -11,40 +11,51 @@ namespace DeliverIt.Services.Services
     public class WarehouseService : IWarehouseService
     {
         private readonly DeliverItContext dbContext;
-
         public WarehouseService(DeliverItContext dbContext)
         {
             this.dbContext = dbContext;
         }
         public Warehouse Create(Warehouse warehouse)
         {
-            dbContext.Warehouses.Add(warehouse);
+            this.dbContext.Warehouses.Add(warehouse);
             warehouse.CreatedOn = DateTime.UtcNow;
             return warehouse;
         }
-
         public Warehouse Get(int id)
         {
-            var warehouse = dbContext.Warehouses.FirstOrDefault(w => w.Id == id);
-            if(warehouse == null)
-            {
-                throw new ArgumentNullException();
-            }
+            var warehouse = FindWarehouse(id);
             return warehouse;
         }
-
         public IEnumerable<Warehouse> GetAll()
         {
-            return dbContext.Warehouses;
+            return this.dbContext.Warehouses.Where(w => w.IsDeleted == false);
         }
-
-        public Warehouse Update(int id, Address address)
+        public Warehouse Update(int id, Warehouse model)
         {
-            throw new NotImplementedException();
+            var warehouse = FindWarehouse(id);
+            warehouse.ModifiedOn = DateTime.UtcNow;
+            warehouse = model;
+            return warehouse;
         }
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var warehouse = FindWarehouse(id);
+            warehouse.IsDeleted = true;
+            warehouse.ModifiedOn = DateTime.UtcNow;
+            return true;
+        }
+        private Warehouse FindWarehouse(int id)
+        {
+            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == id);
+            if (warehouse == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (warehouse.IsDeleted)
+            {
+                throw new ArgumentException();
+            };
+            return warehouse;
         }
     }
 }

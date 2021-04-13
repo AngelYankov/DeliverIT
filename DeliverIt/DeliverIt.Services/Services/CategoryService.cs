@@ -25,26 +25,24 @@ namespace DeliverIt.Services.Services
         }
         public IList<string> GetAll()
         {
-            return dbContext.Categories.Select(c => c.Name).ToList();
+            return dbContext.Categories.Where(c=>c.IsDeleted==false).Select(c => c.Name).ToList();
         }
         public Category Update(int id, string name)
         {
-            var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
-            if (category == null)
-            {
-                throw new ArgumentNullException();
-            }
-            if (category.IsDeleted)
-            {
-                throw new ArgumentException();
-            }
-
+            var category = FindCategory(id);
             category.Name = name;
             category.ModifiedOn = DateTime.UtcNow;
             return category;
         }
         public bool Delete(int id)
         {
+            var category = FindCategory(id);
+            category.IsDeleted = true;
+            category.DeletedOn = DateTime.UtcNow;
+            return category.IsDeleted;
+        }
+        private Category FindCategory(int id)
+        {
             var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
             if (category == null)
             {
@@ -54,9 +52,7 @@ namespace DeliverIt.Services.Services
             {
                 throw new ArgumentException();
             }
-            category.IsDeleted = true;
-            category.DeletedOn = DateTime.UtcNow;
-            return category.IsDeleted;
+            return category;
         }
     }
 }
