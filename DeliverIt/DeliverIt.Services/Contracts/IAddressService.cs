@@ -10,7 +10,7 @@ namespace DeliverIt.Services.Contracts
     {
         AddressDTO Get(int id);
         List<AddressDTO> GetAll();
-        Address Create(Address address);
+        AddressDTO Create(Address address);
         Address Update(int id,Address address);
 
     }

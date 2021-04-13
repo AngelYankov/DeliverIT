@@ -33,7 +33,11 @@ namespace DeliverIt.Services.Services
         public List<ShipmentDTO> GetAll()
         {
             var shipments = new List<ShipmentDTO>();
-            foreach (var shipment in this.dbContext.Shipments)
+            foreach (var shipment in this.dbContext
+                               .Shipments
+                               .Include(s => s.Status)
+                               .Include(s => s.Warehouse)
+                                    .ThenInclude(w => w.Address))
             {
                 var shipmentDTO = new ShipmentDTO(shipment);
                 shipments.Add(shipmentDTO);
@@ -105,7 +109,11 @@ namespace DeliverIt.Services.Services
         public List<ShipmentDTO> GetBy(int warehouseId)
         {
             var shipments = new List<ShipmentDTO>();
-            foreach (var shipment in this.dbContext.Shipments)
+            foreach (var shipment in this.dbContext
+                               .Shipments
+                               .Include(s => s.Status)
+                               .Include(s => s.Warehouse)
+                                    .ThenInclude(w => w.Address))
             {
                 if (shipment.WarehouseId == warehouseId)
                 {

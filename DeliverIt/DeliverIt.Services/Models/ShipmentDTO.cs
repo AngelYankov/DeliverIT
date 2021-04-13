@@ -9,14 +9,14 @@ namespace DeliverIt.Services.Models
     {
         public ShipmentDTO(Shipment shipment)
         {
-            Departure = shipment.Departure;
-            Arrival = shipment.Arrival;
+            Departure = shipment.Departure.ToString("dddd, dd MMMM yyyy");
+            Arrival = shipment.Arrival.ToString("dddd, dd MMMM yyyy");
             Status = shipment.Status.Name;
             Warehouse = shipment.Warehouse.Address.StreetName;
         }
         
-        public DateTime Departure { get; set; }
-        public DateTime Arrival { get; set; }
+        public string Departure { get; set; }
+        public string Arrival { get; set; }
         public string Status { get; set; }
         public string Warehouse { get; set; }
         public IList<ShipmentDTO> Shipments { get; set; }

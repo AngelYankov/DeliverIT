@@ -46,6 +46,7 @@ namespace DeliverIt.Web
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IAddressService, AddressService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
