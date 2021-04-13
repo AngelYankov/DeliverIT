@@ -48,7 +48,7 @@ namespace DeliverIt.Web.Controllers
             return Created("post", address);
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Address address)
+        public IActionResult Update(int id,[FromBody] Address address)
         {
             try
             {
