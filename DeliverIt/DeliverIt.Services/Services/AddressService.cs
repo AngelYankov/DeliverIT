@@ -18,11 +18,11 @@ namespace DeliverIt.Services.Services
         {
             this.dbcontext = dbcontext;
         }
-        public Address Create(Address address)
+        public AddressDTO Create(Address address)
         {
             this.dbcontext.Addresses.Add(address);
             address.CreatedOn = DateTime.UtcNow;
-            return address;
+            return new AddressDTO(address);
         }
 
         public AddressDTO Get(int id)
@@ -30,6 +30,7 @@ namespace DeliverIt.Services.Services
             var address = this.dbcontext
                                   .Addresses
                                   .Include(a => a.City)
+                                  .Include(a=>a.Warehouse)
                                   .FirstOrDefault(a => a.Id == id);
             if (address==null)
             {
@@ -42,7 +43,7 @@ namespace DeliverIt.Services.Services
         public List<AddressDTO> GetAll()
         {
             var addressDTOs = new List<AddressDTO>();
-            foreach (var address in this.dbcontext.Addresses)
+            foreach (var address in this.dbcontext.Addresses.Include(a=>a.City))
             {
                 var a = new AddressDTO(address);
                 addressDTOs.Add(a);
@@ -52,18 +53,16 @@ namespace DeliverIt.Services.Services
         //TODO
         public Address Update(int id,Address address)
         {
-            var addressToChange = this.dbcontext.Addresses.FirstOrDefault(a => a.Id == id);
+            var addressToChange = this.dbcontext
+                                      .Addresses
+                                      .Include(a=>a.City)
+                                      .FirstOrDefault(a => a.Id == id);
             if (addressToChange==null)
             {
                 throw new ArgumentNullException();
             }
-            addressToChange.Warehouse.Address = address;
-            addressToChange.Warehouse.AddressId = id;
-            //var customer = this.dbcontext.Customers.SelectMany(c => c.AddressId == id);
             addressToChange = address;
             return address;
-
-
         }
     }
 }
