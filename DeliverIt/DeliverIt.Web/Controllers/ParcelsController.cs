@@ -1,4 +1,5 @@
-﻿using DeliverIt.Services.Contracts;
+﻿using DeliverIt.Data.Models;
+using DeliverIt.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,17 @@ namespace DeliverIt.Web.Controllers
             this.parcelService = parcelService;
         }
 
+        [HttpPost("")]
+        public IActionResult Create([FromBody] Parcel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var parcel = this.parcelService.Create(model);
+            return Created("post", parcel);
+        }
+
         [HttpGet("")]
         public IActionResult GetAll()
         {
@@ -35,6 +47,48 @@ namespace DeliverIt.Web.Controllers
             catch (Exception)
             {
                 return NotFound("There is no such parcel.");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] Parcel model)
+        {
+            try
+            {
+                var parcel = this.parcelService.Update(id, model);
+                return Ok(parcel);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var parcel = this.parcelService.Delete(id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return NotFound("There is no such parcel.");
+            }
+        }
+
+        [HttpGet("filter")]
+        public IActionResult GetBy([FromQuery] string filter, string value)
+        {
+            try
+            {
+                var parcelsDTO = this.parcelService.GetBy(filter, value);
+                return Ok(parcelsDTO);
+            }
+            catch (Exception)
+            {
+                return NotFound();
             }
         }
     }

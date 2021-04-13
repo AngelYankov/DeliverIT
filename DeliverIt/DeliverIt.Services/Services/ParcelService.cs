@@ -18,10 +18,19 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public Parcel Create(Parcel parcel, Customer customer)
+        public Parcel Create(Parcel parcel)
         {
+            parcel.Customer = this.dbContext.Customers
+                                            .Include(c=>c.Address)
+                                            .Include(c=>c.Parcels)
+                                            .FirstOrDefault(c => c.Id == parcel.CustomerId);
+            parcel.Warehouse = this.dbContext.Warehouses
+                                             .Include(w => w.Address)
+                                                .ThenInclude(a=>a.City)
+                                             .Include(w => w.Parcels)
+                                             .Include(w => w.Shipments)
+                                             .FirstOrDefault(w => w.Id == parcel.WarehouseId);
             dbContext.Parcels.Add(parcel);
-            customer.Parcels.Add(parcel);
             parcel.CreatedOn = DateTime.UtcNow;
             return parcel;
         }
@@ -50,8 +59,8 @@ namespace DeliverIt.Services.Services
                              .Parcels
                              .Include(p => p.Category)
                              .Include(p => p.Customer)
-                             .Include(p=>p.Warehouse)
-                                .ThenInclude(w=>w.Address)
+                             .Include(p => p.Warehouse)
+                                .ThenInclude(w => w.Address)
                                 .ThenInclude(a => a.City)
                                 .FirstOrDefault(c => c.Id == id);
             if (parcel == null)
@@ -73,6 +82,7 @@ namespace DeliverIt.Services.Services
             }
 
             parcel.Category = model.Category ?? parcel.Category;
+
             if (model.CustomerId != 0)
             {
                 var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId);
@@ -123,10 +133,66 @@ namespace DeliverIt.Services.Services
 
             return parcel.IsDeleted;
         }
-
-        public IEnumerable<Parcel> GetBy(string filter, string type)
+        public List<ParcelDTO> GetBy(string filter, string value)
         {
-            throw new NotImplementedException();
+            var allParcels = this.dbContext
+                            .Parcels
+                            .Include(p => p.Category)
+                            .Include(p => p.Customer)
+                            .Include(p => p.Warehouse)
+                               .ThenInclude(w => w.Address)
+                               .ThenInclude(a => a.City);
+            var parcels = new List<ParcelDTO>();
+            if (filter == "weight")
+            {
+                foreach (var parcel in allParcels)
+                {
+                    if (parcel.Weight == double.Parse(value))
+                    {
+                        var parcelDTO = new ParcelDTO(parcel);
+                        parcels.Add(parcelDTO);
+                    }
+                }
+            }
+            if (filter == "customer")
+            {
+                foreach (var parcel in allParcels)
+                {
+                    if (parcel.Customer.FirstName == value || parcel.Customer.LastName == value)
+                    {
+                        var parcelDTO = new ParcelDTO(parcel);
+                        parcels.Add(parcelDTO);
+                    }
+                }
+            }
+            if (filter == "warehouse")
+            {
+                foreach (var parcel in allParcels)
+                {
+                    if (parcel.WarehouseId == int.Parse(value))
+                    {
+                        var parcelDTO = new ParcelDTO(parcel);
+                        parcels.Add(parcelDTO);
+                    }
+                }
+            }
+            if (filter == "category")
+            {
+                foreach (var parcel in allParcels)
+                {
+                    if (parcel.CategoryId == int.Parse(value))
+                    {
+                        var parcelDTO = new ParcelDTO(parcel);
+                        parcels.Add(parcelDTO);
+                    }
+                }
+            }
+            if(parcels.Count == 0)
+            {
+                throw new ArgumentNullException();
+            }
+            
+            return parcels;
         }
     }
 }

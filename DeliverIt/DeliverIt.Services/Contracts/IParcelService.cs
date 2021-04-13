@@ -10,9 +10,9 @@ namespace DeliverIt.Services.Contracts
     {
         ParcelDTO Get(int id);
         List<ParcelDTO> GetAll();
-        Parcel Create(Parcel parcel, Customer customer);
+        Parcel Create(Parcel parcel);
         Parcel Update(int id, Parcel parcel);
         bool Delete(int id);
-        IEnumerable<Parcel> GetBy(string filter, string type);
+        List<ParcelDTO> GetBy(string filter, string value);
     }
 }

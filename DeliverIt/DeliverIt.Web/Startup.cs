@@ -25,9 +25,9 @@ namespace DeliverIt.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                    /*.AddNewtonsoftJson(options =>
+                    .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    )*/;
+                    );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("DeliverIt", new OpenApiInfo { Title = "DeliverIt"});

@@ -1,4 +1,5 @@
 ﻿using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,6 +37,13 @@ namespace DeliverIt.Web.Controllers
             {
                 return NotFound("There is no such shipment.");
             }
+        }
+
+        [HttpGet("filter")]
+        public IActionResult GetBy([FromQuery] int warehouseId)
+        {
+            var shipmentsDTO = this.shipmentService.GetBy(warehouseId);
+            return Ok(shipmentsDTO);
         }
     }
 }
