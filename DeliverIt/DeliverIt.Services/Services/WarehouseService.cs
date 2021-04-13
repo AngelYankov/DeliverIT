@@ -38,7 +38,7 @@ namespace DeliverIt.Services.Services
             return warehouse;
         }
         public bool Delete(int id)
-        {
+        { 
             var warehouse = FindWarehouse(id);
             warehouse.IsDeleted = true;
             warehouse.ModifiedOn = DateTime.UtcNow;

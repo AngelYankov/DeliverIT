@@ -19,7 +19,7 @@ namespace DeliverIt.Services.Services
 
         public Category Create(Category category)
         {
-            dbContext.Categories.Add(category);
+            this.dbContext.Categories.Add(category);
             category.CreatedOn = DateTime.UtcNow;
             return category;
         }

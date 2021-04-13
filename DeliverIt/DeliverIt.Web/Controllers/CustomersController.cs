@@ -1,4 +1,5 @@
-﻿using DeliverIt.Services.Contracts;
+﻿using DeliverIt.Data.Models;
+using DeliverIt.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,6 +36,42 @@ namespace DeliverIt.Web.Controllers
             catch (Exception)
             {
                 return NotFound("There is no such customer.");
+            }
+        }
+        [HttpPost("")]
+        public IActionResult Create([FromBody] Customer model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var customer = this.customerService.Create(model);
+            return Created("post", customer);
+        }
+        [HttpPut("{id}")]
+        public IActionResult Update(int id,[FromBody] Customer model)
+        {
+            try
+            {
+                this.customerService.Update(id,model);
+                return Ok(model);
+            }
+            catch (Exception)
+            {
+                return NotFound("There is no such customer.");
+            }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                this.customerService.Delete(id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest("There is no such customer.");
             }
         }
     }

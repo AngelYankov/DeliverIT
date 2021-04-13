@@ -27,15 +27,7 @@ namespace DeliverIt.Services.Services
 
         public AddressDTO Get(int id)
         {
-            var address = this.dbcontext
-                                  .Addresses
-                                  .Include(a => a.City)
-                                  .Include(a=>a.Warehouse)
-                                  .FirstOrDefault(a => a.Id == id);
-            if (address==null)
-            {
-                throw new ArgumentNullException();
-            }
+            var address = FindAddress(id);
             var addressDTO = new AddressDTO(address);
             return addressDTO;
         }
@@ -51,17 +43,26 @@ namespace DeliverIt.Services.Services
             return addressDTOs;
         }
         //TODO
-        public Address Update(int id,Address address)
+        public Address Update(int id,Address model)
         {
-            var addressToChange = this.dbcontext
-                                      .Addresses
-                                      .Include(a=>a.City)
-                                      .FirstOrDefault(a => a.Id == id);
-            if (addressToChange==null)
+            var address = FindAddress(id);
+            if (model == null)
             {
                 throw new ArgumentNullException();
             }
-            addressToChange = address;
+            address = model;
+            return address;
+        }
+        private Address FindAddress(int id)
+        {
+            var address = this.dbcontext
+                              .Addresses
+                              .Include(a => a.City)
+                              .FirstOrDefault(a => a.Id == id);
+            if (address == null)
+            {
+                throw new ArgumentNullException();
+            }
             return address;
         }
     }
