@@ -11,13 +11,15 @@ namespace DeliverIt.Services.Models
         {
             CustomerFirstName = parcel.Customer.FirstName;
             CustomerLastName = parcel.Customer.LastName;
-            WarehouseAddress = parcel.Warehouse.Address.City.Name + " " + parcel.Warehouse.Address.StreetName;
+            WarehouseAddress = parcel.Warehouse.Address.StreetName;
+            WarehouseCity = parcel.Warehouse.Address.City.Name;
             Category = parcel.Category.Name;
             Weight = parcel.Weight;
         }
         public string CustomerFirstName { get; set; }
         public string CustomerLastName { get; set; }
         public string WarehouseAddress { get; set; }
+        public string WarehouseCity { get; set; }
         public string Category { get; set; }
         public double Weight { get; set; }
     }

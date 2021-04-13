@@ -28,8 +28,15 @@ namespace DeliverIt.Services.Services
 
         public List<ParcelDTO> GetAll()
         {
+            var allParcels = this.dbContext
+                             .Parcels
+                             .Include(p => p.Category)
+                             .Include(p => p.Customer)
+                             .Include(p => p.Warehouse)
+                                .ThenInclude(w => w.Address)
+                                .ThenInclude(a => a.City);
             var parcels = new List<ParcelDTO>();
-            foreach (var parcel in this.dbContext.Parcels)
+            foreach (var parcel in allParcels)
             {
                 var parcelDTO = new ParcelDTO(parcel);
                 parcels.Add(parcelDTO);
@@ -45,7 +52,8 @@ namespace DeliverIt.Services.Services
                              .Include(p => p.Customer)
                              .Include(p=>p.Warehouse)
                                 .ThenInclude(w=>w.Address)
-                             .FirstOrDefault(c => c.Id == id);
+                                .ThenInclude(a => a.City)
+                                .FirstOrDefault(c => c.Id == id);
             if (parcel == null)
             {
                 throw new ArgumentNullException();
