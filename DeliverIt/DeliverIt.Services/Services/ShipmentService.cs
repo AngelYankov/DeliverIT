@@ -68,7 +68,7 @@ namespace DeliverIt.Services.Services
             if (model.StatusId != 0)
             {
                 var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId);
-                if(status == null)
+                if (status == null)
                 {
                     throw new ArgumentNullException();
                 }
@@ -100,9 +100,20 @@ namespace DeliverIt.Services.Services
             return true;
         }
 
-        public IEnumerable<Shipment> GetBy(string filter, string type)
+        //api/shipments/search?warehouseId=
+        //public IActionResult Get([From Query] int warehouseId)
+        public List<ShipmentDTO> GetBy(int warehouseId)
         {
-            throw new NotImplementedException();
+            var shipments = new List<ShipmentDTO>();
+            foreach (var shipment in this.dbContext.Shipments)
+            {
+                if (shipment.WarehouseId == warehouseId)
+                {
+                    var shipmentDTO = new ShipmentDTO(shipment);
+                    shipments.Add(shipmentDTO);
+                }
+            }
+            return shipments;
         }
     }
 }

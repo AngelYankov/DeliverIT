@@ -13,6 +13,6 @@ namespace DeliverIt.Services.Contracts
         Shipment Create(Shipment shipment, int warehouseId);
         Shipment Update(int id, Shipment shipment);
         bool Delete(int id);
-        IEnumerable<Shipment> GetBy(string filter, string type);
+        List<ShipmentDTO> GetBy(int warehouseId);
     }
 }

@@ -11,7 +11,7 @@ namespace DeliverIt.Data.Models
         [Key]
         public int Id { get; set; }
 
-        [Required, StringLength(20,MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
+        [Required, StringLength(30,MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
         public string StreetName { get; set; }
 
         public int CityID { get; set; }
