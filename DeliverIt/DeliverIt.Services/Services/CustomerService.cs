@@ -1,6 +1,8 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,41 +19,64 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public Customer Create(Customer customer)
+        public CustomerDTO Create(NewCustomerDTO model)
         {
-            this.dbContext.Customers.Add(customer);
+            var customer = new Customer();
+            customer.FirstName = model.FirstName;
+            customer.LastName = model.LastName;
+            customer.Email = model.Email;
+            customer.AddressId = model.AddressId;
             customer.CreatedOn = DateTime.UtcNow;
-            return customer;
-        }
 
-        public string Get(int id)
+            this.dbContext.Customers.Add(customer);
+            this.dbContext.SaveChanges();
+            var createdCustomer = FindCustomer(customer.Id);
+            return new CustomerDTO(createdCustomer);
+        }
+        public CustomerDTO Get(int id)
         {
             var customer = FindCustomer(id);
-            return customer.FirstName + " " + customer.LastName;
+            return new CustomerDTO(customer);
         }
-
-        public IList<string> GetAll()
+        public IEnumerable<CustomerDTO> GetAll()
         {
-            return this.dbContext.Customers.Where(c => c.IsDeleted == false).Select(c => c.FirstName + " " + c.LastName).ToList();
+            return this.dbContext
+                       .Customers
+                       .Include(c => c.Address)
+                            .ThenInclude(a => a.City)
+                       .Where(c => c.IsDeleted == false)
+                       .Select(c => new CustomerDTO(c));
         }
-
-        public Customer Update(int id, Customer model)
+        public CustomerDTO Update(int id, NewCustomerDTO model)
         {
             var customer = FindCustomer(id);
             if (model == null)
             {
                 throw new ArgumentNullException();
             }
-            customer = model;
-            customer.ModifiedOn = DateTime.UtcNow;
-            return customer;
-        }
+            customer.FirstName = model.FirstName ?? customer.FirstName;
+            customer.LastName = model.LastName ?? customer.LastName;
+            customer.Email = model.Email ?? customer.Email;
+            var address = this.dbContext.Addresses
+                                .Include(a => a.City)
+                                .FirstOrDefault(a => a.Id == model.AddressId);
+            //TODO if default addressId is put
 
+            if (address == null)
+            {
+                throw new ArgumentNullException();
+            }
+            customer.Address = address;
+            customer.ModifiedOn = DateTime.UtcNow;
+            this.dbContext.SaveChanges();
+            return new CustomerDTO(customer);
+        }
         public bool Delete(int id)
         {
             var customer = FindCustomer(id);
             customer.IsDeleted = true;
             customer.DeletedOn = DateTime.UtcNow;
+            dbContext.SaveChanges();
             return true;
         }
         //TODO
@@ -64,6 +89,7 @@ namespace DeliverIt.Services.Services
             var customer = this.dbContext
                                .Customers
                                .Include(c => c.Address)
+                                    .ThenInclude(a => a.City)
                                .FirstOrDefault(c => c.Id == id);
             if (customer == null)
             {

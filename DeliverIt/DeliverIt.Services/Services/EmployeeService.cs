@@ -1,6 +1,8 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,24 +18,35 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = deliverItContext;
         }
-        public Employee Create(Employee employee)
+        public EmployeeDTO Create(NewEmployeeDTO model)
         {
-            this.dbContext.Employees.Add(employee);
+            var employee = new Employee();
+            employee.FirstName = model.FirstName;
+            employee.LastName = model.FirstName;
+            employee.Email = model.Email;
+            employee.AddressId = model.AddressId;
             employee.CreatedOn = DateTime.UtcNow;
-            return employee;
+
+            this.dbContext.Employees.Add(employee);
+            this.dbContext.SaveChanges();
+            var createdEmployee = FindEmployee(employee.Id);
+            return new EmployeeDTO(createdEmployee);
         }
-        public string Get(int id)
+        public EmployeeDTO Get(int id)
         {
             var employee = FindEmployee(id);
-            return employee.FirstName + " " + employee.LastName;
+            return new EmployeeDTO(employee);
         }
-
-        public IList<string> GetAll()
+        public IEnumerable<EmployeeDTO> GetAll()
         {
-            return this.dbContext.Employees.Where(e => e.IsDeleted == false).Select(e => e.FirstName + " " + e.LastName).ToList();
+            return this.dbContext
+                        .Employees
+                        .Include(e=>e.Address)
+                            .ThenInclude(a=>a.City)
+                        .Where(e => e.IsDeleted == false)
+                        .Select(e=>new EmployeeDTO(e));
         }
-        //should we check if the input's addressId is valid?
-        public Employee Update(int id, Employee model)
+        public EmployeeDTO Update(int id, NewEmployeeDTO model)
         {
             var employee = FindEmployee(id);
             if (model == null)
@@ -43,22 +56,25 @@ namespace DeliverIt.Services.Services
             employee.FirstName = model.FirstName ?? employee.FirstName;
             employee.LastName = model.LastName ?? employee.LastName;
             employee.Email = model.Email ?? employee.Email;
-            var modelAddress = this.dbContext.Addresses.FirstOrDefault(a => a.Id == model.AddressId);
-            if (modelAddress == null)
+            var address = this.dbContext.Addresses
+                                .Include(a=>a.City)
+                                .FirstOrDefault(a => a.Id == model.AddressId);
+            //TODO if default addressId is put
+            if (address == null)
             {
-                employee.Address.StreetName = model.Address.StreetName;
-                employee.Address.CityID = model.Address.CityID;
+                throw new ArgumentNullException();
             }
-            employee.AddressId = model.AddressId;
+            employee.Address = address;
             employee.ModifiedOn = DateTime.UtcNow;
-            return employee;
+            this.dbContext.SaveChanges();
+            return new EmployeeDTO(employee);
         }
-
         public bool Delete(int id)
         {
             var employee = FindEmployee(id);
             employee.IsDeleted = true;
             employee.DeletedOn = DateTime.UtcNow;
+            this.dbContext.SaveChanges();
             return true;
         }
         //TODO
@@ -71,6 +87,7 @@ namespace DeliverIt.Services.Services
             var employee = this.dbContext
                                .Employees
                                .Include(e => e.Address)
+                                    .ThenInclude(a=>a.City)
                                .FirstOrDefault(e => e.Id == id);
             if (employee == null)
             {

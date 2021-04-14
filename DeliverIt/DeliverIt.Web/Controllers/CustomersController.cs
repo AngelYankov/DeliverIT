@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,7 +40,7 @@ namespace DeliverIt.Web.Controllers
             }
         }
         [HttpPost("")]
-        public IActionResult Create([FromBody] Customer model)
+        public IActionResult Create([FromBody] NewCustomerDTO model)
         {
             if (model == null)
             {
@@ -49,12 +50,12 @@ namespace DeliverIt.Web.Controllers
             return Created("post", customer);
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] Customer model)
+        public IActionResult Update(int id,[FromBody] NewCustomerDTO model)
         {
             try
             {
-                this.customerService.Update(id,model);
-                return Ok(model);
+                var customer = this.customerService.Update(id,model);
+                return Ok(customer);
             }
             catch (Exception)
             {
