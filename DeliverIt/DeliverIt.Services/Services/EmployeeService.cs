@@ -26,6 +26,10 @@ namespace DeliverIt.Services.Services
             employee.Email = model.Email;
             employee.AddressId = model.AddressId;
             employee.CreatedOn = DateTime.UtcNow;
+            var address = this.dbContext.Addresses
+                                        .Include(a => a.City)
+                                        .FirstOrDefault(a => a.Id == model.AddressId);
+            address.Employees.Add(employee);
 
             this.dbContext.Employees.Add(employee);
             this.dbContext.SaveChanges();
@@ -41,10 +45,10 @@ namespace DeliverIt.Services.Services
         {
             return this.dbContext
                         .Employees
-                        .Include(e=>e.Address)
-                            .ThenInclude(a=>a.City)
+                        .Include(e => e.Address)
+                            .ThenInclude(a => a.City)
                         .Where(e => e.IsDeleted == false)
-                        .Select(e=>new EmployeeDTO(e));
+                        .Select(e => new EmployeeDTO(e));
         }
         public EmployeeDTO Update(int id, NewEmployeeDTO model)
         {
@@ -56,16 +60,18 @@ namespace DeliverIt.Services.Services
             employee.FirstName = model.FirstName ?? employee.FirstName;
             employee.LastName = model.LastName ?? employee.LastName;
             employee.Email = model.Email ?? employee.Email;
-            var address = this.dbContext.Addresses
-                                .Include(a=>a.City)
-                                .FirstOrDefault(a => a.Id == model.AddressId);
-            //TODO if default addressId is put
-            if (address == null)
+            if (model.AddressId != 0)
             {
-                throw new ArgumentNullException();
+                var address = this.dbContext.Addresses
+                                    .Include(a => a.City)
+                                    .FirstOrDefault(a => a.Id == model.AddressId);
+                if (address == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                employee.AddressId = model.AddressId;
+                employee.ModifiedOn = DateTime.UtcNow;
             }
-            employee.Address = address;
-            employee.ModifiedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
             return new EmployeeDTO(employee);
         }
@@ -87,7 +93,7 @@ namespace DeliverIt.Services.Services
             var employee = this.dbContext
                                .Employees
                                .Include(e => e.Address)
-                                    .ThenInclude(a=>a.City)
+                                    .ThenInclude(a => a.City)
                                .FirstOrDefault(e => e.Id == id);
             if (employee == null)
             {

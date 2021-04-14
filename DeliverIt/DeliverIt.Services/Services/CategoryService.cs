@@ -17,28 +17,33 @@ namespace DeliverIt.Services.Services
             this.dbContext = dbContext;
         }
 
-        public Category Create(Category category)
+        public string Create(string categoryName)
         {
-            this.dbContext.Categories.Add(category);
+            var category = new Category();
+            category.Name = categoryName;
             category.CreatedOn = DateTime.UtcNow;
-            return category;
+            this.dbContext.Categories.Add(category);
+            this.dbContext.SaveChanges();
+            return category.Name;
         }
         public IList<string> GetAll()
         {
-            return dbContext.Categories.Where(c=>c.IsDeleted==false).Select(c => c.Name).ToList();
+            return this.dbContext.Categories.Where(c=>c.IsDeleted==false).Select(c => c.Name).ToList();
         }
-        public Category Update(int id, string name)
+        public string Update(int id, string name)
         {
             var category = FindCategory(id);
             category.Name = name;
             category.ModifiedOn = DateTime.UtcNow;
-            return category;
+            this.dbContext.SaveChanges();
+            return category.Name;
         }
         public bool Delete(int id)
         {
             var category = FindCategory(id);
             category.IsDeleted = true;
             category.DeletedOn = DateTime.UtcNow;
+            this.dbContext.SaveChanges();
             return category.IsDeleted;
         }
         private Category FindCategory(int id)

@@ -17,6 +17,7 @@ namespace DeliverIt.Services.Services
         }
         public Warehouse Create(Warehouse warehouse)
         {
+            //TO set up address - warehouse
             this.dbContext.Warehouses.Add(warehouse);
             warehouse.CreatedOn = DateTime.UtcNow;
             return warehouse;

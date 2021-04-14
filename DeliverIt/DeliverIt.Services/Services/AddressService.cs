@@ -2,6 +2,7 @@
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,40 +19,56 @@ namespace DeliverIt.Services.Services
         {
             this.dbcontext = dbcontext;
         }
-        public AddressDTO Create(Address address)
+        public AddressDTO Create(NewAddressDTO model)
         {
-            this.dbcontext.Addresses.Add(address);
+            var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId);
+            if (city == null)
+            {
+                throw new ArgumentException();
+            }
+            var address = new Address();
+            address.StreetName = model.StreetName;
+            address.CityID = model.CityId;
             address.CreatedOn = DateTime.UtcNow;
+            city.Addresses.Add(address);
+            this.dbcontext.Addresses.Add(address);
+            this.dbcontext.SaveChanges();
             return new AddressDTO(address);
         }
-
         public AddressDTO Get(int id)
         {
             var address = FindAddress(id);
-            var addressDTO = new AddressDTO(address);
-            return addressDTO;
+            return new AddressDTO(address);
         }
-
-        public List<AddressDTO> GetAll()
+        public IEnumerable<AddressDTO> GetAll()
         {
-            var addressDTOs = new List<AddressDTO>();
-            foreach (var address in this.dbcontext.Addresses.Include(a=>a.City))
-            {
-                var a = new AddressDTO(address);
-                addressDTOs.Add(a);
-            }
-            return addressDTOs;
+            return this.dbcontext
+                       .Addresses
+                       .Include(a => a.City)
+                       .Select(a => new AddressDTO(a));
         }
-        //TODO
-        public Address Update(int id,Address model)
+        public AddressDTO Update(int id, NewAddressDTO model)
         {
             var address = FindAddress(id);
             if (model == null)
             {
                 throw new ArgumentNullException();
             }
-            address = model;
-            return address;
+            address.StreetName = model.StreetName ?? address.StreetName;
+            if (model.CityId != 0)
+            {
+                var city = this.dbcontext
+                               .Cities
+                               .FirstOrDefault(c => c.Id == model.CityId);
+                if (city == null)
+                {
+                    throw new ArgumentException();
+                }
+                address.CityID = model.CityId;
+            }
+            address.ModifiedOn = DateTime.UtcNow;
+            this.dbcontext.SaveChanges();
+            return new AddressDTO(address);
         }
         private Address FindAddress(int id)
         {

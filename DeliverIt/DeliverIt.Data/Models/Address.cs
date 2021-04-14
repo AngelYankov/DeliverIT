@@ -13,9 +13,7 @@ namespace DeliverIt.Data.Models
 
         [Required, StringLength(30,MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
         public string StreetName { get; set; }
-
         public int CityID { get; set; }
-
         public City City { get; set; }
         public Warehouse Warehouse { get; set; }
         public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();

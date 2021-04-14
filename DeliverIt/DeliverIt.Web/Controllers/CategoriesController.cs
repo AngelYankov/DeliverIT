@@ -25,24 +25,24 @@ namespace DeliverIt.Web.Controllers
             return Ok(this.categoryService.GetAll());
         }
 
-        [HttpPost("")]
-        public IActionResult Create([FromBody] Category model)
+        [HttpPost("{name}")]
+        public IActionResult Create(string name)
         {
-            if(model == null)
+            if(name == null)
             {
                 return BadRequest();
             }
 
-            var category = this.categoryService.Create(model);
+            var category = this.categoryService.Create(name);
             return Created("post",category);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Category model)
+        [HttpPut("{id}/{name}")]
+        public IActionResult Update(int id, string name)
         {
             try
             {
-                var category = this.categoryService.Update(id, model.Name);
+                var category = this.categoryService.Update(id, name);
                 return Ok(category);
             }
             catch (Exception)

@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -38,7 +39,7 @@ namespace DeliverIt.Web.Controllers
             }
         }
         [HttpPost("")]
-        public IActionResult Create([FromBody] Address address)
+        public IActionResult Create([FromBody] NewAddressDTO address)
         {
             if (address == null)
             {
@@ -48,7 +49,7 @@ namespace DeliverIt.Web.Controllers
             return Created("post", address);
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] Address address)
+        public IActionResult Update(int id,[FromBody] NewAddressDTO address)
         {
             try
             {

@@ -27,6 +27,10 @@ namespace DeliverIt.Services.Services
             customer.Email = model.Email;
             customer.AddressId = model.AddressId;
             customer.CreatedOn = DateTime.UtcNow;
+            var address = this.dbContext.Addresses
+                                        .Include(a => a.City)
+                                        .FirstOrDefault(a => a.Id == model.AddressId);
+            address.Customers.Add(customer);
 
             this.dbContext.Customers.Add(customer);
             this.dbContext.SaveChanges();
@@ -57,17 +61,19 @@ namespace DeliverIt.Services.Services
             customer.FirstName = model.FirstName ?? customer.FirstName;
             customer.LastName = model.LastName ?? customer.LastName;
             customer.Email = model.Email ?? customer.Email;
-            var address = this.dbContext.Addresses
+
+            if (model.AddressId != 0)
+            {
+                var address = this.dbContext.Addresses
                                 .Include(a => a.City)
                                 .FirstOrDefault(a => a.Id == model.AddressId);
-            //TODO if default addressId is put
-
-            if (address == null)
-            {
-                throw new ArgumentNullException();
+                if (address == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                customer.AddressId = model.AddressId;
+                customer.ModifiedOn = DateTime.UtcNow;
             }
-            customer.Address = address;
-            customer.ModifiedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
             return new CustomerDTO(customer);
         }
