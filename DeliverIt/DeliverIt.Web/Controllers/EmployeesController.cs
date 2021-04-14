@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,8 +40,8 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
-        [HttpPut("")]
-        public IActionResult Create([FromBody] Employee model)
+        [HttpPost("")]
+        public IActionResult Create([FromBody] NewEmployeeDTO model)
         {
             if (model == null)
             {
@@ -51,8 +52,8 @@ namespace DeliverIt.Web.Controllers
             return Created("post", employee);
         }
 
-        [HttpPost("")]
-        public IActionResult Update(int id, [FromBody] Employee model)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] NewEmployeeDTO model)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace DeliverIt.Web.Controllers
             }
             catch (Exception)
             {
-                return NotFound("There is no such employee.");
+                return BadRequest("There is no such employee.");
             }
         }
     }

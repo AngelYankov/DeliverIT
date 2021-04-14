@@ -19,11 +19,8 @@ namespace DeliverIt.Data.Models
 
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
-        
         public int AddressId { get; set; }
-
         public Address Address { get; set; }
-
         public ICollection<Parcel> Parcels { get; set; } = new HashSet<Parcel>();
     }
 }

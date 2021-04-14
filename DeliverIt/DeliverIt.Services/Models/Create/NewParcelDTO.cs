@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DeliverIt.Services.Models.Create
+﻿namespace DeliverIt.Services.Models.Create
 {
     public class NewParcelDTO
     {
