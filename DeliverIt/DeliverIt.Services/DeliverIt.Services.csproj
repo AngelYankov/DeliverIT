@@ -16,4 +16,8 @@
     <ProjectReference Include="..\DeliverIt.Data\DeliverIt.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Create\" />
+  </ItemGroup>
+
 </Project>
