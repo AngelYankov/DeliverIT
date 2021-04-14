@@ -24,7 +24,7 @@ namespace DeliverIt.Services.Services
             var newParcel = new Parcel();
 
             var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == dto.CategoryId);
-            if(category == null)
+            if (category == null)
             {
                 throw new ArgumentNullException("There is no such category.");
             }
@@ -51,7 +51,6 @@ namespace DeliverIt.Services.Services
             }
             newParcel.ShipmentId = dto.ShipmentId;
 
-            if(dto.Weight < 0.1 || dto.Weight > 500)
             newParcel.Weight = dto.Weight;
             newParcel.CreatedOn = DateTime.UtcNow;
 
@@ -66,22 +65,16 @@ namespace DeliverIt.Services.Services
             return parcelDTO;
         }
 
-        public List<ParcelDTO> GetAll()
+        public IEnumerable<ParcelDTO> GetAll()
         {
-            var allParcels = this.dbContext
-                             .Parcels
-                             .Include(p => p.Category)
-                             .Include(p => p.Customer)
-                             .Include(p => p.Warehouse)
-                                .ThenInclude(w => w.Address)
-                                .ThenInclude(a => a.City);
-            var parcels = new List<ParcelDTO>();
-            foreach (var parcel in allParcels)
-            {
-                var parcelDTO = new ParcelDTO(parcel);
-                parcels.Add(parcelDTO);
-            }
-            return parcels;
+            return this.dbContext.Parcels
+                                 .Include(p => p.Category)
+                                 .Include(p => p.Customer)
+                                 .Include(p => p.Warehouse)
+                                    .ThenInclude(w => w.Address)
+                                        .ThenInclude(a => a.City)
+                                 .Where(p=>p.IsDeleted == false)
+                                 .Select(p=>new ParcelDTO(p));
         }
 
         public ParcelDTO Get(int id)
@@ -92,12 +85,24 @@ namespace DeliverIt.Services.Services
             return parcelDTO;
         }
 
-        public Parcel Update(int id, Parcel model)
+        public ParcelDTO Update(int id, NewParcelDTO model)
         {
             var parcel = FindParcel(id);
-
-            parcel.Category = model.Category ?? parcel.Category;
-
+            var result = this.dbContext.Parcels
+                          .Include(p => p.Category)
+                          .Include(p => p.Customer)
+                          .Include(p => p.Warehouse)
+                             .ThenInclude(w => w.Address)
+                                .ThenInclude(a => a.City);
+            if (model.CategoryId != 0)
+            {
+                var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == model.CategoryId);
+                if (category == null)
+                {
+                    throw new ArgumentNullException("There is no such category.");
+                }
+                parcel.CategoryId = model.CategoryId;
+            }
             if (model.CustomerId != 0)
             {
                 var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId);
@@ -118,7 +123,10 @@ namespace DeliverIt.Services.Services
             }
             if (model.WarehouseId != 0)
             {
-                var warehouse = this.dbContext.Warehouses.FirstOrDefault(s => s.Id == model.WarehouseId);
+                var warehouse = this.dbContext.Warehouses
+                                              .Include(w=>w.Address)
+                                                .ThenInclude(a=>a.City)
+                                              .FirstOrDefault(s => s.Id == model.WarehouseId);
                 if (warehouse == null)
                 {
                     throw new ArgumentNullException("There is no such warehouse.");
@@ -130,7 +138,9 @@ namespace DeliverIt.Services.Services
                 parcel.Weight = model.Weight;
             }
             parcel.ModifiedOn = DateTime.UtcNow;
-            return parcel;
+            this.dbContext.SaveChanges();
+
+            return new ParcelDTO(parcel);
         }
 
         public bool Delete(int id)
@@ -138,6 +148,7 @@ namespace DeliverIt.Services.Services
             var parcel = FindParcel(id);
             parcel.IsDeleted = true;
             parcel.DeletedOn = DateTime.UtcNow;
+            this.dbContext.SaveChanges();
 
             return parcel.IsDeleted;
         }
@@ -148,14 +159,14 @@ namespace DeliverIt.Services.Services
                             .Include(p => p.Category)
                             .Include(p => p.Customer)
                             .Include(p => p.Warehouse)
-                               .ThenInclude(w => w.Address)
-                               .ThenInclude(a => a.City);
+                                .ThenInclude(w => w.Address)
+                                    .ThenInclude(a => a.City);
             var parcels = new List<ParcelDTO>();
             if (filter == "weight")
             {
                 foreach (var parcel in allParcels)
                 {
-                    if (parcel.Weight == double.Parse(value))
+                    if ((parcel.Weight == double.Parse(value)) && parcel.IsDeleted == false)
                     {
                         var parcelDTO = new ParcelDTO(parcel);
                         parcels.Add(parcelDTO);
@@ -166,7 +177,7 @@ namespace DeliverIt.Services.Services
             {
                 foreach (var parcel in allParcels)
                 {
-                    if (parcel.Customer.FirstName == value || parcel.Customer.LastName == value)
+                    if ((parcel.Customer.FirstName == value || parcel.Customer.LastName == value) && parcel.IsDeleted == false)
                     {
                         var parcelDTO = new ParcelDTO(parcel);
                         parcels.Add(parcelDTO);
@@ -177,7 +188,7 @@ namespace DeliverIt.Services.Services
             {
                 foreach (var parcel in allParcels)
                 {
-                    if (parcel.WarehouseId == int.Parse(value))
+                    if ((parcel.WarehouseId == int.Parse(value)) && parcel.IsDeleted == false)
                     {
                         var parcelDTO = new ParcelDTO(parcel);
                         parcels.Add(parcelDTO);
@@ -188,18 +199,18 @@ namespace DeliverIt.Services.Services
             {
                 foreach (var parcel in allParcels)
                 {
-                    if (parcel.CategoryId == int.Parse(value))
+                    if ((parcel.CategoryId == int.Parse(value)) && parcel.IsDeleted == false)
                     {
                         var parcelDTO = new ParcelDTO(parcel);
                         parcels.Add(parcelDTO);
                     }
                 }
             }
-            if(parcels.Count == 0)
+            if (parcels.Count == 0)
             {
                 throw new ArgumentNullException("There are no such parcels.");
             }
-            
+
             return parcels;
         }
 
@@ -211,8 +222,8 @@ namespace DeliverIt.Services.Services
                              .Include(p => p.Customer)
                              .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
-                                .ThenInclude(a => a.City)
-                                .FirstOrDefault(c => c.Id == id);
+                                    .ThenInclude(a => a.City)
+                             .FirstOrDefault(c => c.Id == id);
             if (parcel == null)
             {
                 throw new ArgumentNullException("There is no such parcel.");

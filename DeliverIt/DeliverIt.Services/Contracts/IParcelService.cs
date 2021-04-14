@@ -10,9 +10,9 @@ namespace DeliverIt.Services.Contracts
     public interface IParcelService
     {
         ParcelDTO Get(int id);
-        List<ParcelDTO> GetAll();
+        IEnumerable<ParcelDTO> GetAll();
         ParcelDTO Create(NewParcelDTO parcel);
-        Parcel Update(int id, Parcel parcel);
+        ParcelDTO Update(int id, NewParcelDTO model);
         bool Delete(int id);
         List<ParcelDTO> GetBy(string filter, string value);
     }

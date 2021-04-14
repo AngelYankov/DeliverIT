@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 
 namespace DeliverIt.Services.Services
 {
@@ -18,33 +19,42 @@ namespace DeliverIt.Services.Services
             this.dbContext = dbContext;
         }
 
-        public Shipment Create(Shipment shipment, int warehouseId)
+        public ShipmentDTO Create(NewShipmentDTO dto)
         {
-            var warehouse = dbContext.Warehouses.FirstOrDefault(w => w.Id == warehouseId);
+            var newShipment = new Shipment();
+
+            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
             if (warehouse == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There is no such warehouse.");
             }
-            dbContext.Shipments.Add(shipment);
-            warehouse.Shipments.Add(shipment);
-            shipment.CreatedOn = DateTime.UtcNow;
-            return shipment;
-        }
-        public List<ShipmentDTO> GetAll()
-        {
-            var allShipments = this.dbContext
-                               .Shipments
-                               .Include(s => s.Status)
-                               .Include(s => s.Warehouse)
-                                    .ThenInclude(w => w.Address);
-            var shipments = new List<ShipmentDTO>();
-            foreach (var shipment in allShipments)
+
+            var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == dto.StatusId);
+            if (status == null)
             {
-                var shipmentDTO = new ShipmentDTO(shipment);
-                shipments.Add(shipmentDTO);
+                throw new ArgumentNullException("There is no such status.");
             }
-            return shipments;
+
+            this.dbContext.Shipments.Add(newShipment);
+            warehouse.Shipments.Add(newShipment);
+            newShipment.CreatedOn = DateTime.UtcNow;
+            status.Shipments.Add(newShipment);
+            this.dbContext.SaveChanges();
+
+            var createdShipment = FindShipment(newShipment.Id);
+
+            return new ShipmentDTO(createdShipment);
         }
+        public IEnumerable<ShipmentDTO> GetAll()
+        {
+            return this.dbContext.Shipments
+                                 .Include(s => s.Status)
+                                 .Include(s => s.Warehouse)
+                                      .ThenInclude(w => w.Address)
+                                 .Where(s => s.IsDeleted == false)
+                                 .Select(s => new ShipmentDTO(s));
+        }
+
         public ShipmentDTO Get(int id)
         {
             var shipment = FindShipment(id);
@@ -53,7 +63,7 @@ namespace DeliverIt.Services.Services
             return shipmentDTO;
         }
 
-        public Shipment Update(int id, Shipment model)
+        public ShipmentDTO Update(int id, NewShipmentDTO model)
         {
             var shipment = FindShipment(id);
             if (model.StatusId != 0)
@@ -61,7 +71,7 @@ namespace DeliverIt.Services.Services
                 var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId);
                 if (status == null)
                 {
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("There is no such status.");
                 }
                 shipment.StatusId = model.StatusId;
             }
@@ -74,7 +84,9 @@ namespace DeliverIt.Services.Services
                 shipment.Departure = model.Departure;
             }
             shipment.ModifiedOn = DateTime.UtcNow;
-            return shipment;
+            this.dbContext.SaveChanges();
+
+            return new ShipmentDTO(shipment);
         }
 
         public bool Delete(int id)
@@ -82,6 +94,8 @@ namespace DeliverIt.Services.Services
             var shipment = FindShipment(id);
             shipment.IsDeleted = true;
             shipment.DeletedOn = DateTime.UtcNow;
+            this.dbContext.SaveChanges();
+
             return true;
         }
 
@@ -97,7 +111,7 @@ namespace DeliverIt.Services.Services
             var shipments = new List<ShipmentDTO>();
             foreach (var shipment in allShipments)
             {
-                if (shipment.WarehouseId == warehouseId)
+                if ((shipment.WarehouseId == warehouseId) && shipment.IsDeleted == false)
                 {
                     var shipmentDTO = new ShipmentDTO(shipment);
                     shipments.Add(shipmentDTO);

@@ -52,23 +52,23 @@ namespace DeliverIt.Web.Controllers
                 var parcel = this.parcelService.Get(id);
                 return Ok(parcel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound("There is no such parcel.");
+                return NotFound(e.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Parcel model)
+        public IActionResult Update(int id, [FromBody] NewParcelDTO model)
         {
             try
             {
                 var parcel = this.parcelService.Update(id, model);
                 return Ok(parcel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -80,9 +80,9 @@ namespace DeliverIt.Web.Controllers
                 var parcel = this.parcelService.Delete(id);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound("There is no such parcel.");
+                return NotFound(e.Message);
             }
         }
 
@@ -94,9 +94,9 @@ namespace DeliverIt.Web.Controllers
                 var parcelsDTO = this.parcelService.GetBy(filter, value);
                 return Ok(parcelsDTO);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
     }

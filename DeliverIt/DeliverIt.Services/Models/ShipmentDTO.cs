@@ -11,7 +11,6 @@ namespace DeliverIt.Services.Models
             Status = shipment.Status.Name;
             Warehouse = shipment.Warehouse.Address.StreetName;
         }
-        
         public string Departure { get; set; }
         public string Arrival { get; set; }
         public string Status { get; set; }
