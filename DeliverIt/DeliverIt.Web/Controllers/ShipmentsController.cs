@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +20,24 @@ namespace DeliverIt.Web.Controllers
             this.shipmentService = shipmentService;
         }
 
+        [HttpPost("")]
+        public IActionResult Create([FromBody] NewShipmentDTO model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var shipment = this.shipmentService.Create(model);
+                return Created("post", shipment);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
         [HttpGet("")]
         public IActionResult GetAll()
         {
@@ -33,9 +52,37 @@ namespace DeliverIt.Web.Controllers
                 var shipment = this.shipmentService.Get(id);
                 return Ok(shipment);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound("There is no such shipment.");
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] NewShipmentDTO model)
+        {
+            try
+            {
+                var shipment = this.shipmentService.Update(id, model);
+                return Ok(shipment);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var shipment = this.shipmentService.Delete(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 

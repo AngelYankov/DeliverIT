@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DeliverIt.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -340,17 +340,17 @@ namespace DeliverIt.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Shipments",
                 columns: new[] { "Id", "Arrival", "CreatedOn", "DeletedOn", "Departure", "IsDeleted", "ModifiedOn", "StatusId", "WarehouseId" },
-                values: new object[] { 1, new DateTime(2021, 4, 25, 21, 18, 41, 602, DateTimeKind.Utc).AddTicks(9625), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 20, 21, 18, 41, 602, DateTimeKind.Utc).AddTicks(8821), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 });
+                values: new object[] { 1, new DateTime(2021, 4, 26, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(4921), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 21, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(4343), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "Shipments",
                 columns: new[] { "Id", "Arrival", "CreatedOn", "DeletedOn", "Departure", "IsDeleted", "ModifiedOn", "StatusId", "WarehouseId" },
-                values: new object[] { 2, new DateTime(2021, 4, 23, 21, 18, 41, 603, DateTimeKind.Utc).AddTicks(318), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 19, 21, 18, 41, 603, DateTimeKind.Utc).AddTicks(292), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2 });
+                values: new object[] { 2, new DateTime(2021, 4, 24, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(5498), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 20, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(5474), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2 });
 
             migrationBuilder.InsertData(
                 table: "Shipments",
                 columns: new[] { "Id", "Arrival", "CreatedOn", "DeletedOn", "Departure", "IsDeleted", "ModifiedOn", "StatusId", "WarehouseId" },
-                values: new object[] { 3, new DateTime(2021, 4, 27, 21, 18, 41, 603, DateTimeKind.Utc).AddTicks(331), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 23, 21, 18, 41, 603, DateTimeKind.Utc).AddTicks(331), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 3 });
+                values: new object[] { 3, new DateTime(2021, 4, 28, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(5508), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 4, 24, 17, 29, 11, 482, DateTimeKind.Utc).AddTicks(5507), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 3 });
 
             migrationBuilder.InsertData(
                 table: "Parcels",
