@@ -21,14 +21,7 @@ namespace DeliverIt.Services.Services
         }
         public CityDTO Get(int id)
         {
-            var city = this.dbContext.Cities
-                                     .Include(c=>c.Country)
-                                     .FirstOrDefault(c => c.Id == id);
-            if(city == null)
-            {
-                throw new ArgumentNullException();
-            }
-
+            var city = FindCity(id);
             CityDTO cityDTO = new CityDTO(city);
 
             return cityDTO;
@@ -37,6 +30,18 @@ namespace DeliverIt.Services.Services
         public IList<string> GetAll()
         {
             return dbContext.Cities.Select(c => c.Name).ToList();
+        }
+
+        private City FindCity(int id)
+        {
+            var city = this.dbContext.Cities
+                                     .Include(c => c.Country)
+                                     .FirstOrDefault(c => c.Id == id);
+            if (city == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return city;
         }
     }
 }

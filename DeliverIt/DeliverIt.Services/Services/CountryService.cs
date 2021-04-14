@@ -20,12 +20,7 @@ namespace DeliverIt.Services.Services
         }
         public CountryDTO Get(int id)
         {
-            var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id);
-            if(country == null)
-            {
-                throw new ArgumentNullException();
-            }
-
+            var country = FindCountry(id);
             CountryDTO countryDTO = new CountryDTO(country);
 
             return countryDTO;
@@ -34,6 +29,16 @@ namespace DeliverIt.Services.Services
         public IList<string> GetAll()
         {
             return dbContext.Countries.Select(c => c.Name).ToList();
+        }
+
+        private Country FindCountry(int id)
+        {
+            var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id);
+            if (country == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return country;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,7 +21,7 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult Create([FromBody] Parcel model)
+        public IActionResult Create([FromBody] NewParcelDTO model)
         {
             if (model == null)
             {

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using DeliverIt.Services.Models.Create;
 
 namespace DeliverIt.Services.Services
 {
@@ -18,21 +19,29 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-        public Parcel Create(Parcel parcel)
+        public ParcelDTO Create(NewParcelDTO dto)
         {
-            parcel.Customer = this.dbContext.Customers
-                                            .Include(c=>c.Address)
-                                            .Include(c=>c.Parcels)
-                                            .FirstOrDefault(c => c.Id == parcel.CustomerId);
-            parcel.Warehouse = this.dbContext.Warehouses
-                                             .Include(w => w.Address)
-                                                .ThenInclude(a=>a.City)
-                                             .Include(w => w.Parcels)
-                                             .Include(w => w.Shipments)
-                                             .FirstOrDefault(w => w.Id == parcel.WarehouseId);
-            dbContext.Parcels.Add(parcel);
-            parcel.CreatedOn = DateTime.UtcNow;
-            return parcel;
+            var newParcel = new Parcel();
+            newParcel.CategoryId = dto.CategoryId;
+            newParcel.CustomerId = dto.CustomerId;
+            newParcel.WarehouseId = dto.WarehouseId;
+            newParcel.ShipmentId = dto.ShipmentId;
+            newParcel.Weight = dto.Weight;
+
+            this.dbContext.Parcels.Add(newParcel);
+            this.dbContext.SaveChanges();
+            newParcel.CreatedOn = DateTime.UtcNow;
+
+            var createdParcel = this.dbContext
+                             .Parcels
+                             .Include(p => p.Category)
+                             .Include(p => p.Customer)
+                             .Include(p => p.Warehouse)
+                                .ThenInclude(w => w.Address)
+                                .ThenInclude(a => a.City)
+                                .FirstOrDefault(p => p.Id == newParcel.Id);
+            ParcelDTO parcelDTO = new ParcelDTO(createdParcel);
+            return parcelDTO;
         }
 
         public List<ParcelDTO> GetAll()
@@ -55,19 +64,7 @@ namespace DeliverIt.Services.Services
 
         public ParcelDTO Get(int id)
         {
-            var parcel = this.dbContext
-                             .Parcels
-                             .Include(p => p.Category)
-                             .Include(p => p.Customer)
-                             .Include(p => p.Warehouse)
-                                .ThenInclude(w => w.Address)
-                                .ThenInclude(a => a.City)
-                                .FirstOrDefault(c => c.Id == id);
-            if (parcel == null)
-            {
-                throw new ArgumentNullException();
-            }
-
+            var parcel = FindParcel(id);
             ParcelDTO parcelDTO = new ParcelDTO(parcel);
 
             return parcelDTO;
@@ -75,11 +72,7 @@ namespace DeliverIt.Services.Services
 
         public Parcel Update(int id, Parcel model)
         {
-            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
-            if (parcel == null)
-            {
-                throw new ArgumentNullException();
-            }
+            var parcel = FindParcel(id);
 
             parcel.Category = model.Category ?? parcel.Category;
 
@@ -120,14 +113,7 @@ namespace DeliverIt.Services.Services
 
         public bool Delete(int id)
         {
-            var parcel = dbContext.Parcels.FirstOrDefault(c => c.Id == id);
-
-            if (parcel == null)
-            {
-                throw new ArgumentNullException();
-            }
-            dbContext.Parcels.Remove(parcel);
-            parcel.Customer.Parcels.Remove(parcel);
+            var parcel = FindParcel(id);
             parcel.IsDeleted = true;
             parcel.DeletedOn = DateTime.UtcNow;
 
@@ -193,6 +179,27 @@ namespace DeliverIt.Services.Services
             }
             
             return parcels;
+        }
+
+        private Parcel FindParcel(int id)
+        {
+            var parcel = this.dbContext
+                             .Parcels
+                             .Include(p => p.Category)
+                             .Include(p => p.Customer)
+                             .Include(p => p.Warehouse)
+                                .ThenInclude(w => w.Address)
+                                .ThenInclude(a => a.City)
+                                .FirstOrDefault(c => c.Id == id);
+            if (parcel == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (parcel.IsDeleted)
+            {
+                throw new ArgumentException();
+            }
+            return parcel;
         }
     }
 }

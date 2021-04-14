@@ -47,17 +47,7 @@ namespace DeliverIt.Services.Services
         }
         public ShipmentDTO Get(int id)
         {
-            var shipment = this.dbContext
-                               .Shipments
-                               .Include(s => s.Status)
-                               .Include(s => s.Warehouse)
-                                    .ThenInclude(w => w.Address)
-                               .FirstOrDefault(s => s.Id == id);
-            if (shipment == null)
-            {
-                throw new ArgumentNullException();
-            }
-
+            var shipment = FindShipment(id);
             ShipmentDTO shipmentDTO = new ShipmentDTO(shipment);
 
             return shipmentDTO;
@@ -65,11 +55,7 @@ namespace DeliverIt.Services.Services
 
         public Shipment Update(int id, Shipment model)
         {
-            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
-            if (shipment == null)
-            {
-                throw new ArgumentNullException();
-            }
+            var shipment = FindShipment(id);
             if (model.StatusId != 0)
             {
                 var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId);
@@ -93,13 +79,7 @@ namespace DeliverIt.Services.Services
 
         public bool Delete(int id)
         {
-            var shipment = dbContext.Shipments.FirstOrDefault(s => s.Id == id);
-            if (shipment == null)
-            {
-                throw new ArgumentNullException();
-            }
-            dbContext.Shipments.Remove(shipment);
-            shipment.Warehouse.Shipments.Remove(shipment);
+            var shipment = FindShipment(id);
             shipment.IsDeleted = true;
             shipment.DeletedOn = DateTime.UtcNow;
             return true;
@@ -124,6 +104,25 @@ namespace DeliverIt.Services.Services
                 }
             }
             return shipments;
+        }
+
+        private Shipment FindShipment(int id)
+        {
+            var shipment = this.dbContext
+                               .Shipments
+                               .Include(s => s.Status)
+                               .Include(s => s.Warehouse)
+                                    .ThenInclude(w => w.Address)
+                               .FirstOrDefault(s => s.Id == id);
+            if (shipment == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (shipment.IsDeleted)
+            {
+                throw new ArgumentException();
+            }
+            return shipment;
         }
     }
 }
