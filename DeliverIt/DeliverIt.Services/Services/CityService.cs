@@ -39,7 +39,7 @@ namespace DeliverIt.Services.Services
                                      .FirstOrDefault(c => c.Id == id);
             if (city == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There is no such city.");
             }
             return city;
         }

@@ -36,7 +36,7 @@ namespace DeliverIt.Services.Services
             var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id);
             if (country == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There in no such country.");
             }
             return country;
         }

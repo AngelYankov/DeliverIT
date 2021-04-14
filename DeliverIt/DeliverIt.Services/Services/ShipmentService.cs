@@ -116,11 +116,11 @@ namespace DeliverIt.Services.Services
                                .FirstOrDefault(s => s.Id == id);
             if (shipment == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There is no such shipment.");
             }
             if (shipment.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException("Shipment is deleted.");
             }
             return shipment;
         }

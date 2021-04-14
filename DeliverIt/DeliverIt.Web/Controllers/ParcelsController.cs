@@ -27,8 +27,15 @@ namespace DeliverIt.Web.Controllers
             {
                 return BadRequest();
             }
-            var parcel = this.parcelService.Create(model);
-            return Created("post", parcel);
+            try
+            {
+                var parcel = this.parcelService.Create(model);
+                return Created("post", parcel);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpGet("")]

@@ -22,24 +22,46 @@ namespace DeliverIt.Services.Services
         public ParcelDTO Create(NewParcelDTO dto)
         {
             var newParcel = new Parcel();
-            newParcel.CategoryId = dto.CategoryId;
-            newParcel.CustomerId = dto.CustomerId;
-            newParcel.WarehouseId = dto.WarehouseId;
-            newParcel.ShipmentId = dto.ShipmentId;
-            newParcel.Weight = dto.Weight;
 
-            this.dbContext.Parcels.Add(newParcel);
-            this.dbContext.SaveChanges();
+            var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == dto.CategoryId);
+            if(category == null)
+            {
+                throw new ArgumentNullException("There is no such category.");
+            }
+            newParcel.CategoryId = dto.CategoryId;
+
+            var customer = this.dbContext.Customers.FirstOrDefault(c => c.Id == dto.CustomerId);
+            if (customer == null)
+            {
+                throw new ArgumentNullException("There is no such customer.");
+            }
+            newParcel.CustomerId = dto.CustomerId;
+
+            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
+            if (warehouse == null)
+            {
+                throw new ArgumentNullException("There is no such warehouse.");
+            }
+            newParcel.WarehouseId = dto.WarehouseId;
+
+            var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == dto.ShipmentId);
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("There is no such shipment.");
+            }
+            newParcel.ShipmentId = dto.ShipmentId;
+
+            if(dto.Weight < 0.1 || dto.Weight > 500)
+            newParcel.Weight = dto.Weight;
             newParcel.CreatedOn = DateTime.UtcNow;
 
-            var createdParcel = this.dbContext
-                             .Parcels
-                             .Include(p => p.Category)
-                             .Include(p => p.Customer)
-                             .Include(p => p.Warehouse)
-                                .ThenInclude(w => w.Address)
-                                .ThenInclude(a => a.City)
-                                .FirstOrDefault(p => p.Id == newParcel.Id);
+            this.dbContext.Parcels.Add(newParcel);
+            warehouse.Parcels.Add(newParcel);
+
+            this.dbContext.SaveChanges();
+
+            var createdParcel = FindParcel(newParcel.Id);
+
             ParcelDTO parcelDTO = new ParcelDTO(createdParcel);
             return parcelDTO;
         }
@@ -81,7 +103,7 @@ namespace DeliverIt.Services.Services
                 var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId);
                 if (customer == null)
                 {
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("There is no such customer.");
                 }
                 parcel.CustomerId = model.CustomerId;
             }
@@ -90,7 +112,7 @@ namespace DeliverIt.Services.Services
                 var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == model.ShipmentId);
                 if (shipment == null)
                 {
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("There is no such shipment.");
                 }
                 parcel.ShipmentId = model.ShipmentId;
             }
@@ -99,7 +121,7 @@ namespace DeliverIt.Services.Services
                 var warehouse = this.dbContext.Warehouses.FirstOrDefault(s => s.Id == model.WarehouseId);
                 if (warehouse == null)
                 {
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("There is no such warehouse.");
                 }
                 parcel.WarehouseId = model.WarehouseId;
             }
@@ -175,7 +197,7 @@ namespace DeliverIt.Services.Services
             }
             if(parcels.Count == 0)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There are no such parcels.");
             }
             
             return parcels;
@@ -193,11 +215,11 @@ namespace DeliverIt.Services.Services
                                 .FirstOrDefault(c => c.Id == id);
             if (parcel == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("There is no such parcel.");
             }
             if (parcel.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException("Parcel is deleted.");
             }
             return parcel;
         }
