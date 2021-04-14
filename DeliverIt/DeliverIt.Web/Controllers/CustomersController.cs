@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -50,7 +51,7 @@ namespace DeliverIt.Web.Controllers
             return Created("post", customer);
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] NewCustomerDTO model)
+        public IActionResult Update(int id,[FromBody] UpdateCustomerDTO model)
         {
             try
             {

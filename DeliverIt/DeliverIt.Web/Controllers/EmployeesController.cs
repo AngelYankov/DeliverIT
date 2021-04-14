@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,7 +20,6 @@ namespace DeliverIt.Web.Controllers
         {
             this.employeeService = employeeService; 
         }
-
         [HttpGet("")]
         public IActionResult GetAll()
         {
@@ -53,7 +53,7 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] NewEmployeeDTO model)
+        public IActionResult Update(int id, [FromBody] UpdateEmployeeDTO model)
         {
             try
             {

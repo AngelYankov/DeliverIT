@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DeliverIt.Data.Models
@@ -9,6 +10,7 @@ namespace DeliverIt.Data.Models
     public class Parcel : Entity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }

@@ -1,5 +1,7 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
+using DeliverIt.Services.Models.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -38,12 +40,12 @@ namespace DeliverIt.Web.Controllers
                 return NotFound("There is no such warehouse.");
             }
         }
-        [HttpPost("{id}")]
-        public IActionResult Update(int id, [FromBody] Warehouse model)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] NewWarehouseDTO model)
         {
             try
             {
-                this.warehouseService.Update(id,model);
+                this.warehouseService.Update(id, model);
                 return Ok(model);
             }
             catch (Exception)
@@ -52,14 +54,21 @@ namespace DeliverIt.Web.Controllers
             }
         }
         [HttpPost("")]
-        public IActionResult Create([FromBody] Warehouse model)
+        public IActionResult Create([FromBody] NewWarehouseDTO model)
         {
-            if (model==null)
+            if (model == null)
             {
                 return BadRequest();
             }
-            var warehouse = this.warehouseService.Create(model);
-            return Created("post", warehouse);
+            try
+            {
+                var warehouse = this.warehouseService.Create(model);
+                return Created("post", warehouse);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

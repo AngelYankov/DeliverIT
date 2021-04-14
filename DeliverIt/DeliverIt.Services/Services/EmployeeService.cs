@@ -3,6 +3,7 @@ using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,8 @@ namespace DeliverIt.Services.Services
                         .Where(e => e.IsDeleted == false)
                         .Select(e => new EmployeeDTO(e));
         }
-        public EmployeeDTO Update(int id, NewEmployeeDTO model)
+        //TODO change required fields
+        public EmployeeDTO Update(int id, UpdateEmployeeDTO model)
         {
             var employee = FindEmployee(id);
             if (model == null)

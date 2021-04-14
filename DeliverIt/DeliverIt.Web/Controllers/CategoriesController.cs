@@ -1,11 +1,6 @@
-﻿using DeliverIt.Data.Models;
-using DeliverIt.Services.ModelsServices;
-using Microsoft.AspNetCore.Http;
+﻿using DeliverIt.Services.ModelsServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DeliverIt.Web.Controllers
 {
@@ -56,7 +51,7 @@ namespace DeliverIt.Web.Controllers
         {
             try
             {
-                bool deleted = this.categoryService.Delete(id);
+                this.categoryService.Delete(id);
                 return NoContent();
             }
             catch (Exception)

@@ -1,12 +1,7 @@
-﻿using DeliverIt.Data.Models;
-using DeliverIt.Services.Contracts;
+﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models.Create;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DeliverIt.Web.Controllers
 {
@@ -45,8 +40,16 @@ namespace DeliverIt.Web.Controllers
             {
                 return BadRequest();
             }
-            this.addressService.Create(address);
-            return Created("post", address);
+            try
+            {
+                this.addressService.Create(address);
+                return Created("post", address);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+           
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id,[FromBody] NewAddressDTO address)
