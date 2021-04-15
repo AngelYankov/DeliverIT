@@ -10,7 +10,6 @@ namespace DeliverIt.Data.Models
     public class Address : Entity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required, StringLength(30,MinimumLength = 3, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]

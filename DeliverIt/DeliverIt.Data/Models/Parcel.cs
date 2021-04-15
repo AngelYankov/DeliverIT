@@ -10,7 +10,6 @@ namespace DeliverIt.Data.Models
     public class Parcel : Entity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }

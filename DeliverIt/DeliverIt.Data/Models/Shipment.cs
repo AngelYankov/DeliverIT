@@ -10,7 +10,6 @@ namespace DeliverIt.Data.Models
     public class Shipment : Entity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime Departure { get; set; }
         public DateTime Arrival { get; set; }

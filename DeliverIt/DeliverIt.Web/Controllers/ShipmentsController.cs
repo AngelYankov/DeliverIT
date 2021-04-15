@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -59,8 +60,12 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] NewShipmentDTO model)
+        public IActionResult Update(int id, [FromBody] UpdateShipmentDTO model)
         {
+            if (model == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 var shipment = this.shipmentService.Update(id, model);
@@ -87,10 +92,18 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpGet("filter")]
-        public IActionResult GetBy([FromQuery] int warehouseId)
+        public IActionResult GetBy([FromQuery] string filter, string value)
         {
-            var shipmentsDTO = this.shipmentService.GetBy(warehouseId);
-            return Ok(shipmentsDTO);
+            try
+            {
+                var shipmentsDTO = this.shipmentService.GetBy(filter, value);
+                return Ok(shipmentsDTO);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
     }
 }

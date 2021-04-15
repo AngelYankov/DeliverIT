@@ -61,6 +61,10 @@ namespace DeliverIt.Web.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] NewParcelDTO model)
         {
+            if (model == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 var parcel = this.parcelService.Update(id, model);
@@ -86,8 +90,8 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
-        [HttpGet("filter")]
-        public IActionResult GetBy([FromQuery] string filter, string value)
+        [HttpGet("filtering")]
+        public IActionResult GetBy([FromQuery] string filter,string value,string filter2, string value2)
         {
             try
             {
