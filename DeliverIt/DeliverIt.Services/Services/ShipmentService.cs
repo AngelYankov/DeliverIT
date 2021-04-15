@@ -111,21 +111,43 @@ namespace DeliverIt.Services.Services
 
         //api/shipments/search?warehouseId=
         //public IActionResult Get([From Query] int warehouseId)
-        public List<ShipmentDTO> GetBy(int warehouseId)
+        public List<ShipmentDTO> GetBy(string filter, string value)
         {
             var allShipments = this.dbContext
                               .Shipments
                               .Include(s => s.Status)
                               .Include(s => s.Warehouse)
-                                   .ThenInclude(w => w.Address);
+                                   .ThenInclude(w => w.Address)
+                              .Include(s=>s.Parcels)
+                                   .ThenInclude(p=>p.Customer);
             var shipments = new List<ShipmentDTO>();
-            foreach (var shipment in allShipments)
+
+            if (filter == "warehouse")
             {
-                if ((shipment.WarehouseId == warehouseId) && shipment.IsDeleted == false)
+                foreach (var shipment in allShipments)
                 {
-                    var shipmentDTO = new ShipmentDTO(shipment);
-                    shipments.Add(shipmentDTO);
+                    if ((shipment.WarehouseId == int.Parse(value)) && shipment.IsDeleted == false)
+                    {
+                        var shipmentDTO = new ShipmentDTO(shipment);
+                        shipments.Add(shipmentDTO);
+                    }
                 }
+            }
+
+            if (filter == "customer")
+            {
+                foreach (var shipment in allShipments)
+                {
+                    if ((shipment.Parcels.Select(p => p.Customer).Where(c => c.FirstName == value || c.LastName == value).Count() > 0) && shipment.IsDeleted == false)
+                    {
+                        var shipmentDTO = new ShipmentDTO(shipment);
+                        shipments.Add(shipmentDTO);
+                    }
+                }
+            }
+            if(shipments.Count() == 0)
+            {
+                throw new ArgumentNullException("There are no such shipments.");
             }
             return shipments;
         }

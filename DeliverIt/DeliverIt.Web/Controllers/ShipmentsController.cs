@@ -92,10 +92,18 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpGet("filter")]
-        public IActionResult GetBy([FromQuery] int warehouseId)
+        public IActionResult GetBy([FromQuery] string filter, string value)
         {
-            var shipmentsDTO = this.shipmentService.GetBy(warehouseId);
-            return Ok(shipmentsDTO);
+            try
+            {
+                var shipmentsDTO = this.shipmentService.GetBy(filter, value);
+                return Ok(shipmentsDTO);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
     }
 }
