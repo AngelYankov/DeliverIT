@@ -40,9 +40,9 @@ namespace DeliverIt.Web.Controllers
                 var category = this.categoryService.Update(id, name);
                 return Ok(category);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such category.");
+                return NotFound(E.Message);
             }
         }
 
@@ -54,9 +54,9 @@ namespace DeliverIt.Web.Controllers
                 this.categoryService.Delete(id);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return BadRequest("There is no such category.");
+                return BadRequest(E.Message);
             }
         }
     }

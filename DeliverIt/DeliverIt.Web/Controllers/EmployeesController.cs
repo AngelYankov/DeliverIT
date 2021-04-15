@@ -34,9 +34,9 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Get(id);
                 return Ok(employee);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such employee.");
+                return NotFound(E.Message);
             }
         }
 
@@ -60,9 +60,9 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Update(id, model);
                 return Ok(employee);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such employee.");
+                return NotFound(E.Message);
             }
         }
 
@@ -74,9 +74,9 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Delete(id);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return BadRequest("There is no such employee.");
+                return BadRequest(E.Message);
             }
         }
     }

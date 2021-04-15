@@ -35,9 +35,9 @@ namespace DeliverIt.Web.Controllers
                 var customer = this.customerService.Get(id);
                 return Ok(customer);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such customer.");
+                return NotFound(E.Message);
             }
         }
         [HttpPost("")]
@@ -58,9 +58,9 @@ namespace DeliverIt.Web.Controllers
                 var customer = this.customerService.Update(id,model);
                 return Ok(customer);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such customer.");
+                return NotFound(E.Message);
             }
         }
         [HttpDelete("{id}")]
@@ -71,9 +71,9 @@ namespace DeliverIt.Web.Controllers
                 this.customerService.Delete(id);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return BadRequest("There is no such customer.");
+                return BadRequest(E.Message);
             }
         }
     }

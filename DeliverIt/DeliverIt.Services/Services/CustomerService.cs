@@ -22,16 +22,14 @@ namespace DeliverIt.Services.Services
         }
         public CustomerDTO Create(NewCustomerDTO model)
         {
+            var address = FindAddress(model.AddressId);
             var customer = new Customer();
+            address.Customers.Add(customer);
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
             customer.Email = model.Email;
             customer.AddressId = model.AddressId;
             customer.CreatedOn = DateTime.UtcNow;
-            var address = this.dbContext.Addresses
-                                        .Include(a => a.City)
-                                        .FirstOrDefault(a => a.Id == model.AddressId);
-            address.Customers.Add(customer);
 
             this.dbContext.Customers.Add(customer);
             this.dbContext.SaveChanges();
@@ -52,7 +50,6 @@ namespace DeliverIt.Services.Services
                        .Where(c => c.IsDeleted == false)
                        .Select(c => new CustomerDTO(c));
         }
-        //TODO change required fields
         public CustomerDTO Update(int id, UpdateCustomerDTO model)
         {
             var customer = FindCustomer(id);
@@ -66,13 +63,7 @@ namespace DeliverIt.Services.Services
 
             if (model.AddressId != 0)
             {
-                var address = this.dbContext.Addresses
-                                .Include(a => a.City)
-                                .FirstOrDefault(a => a.Id == model.AddressId);
-                if (address == null)
-                {
-                    throw new ArgumentNullException();
-                }
+                FindAddress(model.AddressId);
                 customer.AddressId = model.AddressId;
                 customer.ModifiedOn = DateTime.UtcNow;
             }
@@ -92,20 +83,24 @@ namespace DeliverIt.Services.Services
         {
             throw new NotImplementedException();
         }
+        private Address FindAddress(int id)
+        {
+            return this.dbContext.Addresses
+                                .Include(a => a.City)
+                                .FirstOrDefault(a => a.Id == id)
+                                ?? throw new ArgumentException("There is no such address.");
+        }
         private Customer FindCustomer(int id)
         {
             var customer = this.dbContext
                                .Customers
                                .Include(c => c.Address)
                                     .ThenInclude(a => a.City)
-                               .FirstOrDefault(c => c.Id == id);
-            if (customer == null)
-            {
-                throw new ArgumentNullException();
-            }
+                               .FirstOrDefault(c => c.Id == id)
+                               ?? throw new ArgumentException("There is no such customer.");
             if (customer.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Customer has been already deleted.");
             }
             return customer;
         }

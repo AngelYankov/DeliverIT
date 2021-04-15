@@ -35,23 +35,21 @@ namespace DeliverIt.Web.Controllers
                 var warehouse = this.warehouseService.Get(id);
                 return Ok(warehouse);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such warehouse.");
+                return NotFound(E.Message);
             }
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] NewWarehouseDTO model)
         {
-            try
-            {
-                this.warehouseService.Update(id, model);
-                return Ok(model);
-            }
-            catch (Exception)
-            {
-                return NotFound("There is no such warehouse.");
-            }
+            //TRY CATCH
+                var warehouse = this.warehouseService.Update(id, model);
+                return Ok(warehouse);
+            
+            
+                //return NotFound("There is no such warehouse.");
+            
         }
         [HttpPost("")]
         public IActionResult Create([FromBody] NewWarehouseDTO model)
@@ -78,9 +76,9 @@ namespace DeliverIt.Web.Controllers
                 this.warehouseService.Delete(id);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return BadRequest("There is no such warehouse.");
+                return BadRequest(E.Message);
             }
         }
     }

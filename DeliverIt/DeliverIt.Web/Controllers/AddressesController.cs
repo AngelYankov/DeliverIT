@@ -28,9 +28,9 @@ namespace DeliverIt.Web.Controllers
                 var address = this.addressService.Get(id);
                 return Ok(address);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such address.");
+                return NotFound(E.Message);
             }
         }
         [HttpPost("")]
@@ -59,9 +59,9 @@ namespace DeliverIt.Web.Controllers
                 this.addressService.Update(id, address);
                 return Ok(address);
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                return NotFound("There is no such address.");
+                return NotFound(E.Message);
             }
         }
     }

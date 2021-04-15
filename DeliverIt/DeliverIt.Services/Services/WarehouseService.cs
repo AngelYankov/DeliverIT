@@ -21,13 +21,7 @@ namespace DeliverIt.Services.Services
         public WarehouseDTO Create(NewWarehouseDTO model)
         {
             var warehouse = new Warehouse();
-            var adddress = this.dbContext.Addresses
-                                         .Include(a=>a.City)
-                                         .FirstOrDefault(a => a.Id == model.AddressId);
-            if (adddress == null)
-            {
-                throw new ArgumentNullException();
-            }
+            var adddress = FindAddress(model.AddressId);
             warehouse.AddressId = model.AddressId;
             warehouse.Address = adddress;
             warehouse.CreatedOn = DateTime.UtcNow;
@@ -51,13 +45,16 @@ namespace DeliverIt.Services.Services
         public WarehouseDTO Update(int id, NewWarehouseDTO model)
         {
             var warehouse = FindWarehouse(id);
+            
             if (model.AddressId == 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid address ID.");
             }
-            warehouse.AddressId = model.AddressId;
+            var address = FindAddress(model.AddressId);
+            address.Warehouse = null;
+            warehouse.AddressId = address.Id;
             warehouse.ModifiedOn = DateTime.UtcNow;
-            //TODO 
+            //TODO
             this.dbContext.SaveChanges();
             return new WarehouseDTO(warehouse);
         }
@@ -66,23 +63,26 @@ namespace DeliverIt.Services.Services
             var warehouse = FindWarehouse(id);
             warehouse.IsDeleted = true;
             warehouse.DeletedOn = DateTime.UtcNow;
-            //TODO
             this.dbContext.SaveChanges();
             return true;
+        }
+        private Address FindAddress(int id)
+        {
+            return this.dbContext.Addresses
+                                .Include(a => a.City)
+                                .FirstOrDefault(a => a.Id == id)
+                                ?? throw new ArgumentException("There is no such address.");
         }
         private Warehouse FindWarehouse(int id)
         {
             var warehouse = this.dbContext.Warehouses
                                           .Include(w => w.Address)
                                               .ThenInclude(a => a.City)
-                                          .FirstOrDefault(w => w.Id == id);
-            if (warehouse == null)
-            {
-                throw new ArgumentNullException();
-            }
+                                          .FirstOrDefault(w => w.Id == id)
+                                          ?? throw new ArgumentException("There is no such warehouse.");
             if (warehouse.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Warehouse has already been deleted.");
             };
             return warehouse;
         }

@@ -21,11 +21,8 @@ namespace DeliverIt.Services.Services
         }
         public AddressDTO Create(NewAddressDTO model)
         {
-            var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId);
-            if (city == null)
-            {
-                throw new ArgumentException();
-            }
+            var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId)
+                ?? throw new ArgumentException("There is no such city.");
             var address = new Address();
             address.StreetName = model.StreetName;
             address.CityID = model.CityId;
@@ -52,18 +49,15 @@ namespace DeliverIt.Services.Services
             var address = FindAddress(id);
             if (model == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Invalid input");
             }
             address.StreetName = model.StreetName ?? address.StreetName;
             if (model.CityId != 0)
             {
                 var city = this.dbcontext
                                .Cities
-                               .FirstOrDefault(c => c.Id == model.CityId);
-                if (city == null)
-                {
-                    throw new ArgumentException();
-                }
+                               .FirstOrDefault(c => c.Id == model.CityId)
+                               ?? throw new ArgumentException("There is no such city.");
                 address.CityID = model.CityId;
             }
             address.ModifiedOn = DateTime.UtcNow;
@@ -75,11 +69,8 @@ namespace DeliverIt.Services.Services
             var address = this.dbcontext
                               .Addresses
                               .Include(a => a.City)
-                              .FirstOrDefault(a => a.Id == id);
-            if (address == null)
-            {
-                throw new ArgumentNullException();
-            }
+                              .FirstOrDefault(a => a.Id == id)
+                              ?? throw new ArgumentException("There is no such address.");
             return address;
         }
     }

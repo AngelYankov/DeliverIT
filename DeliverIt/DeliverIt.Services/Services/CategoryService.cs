@@ -48,14 +48,11 @@ namespace DeliverIt.Services.Services
         }
         private Category FindCategory(int id)
         {
-            var category = dbContext.Categories.FirstOrDefault(c => c.Id == id);
-            if (category == null)
-            {
-                throw new ArgumentNullException();
-            }
+            var category = dbContext.Categories.FirstOrDefault(c => c.Id == id)
+                                    ?? throw new ArgumentException("There is no such category.");
             if (category.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Category has been already deleted.");
             }
             return category;
         }

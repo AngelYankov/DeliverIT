@@ -370,21 +370,12 @@ namespace DeliverIt.Data
                 .HasForeignKey(p => p.ShipmentId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
-            modelBuilder.Entity<Warehouse>()
-                        .HasOne(w => w.Address)
-                        .WithOne(a => a.Warehouse);
-            modelBuilder.Entity<Warehouse>()
-                        .HasMany(w => w.Parcels)
-                        .WithOne(p => p.Warehouse)
-                        .HasForeignKey(p => p.WarehouseId);
-            modelBuilder.Entity<Warehouse>()
-                        .HasMany(w => w.Shipments)
-                        .WithOne(s => s.Warehouse)
-                        .HasForeignKey(s => s.WarehouseId);
+
             modelBuilder.Entity<Address>()
                         .HasOne(a => a.Warehouse)
                         .WithOne(w => w.Address)
                         .HasForeignKey<Warehouse>(w => w.AddressId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

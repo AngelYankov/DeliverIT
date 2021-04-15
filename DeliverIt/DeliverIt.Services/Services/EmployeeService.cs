@@ -21,17 +21,14 @@ namespace DeliverIt.Services.Services
         }
         public EmployeeDTO Create(NewEmployeeDTO model)
         {
+            var address = FindAddress(model.AddressId);
             var employee = new Employee();
             employee.FirstName = model.FirstName;
             employee.LastName = model.FirstName;
             employee.Email = model.Email;
             employee.AddressId = model.AddressId;
             employee.CreatedOn = DateTime.UtcNow;
-            var address = this.dbContext.Addresses
-                                        .Include(a => a.City)
-                                        .FirstOrDefault(a => a.Id == model.AddressId);
             address.Employees.Add(employee);
-
             this.dbContext.Employees.Add(employee);
             this.dbContext.SaveChanges();
             var createdEmployee = FindEmployee(employee.Id);
@@ -51,7 +48,6 @@ namespace DeliverIt.Services.Services
                         .Where(e => e.IsDeleted == false)
                         .Select(e => new EmployeeDTO(e));
         }
-        //TODO change required fields
         public EmployeeDTO Update(int id, UpdateEmployeeDTO model)
         {
             var employee = FindEmployee(id);
@@ -64,13 +60,7 @@ namespace DeliverIt.Services.Services
             employee.Email = model.Email ?? employee.Email;
             if (model.AddressId != 0)
             {
-                var address = this.dbContext.Addresses
-                                    .Include(a => a.City)
-                                    .FirstOrDefault(a => a.Id == model.AddressId);
-                if (address == null)
-                {
-                    throw new ArgumentNullException();
-                }
+                FindAddress(model.AddressId);
                 employee.AddressId = model.AddressId;
                 employee.ModifiedOn = DateTime.UtcNow;
             }
@@ -90,20 +80,24 @@ namespace DeliverIt.Services.Services
         {
             throw new NotImplementedException();
         }
+        private Address FindAddress(int id)
+        {
+            return this.dbContext.Addresses
+                                .Include(a => a.City)
+                                .FirstOrDefault(a => a.Id == id)
+                                ?? throw new ArgumentException("There is no such address.");
+        }
         private Employee FindEmployee(int id)
         {
             var employee = this.dbContext
                                .Employees
                                .Include(e => e.Address)
                                     .ThenInclude(a => a.City)
-                               .FirstOrDefault(e => e.Id == id);
-            if (employee == null)
-            {
-                throw new ArgumentNullException();
-            }
+                               .FirstOrDefault(e => e.Id == id)
+                               ?? throw new ArgumentException("There is no such employee.");
             if (employee.IsDeleted)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Employee has been already deleted.");
             }
             return employee;
         }
