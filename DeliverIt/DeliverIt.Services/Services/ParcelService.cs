@@ -56,6 +56,9 @@ namespace DeliverIt.Services.Services
 
             this.dbContext.Parcels.Add(newParcel);
             warehouse.Parcels.Add(newParcel);
+            category.Parcels.Add(newParcel);
+            shipment.Parcels.Add(newParcel);
+            customer.Parcels.Add(newParcel);
 
             this.dbContext.SaveChanges();
 

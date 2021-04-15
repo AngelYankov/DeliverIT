@@ -61,6 +61,10 @@ namespace DeliverIt.Web.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] NewParcelDTO model)
         {
+            if (model == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 var parcel = this.parcelService.Update(id, model);

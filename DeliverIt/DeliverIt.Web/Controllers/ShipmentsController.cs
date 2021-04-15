@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -59,8 +60,12 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] NewShipmentDTO model)
+        public IActionResult Update(int id, [FromBody] UpdateShipmentDTO model)
         {
+            if (model == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 var shipment = this.shipmentService.Update(id, model);

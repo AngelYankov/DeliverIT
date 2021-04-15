@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 
 namespace DeliverIt.Services.Services
 {
@@ -37,8 +38,8 @@ namespace DeliverIt.Services.Services
 
             this.dbContext.Shipments.Add(newShipment);
             warehouse.Shipments.Add(newShipment);
-            newShipment.CreatedOn = DateTime.UtcNow;
             status.Shipments.Add(newShipment);
+            newShipment.CreatedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
 
             var createdShipment = FindShipment(newShipment.Id);
@@ -63,7 +64,7 @@ namespace DeliverIt.Services.Services
             return shipmentDTO;
         }
 
-        public ShipmentDTO Update(int id, NewShipmentDTO model)
+        public ShipmentDTO Update(int id, UpdateShipmentDTO model)
         {
             var shipment = FindShipment(id);
             if (model.StatusId != 0)
@@ -74,6 +75,15 @@ namespace DeliverIt.Services.Services
                     throw new ArgumentNullException("There is no such status.");
                 }
                 shipment.StatusId = model.StatusId;
+            }
+            if (model.WarehouseId != 0)
+            {
+                var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == model.WarehouseId);
+                if (warehouse == null)
+                {
+                    throw new ArgumentNullException("There is no such warehouse.");
+                }
+                shipment.WarehouseId = model.WarehouseId;
             }
             if (model.Arrival != null)
             {
