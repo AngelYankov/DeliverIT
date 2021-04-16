@@ -19,6 +19,11 @@ namespace DeliverIt.Services.Services
         {
             this.dbcontext = dbcontext;
         }
+        /// <summary>
+        /// Creates new Address.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public AddressDTO Create(NewAddressDTO model)
         {
             var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId)
@@ -47,10 +52,6 @@ namespace DeliverIt.Services.Services
         public AddressDTO Update(int id, NewAddressDTO model)
         {
             var address = FindAddress(id);
-            if (model == null)
-            {
-                throw new ArgumentNullException("Invalid input");
-            }
             address.StreetName = model.StreetName ?? address.StreetName;
             if (model.CityId != 0)
             {

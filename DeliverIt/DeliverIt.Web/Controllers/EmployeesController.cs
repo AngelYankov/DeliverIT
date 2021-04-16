@@ -18,7 +18,7 @@ namespace DeliverIt.Web.Controllers
         private readonly IEmployeeService employeeService;
         public EmployeesController(IEmployeeService employeeService)
         {
-            this.employeeService = employeeService; 
+            this.employeeService = employeeService;
         }
         [HttpGet("")]
         public IActionResult GetAll()
@@ -34,22 +34,24 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Get(id);
                 return Ok(employee);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
 
         [HttpPost("")]
         public IActionResult Create([FromBody] NewEmployeeDTO model)
         {
-            if (model == null)
+            try
             {
-                return BadRequest();
+                var employee = this.employeeService.Create(model);
+                return Created("post", employee);
             }
-
-            var employee = this.employeeService.Create(model);
-            return Created("post", employee);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -60,9 +62,9 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Update(id, model);
                 return Ok(employee);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
 
@@ -74,9 +76,9 @@ namespace DeliverIt.Web.Controllers
                 var employee = this.employeeService.Delete(id);
                 return NoContent();
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return BadRequest(E.Message);
+                return BadRequest(e.Message);
             }
         }
     }

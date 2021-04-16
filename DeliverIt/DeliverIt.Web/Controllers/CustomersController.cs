@@ -35,20 +35,24 @@ namespace DeliverIt.Web.Controllers
                 var customer = this.customerService.Get(id);
                 return Ok(customer);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
         [HttpPost("")]
         public IActionResult Create([FromBody] NewCustomerDTO model)
         {
-            if (model == null)
+            try
             {
-                return BadRequest();
+                var customer = this.customerService.Create(model);
+                return Created("post", customer);
             }
-            var customer = this.customerService.Create(model);
-            return Created("post", customer);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id,[FromBody] UpdateCustomerDTO model)
@@ -58,9 +62,9 @@ namespace DeliverIt.Web.Controllers
                 var customer = this.customerService.Update(id,model);
                 return Ok(customer);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
         [HttpDelete("{id}")]
@@ -71,9 +75,9 @@ namespace DeliverIt.Web.Controllers
                 this.customerService.Delete(id);
                 return NoContent();
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return BadRequest(E.Message);
+                return BadRequest(e.Message);
             }
         }
     }

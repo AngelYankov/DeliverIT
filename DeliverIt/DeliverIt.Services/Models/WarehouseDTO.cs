@@ -6,7 +6,7 @@ namespace DeliverIt.Services.Models
     {
         public WarehouseDTO(Warehouse warehouse)
         {
-            this.Address = warehouse.Address.StreetName;// + "" + warehouse.Address.City.Name;
+            this.Address = warehouse.Address.StreetName + ", " + warehouse.Address.City.Name;
         }
         public string Address { get; set; }
     }

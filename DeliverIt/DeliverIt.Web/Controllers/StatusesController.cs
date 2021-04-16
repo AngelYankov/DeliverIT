@@ -33,9 +33,9 @@ namespace DeliverIt.Web.Controllers
                 return Ok(status);
 
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
     }

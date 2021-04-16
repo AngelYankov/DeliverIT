@@ -53,14 +53,9 @@ namespace DeliverIt.Services.Services
         public CustomerDTO Update(int id, UpdateCustomerDTO model)
         {
             var customer = FindCustomer(id);
-            if (model == null)
-            {
-                throw new ArgumentNullException();
-            }
             customer.FirstName = model.FirstName ?? customer.FirstName;
             customer.LastName = model.LastName ?? customer.LastName;
             customer.Email = model.Email ?? customer.Email;
-
             if (model.AddressId != 0)
             {
                 FindAddress(model.AddressId);

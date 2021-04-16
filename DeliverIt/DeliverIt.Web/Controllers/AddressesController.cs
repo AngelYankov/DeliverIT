@@ -28,26 +28,23 @@ namespace DeliverIt.Web.Controllers
                 var address = this.addressService.Get(id);
                 return Ok(address);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
         [HttpPost("")]
         public IActionResult Create([FromBody] NewAddressDTO address)
         {
-            if (address == null)
-            {
-                return BadRequest();
-            }
+            
             try
             {
                 this.addressService.Create(address);
                 return Created("post", address);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
            
         }
@@ -59,9 +56,9 @@ namespace DeliverIt.Web.Controllers
                 this.addressService.Update(id, address);
                 return Ok(address);
             }
-            catch (Exception E)
+            catch (Exception e)
             {
-                return NotFound(E.Message);
+                return NotFound(e.Message);
             }
         }
     }

@@ -22,6 +22,7 @@ namespace DeliverIt.Services.Services
         {
             var warehouse = new Warehouse();
             var adddress = FindAddress(model.AddressId);
+            adddress.Warehouse = warehouse;
             warehouse.AddressId = model.AddressId;
             warehouse.Address = adddress;
             warehouse.CreatedOn = DateTime.UtcNow;
@@ -45,16 +46,13 @@ namespace DeliverIt.Services.Services
         public WarehouseDTO Update(int id, NewWarehouseDTO model)
         {
             var warehouse = FindWarehouse(id);
-            
-            if (model.AddressId == 0)
-            {
-                throw new ArgumentException("Invalid address ID.");
-            }
             var address = FindAddress(model.AddressId);
-            address.Warehouse = null;
+            if (address.Warehouse != null)
+            {
+                throw new ArgumentException("address already taken.");
+            }
             warehouse.AddressId = address.Id;
             warehouse.ModifiedOn = DateTime.UtcNow;
-            //TODO
             this.dbContext.SaveChanges();
             return new WarehouseDTO(warehouse);
         }

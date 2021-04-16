@@ -51,10 +51,6 @@ namespace DeliverIt.Services.Services
         public EmployeeDTO Update(int id, UpdateEmployeeDTO model)
         {
             var employee = FindEmployee(id);
-            if (model == null)
-            {
-                throw new ArgumentNullException();
-            }
             employee.FirstName = model.FirstName ?? employee.FirstName;
             employee.LastName = model.LastName ?? employee.LastName;
             employee.Email = model.Email ?? employee.Email;
