@@ -19,6 +19,11 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = deliverItContext;
         }
+        /// <summary>
+        /// Creae an employee
+        /// </summary>
+        /// <param name="model">Data of the employee to be created.</param>
+        /// <returns>Returns new employee or an appropriate error message.</returns>
         public EmployeeDTO Create(NewEmployeeDTO model)
         {
             var address = FindAddress(model.AddressId);
@@ -34,11 +39,20 @@ namespace DeliverIt.Services.Services
             var createdEmployee = FindEmployee(employee.Id);
             return new EmployeeDTO(createdEmployee);
         }
+        /// <summary>
+        /// Get an employee.
+        /// </summary>
+        /// <param name="id">ID to search for</param>
+        /// <returns>Returns employee with that ID or an appropriate error message.</returns>
         public EmployeeDTO Get(int id)
         {
             var employee = FindEmployee(id);
             return new EmployeeDTO(employee);
         }
+        /// <summary>
+        /// Get all employees.
+        /// </summary>
+        /// <returns>Returns all employees or an appropriate error message.</returns>
         public IEnumerable<EmployeeDTO> GetAll()
         {
             return this.dbContext
@@ -48,6 +62,12 @@ namespace DeliverIt.Services.Services
                         .Where(e => e.IsDeleted == false)
                         .Select(e => new EmployeeDTO(e));
         }
+        /// <summary>
+        /// Update an employee.
+        /// </summary>
+        /// <param name="id">ID of employee to search for.</param>
+        /// <param name="model">Data to be updated.</param>
+        /// <returns></returns>
         public EmployeeDTO Update(int id, UpdateEmployeeDTO model)
         {
             var employee = FindEmployee(id);
@@ -63,6 +83,11 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return new EmployeeDTO(employee);
         }
+        /// <summary>
+        /// Delete an employee.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns true or false if successful or an appropriate error message.</returns>
         public bool Delete(int id)
         {
             var employee = FindEmployee(id);
@@ -82,7 +107,11 @@ namespace DeliverIt.Services.Services
                                 .Include(a => a.City)
                                 .FirstOrDefault(a => a.Id == id)
                                 ?? throw new ArgumentException(Exceptions.InvalidAddress);
-        }
+        }/// <summary>
+         /// Find an employee with ID.
+         /// </summary>
+         /// <param name="id">ID to search for.</param>
+         /// <returns>Returns employee with that ID or an appropriate error message.</returns>
         private Employee FindEmployee(int id)
         {
             var employee = this.dbContext

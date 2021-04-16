@@ -20,12 +20,20 @@ namespace DeliverIt.Web.Controllers
         {
             this.employeeService = employeeService;
         }
+        /// <summary>
+        /// Get all employees.
+        /// </summary>
+        /// <returns>Returns all employees.</returns>
         [HttpGet("")]
         public IActionResult GetAll()
         {
             return Ok(this.employeeService.GetAll());
         }
-
+        /// <summary>
+        /// Get an employee by ID.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns employee with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -39,7 +47,11 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-
+        /// <summary>
+        /// Create new employee.
+        /// </summary>
+        /// <param name="model">Data to be created with.</param>
+        /// <returns>Returns new employee or an appropriate error message.</returns>
         [HttpPost("")]
         public IActionResult Create([FromBody] NewEmployeeDTO model)
         {
@@ -53,7 +65,12 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        /// <summary>
+        /// Update an employee.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <param name="model">Data to be updated.</param>
+        /// <returns>Returns updated employee or an appropriate error message.</returns>
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateEmployeeDTO model)
         {
@@ -67,7 +84,11 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-
+        /// <summary>
+        /// Delete an employee.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

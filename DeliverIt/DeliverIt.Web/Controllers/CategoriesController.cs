@@ -13,13 +13,20 @@ namespace DeliverIt.Web.Controllers
         {
             this.categoryService = categoryService;
         }
-
+        /// <summary>
+        /// Get all categories.
+        /// </summary>
+        /// <returns>Returns all categories.</returns>
         [HttpGet("")]
         public IActionResult GetAll()
         {
             return Ok(this.categoryService.GetAll());
         }
-
+        /// <summary>
+        /// Create a new category.
+        /// </summary>
+        /// <param name="name">Name of new category.</param>
+        /// <returns>Returns new category or an appropriate error message.</returns>
         [HttpPost("{name}")]
         public IActionResult Create(string name)
         {
@@ -31,7 +38,12 @@ namespace DeliverIt.Web.Controllers
             var category = this.categoryService.Create(name);
             return Created("post",category);
         }
-
+        /// <summary>
+        /// Update existing category by ID.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <param name="name">New name of category.</param>
+        /// <returns>Returns updated category or an appropriate error message.</returns>
         [HttpPut("{id}/{name}")]
         public IActionResult Update(int id, string name)
         {
@@ -45,7 +57,11 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-
+        /// <summary>
+        /// Delete a category.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

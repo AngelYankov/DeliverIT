@@ -20,6 +20,11 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
+        /// <summary>
+        /// Create a customer
+        /// </summary>
+        /// <param name="model">Data of the customer to be created.</param>
+        /// <returns>Returns new customer or an appropriate error message.</returns>
         public CustomerDTO Create(NewCustomerDTO model)
         {
             var address = FindAddress(model.AddressId);
@@ -36,11 +41,20 @@ namespace DeliverIt.Services.Services
             var createdCustomer = FindCustomer(customer.Id);
             return new CustomerDTO(createdCustomer);
         }
+        /// <summary>
+        /// Get customer by ID
+        /// </summary>
+        /// <param name="id">ID to search for</param>
+        /// <returns>Returns customer with that ID or an appropriate error message.</returns>
         public CustomerDTO Get(int id)
         {
             var customer = FindCustomer(id);
             return new CustomerDTO(customer);
         }
+        /// <summary>
+        /// Get all customers
+        /// </summary>
+        /// <returns>Returns all customers or an appropriate error message.</returns>
         public IEnumerable<CustomerDTO> GetAll()
         {
             return this.dbContext
@@ -50,6 +64,12 @@ namespace DeliverIt.Services.Services
                        .Where(c => c.IsDeleted == false)
                        .Select(c => new CustomerDTO(c));
         }
+        /// <summary>
+        /// Update a customer.
+        /// </summary>
+        /// <param name="id">ID of customer to search for.</param>
+        /// <param name="model">Data to be updated.</param>
+        /// <returns>Returns updated customer or an appropriate error message.</returns>
         public CustomerDTO Update(int id, UpdateCustomerDTO model)
         {
             var customer = FindCustomer(id);
@@ -65,6 +85,11 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return new CustomerDTO(customer);
         }
+        /// <summary>
+        /// Delete a customer.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns true or false if succesful or an appropriate error message.</returns>
         public bool Delete(int id)
         {
             var customer = FindCustomer(id);
@@ -85,6 +110,11 @@ namespace DeliverIt.Services.Services
                                 .FirstOrDefault(a => a.Id == id)
                                 ?? throw new ArgumentException(Exceptions.InvalidAddress);
         }
+        /// <summary>
+        /// Finds a customer with ID.
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns customer or an appropriate error message.</returns>
         private Customer FindCustomer(int id)
         {
             var customer = this.dbContext
