@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace DeliverIt.Services.Models.Create
+namespace DeliverIt.Services.Models.Update
 {
-    public class NewParcelDTO
+    public class UpdateParcelDTO
     {
         public int CustomerId { get; set; }
         public int WarehouseId { get; set; }
         public int CategoryId { get; set; }
         public int ShipmentId { get; set; }
-        [Range(0.1, 500, ErrorMessage = "Value for {0} should be between {1} and {2} kg.")]
         public double Weight { get; set; }
     }
 }

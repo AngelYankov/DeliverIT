@@ -20,7 +20,7 @@ namespace DeliverIt.Data.Models
         public int ShipmentId { get; set; }
         public Shipment Shipment { get; set; }
 
-        [Required, Range(0.1, 500, ErrorMessage = "Value for {0} should be between {1} and {2} characters.")]
+        [Required, Range(0.1, 500, ErrorMessage = "Value for {0} should be between {1} and {2} kg.")]
         public double Weight { get; set; }
     }
 }
