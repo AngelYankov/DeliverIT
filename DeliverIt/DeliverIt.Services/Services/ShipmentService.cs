@@ -159,7 +159,9 @@ namespace DeliverIt.Services.Services
             {
                 foreach (var shipment in allShipments)
                 {
-                    if ((shipment.Parcels.Select(p => p.Customer).Where(c => c.FirstName == value || c.LastName == value).Count() > 0) && shipment.IsDeleted == false)
+                    if ((shipment.Parcels.Select(p => p.Customer)
+                        .Where(c => c.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase) || c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase))
+                        .Count() > 0) && shipment.IsDeleted == false)
                     {
                         var shipmentDTO = new ShipmentDTO(shipment);
                         shipments.Add(shipmentDTO);
