@@ -31,22 +31,22 @@ namespace DeliverIt.Services.Services
             var newParcel = new Parcel();
 
             var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == dto.CategoryId)
-                ?? throw new ArgumentNullException("There is no such category.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidCategory);
 
             newParcel.CategoryId = dto.CategoryId;
 
             var customer = this.dbContext.Customers.FirstOrDefault(c => c.Id == dto.CustomerId)
-                ?? throw new ArgumentNullException("There is no such customer.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidCustomer);
 
             newParcel.CustomerId = dto.CustomerId;
 
             var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId)
-                ?? throw new ArgumentNullException("There is no such warehouse.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidWarehouse);
 
             newParcel.WarehouseId = dto.WarehouseId;
 
             var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == dto.ShipmentId)
-                ?? throw new ArgumentNullException("There is no such shipment.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidShipment);
 
             newParcel.ShipmentId = dto.ShipmentId;
 
@@ -116,21 +116,21 @@ namespace DeliverIt.Services.Services
             if (model.CategoryId != 0)
             {
                 var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == model.CategoryId)
-                    ?? throw new ArgumentNullException("There is no such category.");
+                    ?? throw new ArgumentNullException(Exceptions.InvalidCategory);
 
                 parcel.CategoryId = model.CategoryId;
             }
             if (model.CustomerId != 0)
             {
                 var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId)
-                    ?? throw new ArgumentNullException("There is no such customer.");
+                    ?? throw new ArgumentNullException(Exceptions.InvalidCustomer);
 
                 parcel.CustomerId = model.CustomerId;
             }
             if (model.ShipmentId != 0)
             {
                 var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == model.ShipmentId)
-                    ?? throw new ArgumentNullException("There is no such shipment.");
+                    ?? throw new ArgumentNullException(Exceptions.InvalidShipment);
 
                 parcel.ShipmentId = model.ShipmentId;
             }
@@ -140,7 +140,7 @@ namespace DeliverIt.Services.Services
                                               .Include(w => w.Address)
                                                 .ThenInclude(a => a.City)
                                               .FirstOrDefault(s => s.Id == model.WarehouseId)
-                                              ?? throw new ArgumentNullException("There is no such warehouse.");
+                                              ?? throw new ArgumentNullException(Exceptions.InvalidWarehouse);
 
                 parcel.WarehouseId = model.WarehouseId;
             }

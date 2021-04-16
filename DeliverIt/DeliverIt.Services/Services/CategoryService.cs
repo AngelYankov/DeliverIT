@@ -16,7 +16,11 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
-
+        /// <summary>
+        /// Create a category.
+        /// </summary>
+        /// <param name="categoryName">The name of the category.</param>
+        /// <returns>Returns the name of the created category or an appropriate error message.</returns>
         public string Create(string categoryName)
         {
             var category = new Category();
@@ -26,10 +30,20 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return category.Name;
         }
+        /// <summary>
+        /// Get all categories
+        /// </summary>
+        /// <returns>Returns all names of the categories</returns>
         public IList<string> GetAll()
         {
             return this.dbContext.Categories.Where(c=>c.IsDeleted==false).Select(c => c.Name).ToList();
         }
+        /// <summary>
+        /// Update name of category.
+        /// </summary>
+        /// <param name="id">ID of the category to be updated.</param>
+        /// <param name="name">Name it should be updated to.</param>
+        /// <returns>Returns the name of the updated category.</returns>
         public string Update(int id, string name)
         {
             var category = FindCategory(id);
@@ -38,6 +52,11 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return category.Name;
         }
+        /// <summary>
+        /// Delete a category
+        /// </summary>
+        /// <param name="id">ID of the category.</param>
+        /// <returns>Returns true or false if category is deleted succesfully or an appropriate error message. </returns>
         public bool Delete(int id)
         {
             var category = FindCategory(id);
@@ -46,6 +65,11 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return category.IsDeleted;
         }
+        /// <summary>
+        /// Finds a category
+        /// </summary>
+        /// <param name="id">ID of category to search for</param>
+        /// <returns>Returns category with that ID or an appropriate error message.</returns>
         private Category FindCategory(int id)
         {
             var category = dbContext.Categories.FirstOrDefault(c => c.Id == id)

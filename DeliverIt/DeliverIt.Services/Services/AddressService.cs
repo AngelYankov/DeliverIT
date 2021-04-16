@@ -20,10 +20,10 @@ namespace DeliverIt.Services.Services
             this.dbcontext = dbcontext;
         }
         /// <summary>
-        /// Creates new Address.
+        /// Create an address.
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="model">Details of the address to be created.</param>
+        /// <returns>Returns created address or an appropriate error message.</returns>
         public AddressDTO Create(NewAddressDTO model)
         {
             var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId)
@@ -37,11 +37,20 @@ namespace DeliverIt.Services.Services
             this.dbcontext.SaveChanges();
             return new AddressDTO(address);
         }
+        /// <summary>
+        /// Get an address by a certain ID
+        /// </summary>
+        /// <param name="id">ID of the address to get</param>
+        /// <returns>Returns an address or an appropriate error message.</returns>
         public AddressDTO Get(int id)
         {
             var address = FindAddress(id);
             return new AddressDTO(address);
         }
+        /// <summary>
+        /// Get all addresses.
+        /// </summary>
+        /// <returns>Returns all addresses.</returns>
         public IEnumerable<AddressDTO> GetAll()
         {
             return this.dbcontext
@@ -49,6 +58,12 @@ namespace DeliverIt.Services.Services
                        .Include(a => a.City)
                        .Select(a => new AddressDTO(a));
         }
+        /// <summary>
+        /// Update an address by a certain ID and data.
+        /// </summary>
+        /// <param name="id">ID of the address to update.</param>
+        /// <param name="model">Details of the address to be updated.</param>
+        /// <returns>Returns the updated address or an appropriate error message. </returns>
         public AddressDTO Update(int id, NewAddressDTO model)
         {
             var address = FindAddress(id);
@@ -63,13 +78,18 @@ namespace DeliverIt.Services.Services
             }
             var warehouse = this.dbcontext.Warehouses.Include(w => w.Address)
                                                      .FirstOrDefault(w => w.Id == model.WarehouseId)
-                                                     ?? throw new ArgumentException("There is no such warehouse.");
+                                                     ?? throw new ArgumentException(Exceptions.InvalidWarehouse);
 
             address.Warehouse = warehouse;
             address.ModifiedOn = DateTime.UtcNow;
             this.dbcontext.SaveChanges();
             return new AddressDTO(address);
         }
+        /// <summary>
+        /// Find an adress by ID
+        /// </summary>
+        /// <param name="id">ID of the address to search for</param>
+        /// <returns>Returns address with that ID</returns>
         private Address FindAddress(int id)
         {
             var address = this.dbcontext
