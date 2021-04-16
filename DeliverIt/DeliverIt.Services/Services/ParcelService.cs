@@ -389,7 +389,7 @@ namespace DeliverIt.Services.Services
             }
             if (filteredParcels.Count == 0 && sortBy1 == null)
             {
-                throw new ArgumentNullException("There are no such parcels.");
+                throw new ArgumentNullException(Exceptions.InvalidParcels);
             }
             if (filteredParcels.Count != 0)
             {
@@ -519,11 +519,11 @@ namespace DeliverIt.Services.Services
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City)
                              .FirstOrDefault(c => c.Id == id)
-                             ?? throw new ArgumentNullException("There is no such parcel.");
+                             ?? throw new ArgumentNullException(Exceptions.InvalidParcel);
 
             if (parcel.IsDeleted)
             {
-                throw new ArgumentNullException("Parcel is deleted.");
+                throw new ArgumentNullException(Exceptions.DeletedParcel);
             }
             return parcel;
         }

@@ -27,7 +27,7 @@ namespace DeliverIt.Services.Services
         public AddressDTO Create(NewAddressDTO model)
         {
             var city = this.dbcontext.Cities.FirstOrDefault(c => c.Id == model.CityId)
-                ?? throw new ArgumentException("There is no such city.");
+                ?? throw new ArgumentException(Exceptions.InvalidCity);
             var address = new Address();
             address.StreetName = model.StreetName;
             address.CityID = model.CityId;
@@ -58,7 +58,7 @@ namespace DeliverIt.Services.Services
                 var city = this.dbcontext
                                .Cities
                                .FirstOrDefault(c => c.Id == model.CityId)
-                               ?? throw new ArgumentException("There is no such city.");
+                               ?? throw new ArgumentException(Exceptions.InvalidCity);
                 address.CityID = model.CityId;
             }
             var warehouse = this.dbcontext.Warehouses.Include(w => w.Address)
@@ -76,7 +76,7 @@ namespace DeliverIt.Services.Services
                               .Addresses
                               .Include(a => a.City)
                               .FirstOrDefault(a => a.Id == id)
-                              ?? throw new ArgumentException("There is no such address.");
+                              ?? throw new ArgumentException(Exceptions.InvalidAddress);
             return address;
         }
     }

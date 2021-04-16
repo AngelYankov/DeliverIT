@@ -49,7 +49,7 @@ namespace DeliverIt.Services.Services
             var warehouseWIthId = this.dbContext.Warehouses.Include(w => w.Address).FirstOrDefault(w => w.AddressId == model.AddressId);
             if (warehouseWIthId!=null)
             {
-                throw new ArgumentException("Address is already set up to another warehouse.");
+                throw new ArgumentException(Exceptions.TakenAddress);
             }
             warehouse.AddressId = address.Id;
             warehouse.ModifiedOn = DateTime.UtcNow;
@@ -69,7 +69,7 @@ namespace DeliverIt.Services.Services
             return this.dbContext.Addresses
                                 .Include(a => a.City)
                                 .FirstOrDefault(a => a.Id == id)
-                                ?? throw new ArgumentException("There is no such address.");
+                                ?? throw new ArgumentException(Exceptions.InvalidAddress);
         }
         private Warehouse FindWarehouse(int id)
         {
@@ -77,10 +77,10 @@ namespace DeliverIt.Services.Services
                                           .Include(w => w.Address)
                                               .ThenInclude(a => a.City)
                                           .FirstOrDefault(w => w.Id == id)
-                                          ?? throw new ArgumentException("There is no such warehouse.");
+                                          ?? throw new ArgumentException(Exceptions.InvalidWarehouse);
             if (warehouse.IsDeleted)
             {
-                throw new ArgumentException("Warehouse has already been deleted.");
+                throw new ArgumentException(Exceptions.DeletedWarehouse);
             };
             return warehouse;
         }

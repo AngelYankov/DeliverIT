@@ -30,10 +30,10 @@ namespace DeliverIt.Services.Services
             var newShipment = new Shipment();
 
             var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId)
-                ?? throw new ArgumentNullException("There is no such warehouse.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidWarehouse);
 
             var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == dto.StatusId)
-                ?? throw new ArgumentNullException("There is no such status.");
+                ?? throw new ArgumentNullException(Exceptions.InvalidStatus);
 
             this.dbContext.Shipments.Add(newShipment);
             warehouse.Shipments.Add(newShipment);
@@ -85,7 +85,7 @@ namespace DeliverIt.Services.Services
             if (model.StatusId != 0)
             {
                 var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId)
-                    ?? throw new ArgumentNullException("There is no such status.");
+                    ?? throw new ArgumentNullException(Exceptions.InvalidStatus);
 
                 shipment.StatusId = model.StatusId;
             }
@@ -93,7 +93,7 @@ namespace DeliverIt.Services.Services
             {
                 var warehouse = this.dbContext.Warehouses.Include(w=>w.Address)
                                                          .FirstOrDefault(w => w.Id == model.WarehouseId)
-                                                         ?? throw new ArgumentNullException("There is no such warehouse.");
+                                                         ?? throw new ArgumentNullException(Exceptions.InvalidWarehouse);
 
                 shipment.WarehouseId = model.WarehouseId;
             }
@@ -168,7 +168,7 @@ namespace DeliverIt.Services.Services
             }
             if (shipments.Count() == 0)
             {
-                throw new ArgumentNullException("There are no such shipments.");
+                throw new ArgumentNullException(Exceptions.InvalidShipments);
             }
             return shipments;
         }
@@ -186,11 +186,11 @@ namespace DeliverIt.Services.Services
                                .Include(s => s.Warehouse)
                                     .ThenInclude(w => w.Address)
                                .FirstOrDefault(s => s.Id == id)
-                               ?? throw new ArgumentNullException("There is no such shipment.");
+                               ?? throw new ArgumentNullException(Exceptions.InvalidShipment);
 
             if (shipment.IsDeleted)
             {
-                throw new ArgumentNullException("Shipment is deleted.");
+                throw new ArgumentNullException(Exceptions.DeletedShipment);
             }
             return shipment;
         }
