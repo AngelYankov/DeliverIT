@@ -514,6 +514,7 @@ namespace DeliverIt.Services.Services
                              .Parcels
                              .Include(p => p.Category)
                              .Include(p => p.Customer)
+                             .Include(s=>s.Shipment)
                              .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City)

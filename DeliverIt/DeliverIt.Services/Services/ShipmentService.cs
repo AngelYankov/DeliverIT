@@ -91,16 +91,17 @@ namespace DeliverIt.Services.Services
             }
             if (model.WarehouseId != 0)
             {
-                var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == model.WarehouseId)
-                     ?? throw new ArgumentNullException("There is no such warehouse.");
+                var warehouse = this.dbContext.Warehouses.Include(w=>w.Address)
+                                                         .FirstOrDefault(w => w.Id == model.WarehouseId)
+                                                         ?? throw new ArgumentNullException("There is no such warehouse.");
 
                 shipment.WarehouseId = model.WarehouseId;
             }
-            if (model.Arrival != null)
+            if (model.Arrival != DateTime.MinValue)
             {
                 shipment.Arrival = model.Arrival;
             }
-            if (model.Departure != null)
+            if (model.Departure != DateTime.MinValue)
             {
                 shipment.Departure = model.Departure;
             }
