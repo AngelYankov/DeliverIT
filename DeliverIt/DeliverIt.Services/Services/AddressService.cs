@@ -61,6 +61,11 @@ namespace DeliverIt.Services.Services
                                ?? throw new ArgumentException("There is no such city.");
                 address.CityID = model.CityId;
             }
+            var warehouse = this.dbcontext.Warehouses.Include(w => w.Address)
+                                                     .FirstOrDefault(w => w.Id == model.WarehouseId)
+                                                     ?? throw new ArgumentException("There is no such warehouse.");
+
+            address.Warehouse = warehouse;
             address.ModifiedOn = DateTime.UtcNow;
             this.dbcontext.SaveChanges();
             return new AddressDTO(address);

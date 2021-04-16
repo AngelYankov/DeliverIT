@@ -34,12 +34,12 @@ namespace DeliverIt.Web.Controllers
             }
         }
         [HttpPost("")]
-        public IActionResult Create([FromBody] NewAddressDTO address)
+        public IActionResult Create([FromBody] NewAddressDTO model)
         {
             
             try
             {
-                this.addressService.Create(address);
+                var address =this.addressService.Create(model);
                 return Created("post", address);
             }
             catch (Exception e)
@@ -49,11 +49,11 @@ namespace DeliverIt.Web.Controllers
            
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] NewAddressDTO address)
+        public IActionResult Update(int id,[FromBody] NewAddressDTO model)
         {
             try
             {
-                this.addressService.Update(id, address);
+                var address = this.addressService.Update(id, model);
                 return Ok(address);
             }
             catch (Exception e)

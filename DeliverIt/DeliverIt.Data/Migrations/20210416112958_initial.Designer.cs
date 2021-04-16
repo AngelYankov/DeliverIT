@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliverIt.Data.Migrations
 {
     [DbContext(typeof(DeliverItContext))]
-    [Migration("20210416095502_initial")]
+    [Migration("20210416112958_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -647,10 +647,10 @@ namespace DeliverIt.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Arrival = new DateTime(2021, 4, 28, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(8891),
+                            Arrival = new DateTime(2021, 4, 28, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(9019),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2021, 4, 23, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(7685),
+                            Departure = new DateTime(2021, 4, 23, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(8159),
                             IsDeleted = false,
                             ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StatusId = 1,
@@ -659,10 +659,10 @@ namespace DeliverIt.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Arrival = new DateTime(2021, 4, 26, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(9904),
+                            Arrival = new DateTime(2021, 4, 26, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(9741),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2021, 4, 22, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(9861),
+                            Departure = new DateTime(2021, 4, 22, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(9716),
                             IsDeleted = false,
                             ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StatusId = 1,
@@ -671,10 +671,10 @@ namespace DeliverIt.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Arrival = new DateTime(2021, 4, 30, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(9921),
+                            Arrival = new DateTime(2021, 4, 30, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(9754),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2021, 4, 26, 9, 55, 1, 797, DateTimeKind.Utc).AddTicks(9921),
+                            Departure = new DateTime(2021, 4, 26, 11, 29, 57, 229, DateTimeKind.Utc).AddTicks(9754),
                             IsDeleted = false,
                             ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StatusId = 1,

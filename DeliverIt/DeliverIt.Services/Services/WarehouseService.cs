@@ -22,7 +22,6 @@ namespace DeliverIt.Services.Services
         {
             var warehouse = new Warehouse();
             var adddress = FindAddress(model.AddressId);
-            adddress.Warehouse = warehouse;
             warehouse.AddressId = model.AddressId;
             warehouse.Address = adddress;
             warehouse.CreatedOn = DateTime.UtcNow;
@@ -47,9 +46,10 @@ namespace DeliverIt.Services.Services
         {
             var warehouse = FindWarehouse(id);
             var address = FindAddress(model.AddressId);
-            if (address.Warehouse != null)
+            var warehouseWIthId = this.dbContext.Warehouses.Include(w => w.Address).FirstOrDefault(w => w.AddressId == model.AddressId);
+            if (warehouseWIthId!=null)
             {
-                throw new ArgumentException("address already taken.");
+                throw new ArgumentException("Address is already set up to another warehouse.");
             }
             warehouse.AddressId = address.Id;
             warehouse.ModifiedOn = DateTime.UtcNow;
