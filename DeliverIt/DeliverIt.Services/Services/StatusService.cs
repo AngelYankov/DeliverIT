@@ -17,6 +17,12 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
+
+        /// <summary>
+        /// Get a status by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the status to get.</param>
+        /// <returns>Returns a status by a certain ID.</returns>
         public StatusDTO Get(int id)
         {
             var status = dbContext.Statuses.FirstOrDefault(s => s.Id == id)
@@ -26,6 +32,10 @@ namespace DeliverIt.Services.Services
             return statusDTO;
         }
 
+        /// <summary>
+        /// Get all statuses.
+        /// </summary>
+        /// <returns>Returns all statuses.</returns>
         public IList<string> GetAll()
         {
             return dbContext.Statuses.Select(s => s.Name).ToList();

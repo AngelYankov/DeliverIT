@@ -20,36 +20,34 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
+
+        /// <summary>
+        /// Create a parcel.
+        /// </summary>
+        /// <param name="dto">Details of the parcel to be created.</param>
+        /// <returns>Returns the created parcel or an appropriate error message.</returns>
         public ParcelDTO Create(NewParcelDTO dto)
         {
             var newParcel = new Parcel();
 
-            var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == dto.CategoryId);
-            if (category == null)
-            {
-                throw new ArgumentNullException("There is no such category.");
-            }
+            var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == dto.CategoryId)
+                ?? throw new ArgumentNullException("There is no such category.");
+
             newParcel.CategoryId = dto.CategoryId;
 
-            var customer = this.dbContext.Customers.FirstOrDefault(c => c.Id == dto.CustomerId);
-            if (customer == null)
-            {
-                throw new ArgumentNullException("There is no such customer.");
-            }
+            var customer = this.dbContext.Customers.FirstOrDefault(c => c.Id == dto.CustomerId)
+                ?? throw new ArgumentNullException("There is no such customer.");
+
             newParcel.CustomerId = dto.CustomerId;
 
-            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
-            if (warehouse == null)
-            {
-                throw new ArgumentNullException("There is no such warehouse.");
-            }
+            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId)
+                ?? throw new ArgumentNullException("There is no such warehouse.");
+
             newParcel.WarehouseId = dto.WarehouseId;
 
-            var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == dto.ShipmentId);
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("There is no such shipment.");
-            }
+            var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == dto.ShipmentId)
+                ?? throw new ArgumentNullException("There is no such shipment.");
+
             newParcel.ShipmentId = dto.ShipmentId;
 
             newParcel.Weight = dto.Weight;
@@ -69,6 +67,10 @@ namespace DeliverIt.Services.Services
             return parcelDTO;
         }
 
+        /// <summary>
+        /// Get all parcels.
+        /// </summary>
+        /// <returns>Returns all parcels.</returns>
         public IEnumerable<ParcelDTO> GetAll()
         {
             return this.dbContext.Parcels
@@ -82,6 +84,11 @@ namespace DeliverIt.Services.Services
                                  .Select(p => new ParcelDTO(p));
         }
 
+        /// <summary>
+        /// Get a parcel by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the parcel to get.</param>
+        /// <returns>Returns a parcel with certain ID or an appropriate error message.</returns>
         public ParcelDTO Get(int id)
         {
             var parcel = FindParcel(id);
@@ -90,6 +97,12 @@ namespace DeliverIt.Services.Services
             return parcelDTO;
         }
 
+        /// <summary>
+        /// Update a parcel by a certain ID and data.
+        /// </summary>
+        /// <param name="id">ID of the parcel to update.</param>
+        /// <param name="model">Details of the parcel to be updated.</param>
+        /// <returns>Returns the updated parcel or an appropriate error message.</returns>
         public ParcelDTO Update(int id, UpdateParcelDTO model)
         {
             var parcel = FindParcel(id);
@@ -102,29 +115,23 @@ namespace DeliverIt.Services.Services
                                 .ThenInclude(a => a.City);
             if (model.CategoryId != 0)
             {
-                var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == model.CategoryId);
-                if (category == null)
-                {
-                    throw new ArgumentNullException("There is no such category.");
-                }
+                var category = this.dbContext.Categories.FirstOrDefault(c => c.Id == model.CategoryId)
+                    ?? throw new ArgumentNullException("There is no such category.");
+
                 parcel.CategoryId = model.CategoryId;
             }
             if (model.CustomerId != 0)
             {
-                var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId);
-                if (customer == null)
-                {
-                    throw new ArgumentNullException("There is no such customer.");
-                }
+                var customer = this.dbContext.Customers.FirstOrDefault(s => s.Id == model.CustomerId)
+                    ?? throw new ArgumentNullException("There is no such customer.");
+
                 parcel.CustomerId = model.CustomerId;
             }
             if (model.ShipmentId != 0)
             {
-                var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == model.ShipmentId);
-                if (shipment == null)
-                {
-                    throw new ArgumentNullException("There is no such shipment.");
-                }
+                var shipment = this.dbContext.Shipments.FirstOrDefault(s => s.Id == model.ShipmentId)
+                    ?? throw new ArgumentNullException("There is no such shipment.");
+
                 parcel.ShipmentId = model.ShipmentId;
             }
             if (model.WarehouseId != 0)
@@ -132,11 +139,9 @@ namespace DeliverIt.Services.Services
                 var warehouse = this.dbContext.Warehouses
                                               .Include(w => w.Address)
                                                 .ThenInclude(a => a.City)
-                                              .FirstOrDefault(s => s.Id == model.WarehouseId);
-                if (warehouse == null)
-                {
-                    throw new ArgumentNullException("There is no such warehouse.");
-                }
+                                              .FirstOrDefault(s => s.Id == model.WarehouseId)
+                                              ?? throw new ArgumentNullException("There is no such warehouse.");
+
                 parcel.WarehouseId = model.WarehouseId;
             }
             if (model.Weight != 0)
@@ -149,6 +154,11 @@ namespace DeliverIt.Services.Services
             return new ParcelDTO(parcel);
         }
 
+        /// <summary>
+        /// Delere a parcel by certain ID.
+        /// </summary>
+        /// <param name="id">ID of the parcel to delete.</param>
+        /// <returns>Returns a boolean value if the parcel is deleted.</returns>
         public bool Delete(int id)
         {
             var parcel = FindParcel(id);
@@ -159,6 +169,17 @@ namespace DeliverIt.Services.Services
             return parcel.IsDeleted;
         }
 
+        /// <summary>
+        /// Filter and/or sort parcels.
+        /// </summary>
+        /// <param name="filter1">First filter for parcels.</param>
+        /// <param name="value1">Value of the first filter.</param>
+        /// <param name="filter2">Second filter for parcels.</param>
+        /// <param name="value2">Value of the second filter.</param>
+        /// <param name="sortBy1">First sort option for parcels.</param>
+        /// <param name="sortBy2">Second sort option for parcels.</param>
+        /// <param name="sortingValue">Value of sorting order.</param>
+        /// <returns></returns>
         public List<ParcelDTO> GetBy(string filter1, string value1, string filter2, string value2, string sortBy1, string sortBy2, string sortingValue)
         {
             var allParcels = this.dbContext
@@ -482,20 +503,24 @@ namespace DeliverIt.Services.Services
             return filteredParcels;
         }
 
+        /// <summary>
+        /// Find a parcel with certain ID.
+        /// </summary>
+        /// <param name="id">ID of the parcel to get.</param>
+        /// <returns>Returns a parcel with certain ID or an appropriate error message.</returns>
         private Parcel FindParcel(int id)
         {
             var parcel = this.dbContext
                              .Parcels
                              .Include(p => p.Category)
                              .Include(p => p.Customer)
+                             .Include(s=>s.Shipment)
                              .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City)
-                             .FirstOrDefault(c => c.Id == id);
-            if (parcel == null)
-            {
-                throw new ArgumentNullException("There is no such parcel.");
-            }
+                             .FirstOrDefault(c => c.Id == id)
+                             ?? throw new ArgumentNullException("There is no such parcel.");
+
             if (parcel.IsDeleted)
             {
                 throw new ArgumentNullException("Parcel is deleted.");

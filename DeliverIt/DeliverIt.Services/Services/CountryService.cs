@@ -18,6 +18,12 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
+
+        /// <summary>
+        /// Get a country by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the country to get</param>
+        /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         public CountryDTO Get(int id)
         {
             var country = FindCountry(id);
@@ -26,18 +32,25 @@ namespace DeliverIt.Services.Services
             return countryDTO;
         }
 
+        /// <summary>
+        /// Get all countries.
+        /// </summary>
+        /// <returns>Returns all countries.</returns>
         public IList<string> GetAll()
         {
             return dbContext.Countries.Select(c => c.Name).ToList();
         }
 
+        /// <summary>
+        /// Find a country by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the country to get.</param>
+        /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         private Country FindCountry(int id)
         {
-            var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id);
-            if (country == null)
-            {
-                throw new ArgumentNullException("There in no such country.");
-            }
+            var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id)
+                ??throw new ArgumentNullException("There in no such country.");
+
             return country;
         }
     }

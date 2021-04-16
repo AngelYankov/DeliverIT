@@ -18,12 +18,21 @@ namespace DeliverIt.Web.Controllers
             this.cityService = cityService;
         }
 
+        /// <summary>
+        /// Get all cities.
+        /// </summary>
+        /// <returns>Returns all cities.</returns>
         [HttpGet("")]
         public IActionResult GetAll()
         {
             return Ok(this.cityService.GetAll());
         }
 
+        /// <summary>
+        /// Get a city by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the city to get.</param>
+        /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

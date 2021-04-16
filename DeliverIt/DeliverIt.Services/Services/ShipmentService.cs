@@ -20,21 +20,20 @@ namespace DeliverIt.Services.Services
             this.dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Create a shipment.
+        /// </summary>
+        /// <param name="dto">Details of the shipment to be created.</param>
+        /// <returns>Returns the created shipment or an appropriate error message.</returns>
         public ShipmentDTO Create(NewShipmentDTO dto)
         {
             var newShipment = new Shipment();
 
-            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
-            if (warehouse == null)
-            {
-                throw new ArgumentNullException("There is no such warehouse.");
-            }
+            var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId)
+                ?? throw new ArgumentNullException("There is no such warehouse.");
 
-            var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == dto.StatusId);
-            if (status == null)
-            {
-                throw new ArgumentNullException("There is no such status.");
-            }
+            var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == dto.StatusId)
+                ?? throw new ArgumentNullException("There is no such status.");
 
             this.dbContext.Shipments.Add(newShipment);
             warehouse.Shipments.Add(newShipment);
@@ -46,6 +45,11 @@ namespace DeliverIt.Services.Services
 
             return new ShipmentDTO(createdShipment);
         }
+
+        /// <summary>
+        /// Get all shippemnts.
+        /// </summary>
+        /// <returns>Returns all shipments.</returns>
         public IEnumerable<ShipmentDTO> GetAll()
         {
             return this.dbContext.Shipments
@@ -56,6 +60,11 @@ namespace DeliverIt.Services.Services
                                  .Select(s => new ShipmentDTO(s));
         }
 
+        /// <summary>
+        /// Get a shipment by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the shipment to get.</param>
+        /// <returns>Returns a shipment by a certain ID or an appropriate error message.</returns>
         public ShipmentDTO Get(int id)
         {
             var shipment = FindShipment(id);
@@ -64,32 +73,35 @@ namespace DeliverIt.Services.Services
             return shipmentDTO;
         }
 
+        /// <summary>
+        /// Update a shipment.
+        /// </summary>
+        /// <param name="id">ID of the shipment to be updated.</param>
+        /// <param name="model">Details of the shipment to be updated.</param>
+        /// <returns>Returns the updated shipment or an appropriate error message.</returns>
         public ShipmentDTO Update(int id, UpdateShipmentDTO model)
         {
             var shipment = FindShipment(id);
             if (model.StatusId != 0)
             {
-                var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId);
-                if (status == null)
-                {
-                    throw new ArgumentNullException("There is no such status.");
-                }
+                var status = this.dbContext.Statuses.FirstOrDefault(s => s.Id == model.StatusId)
+                    ?? throw new ArgumentNullException("There is no such status.");
+
                 shipment.StatusId = model.StatusId;
             }
             if (model.WarehouseId != 0)
             {
-                var warehouse = this.dbContext.Warehouses.FirstOrDefault(w => w.Id == model.WarehouseId);
-                if (warehouse == null)
-                {
-                    throw new ArgumentNullException("There is no such warehouse.");
-                }
+                var warehouse = this.dbContext.Warehouses.Include(w=>w.Address)
+                                                         .FirstOrDefault(w => w.Id == model.WarehouseId)
+                                                         ?? throw new ArgumentNullException("There is no such warehouse.");
+
                 shipment.WarehouseId = model.WarehouseId;
             }
-            if (model.Arrival != null)
+            if (model.Arrival != DateTime.MinValue)
             {
                 shipment.Arrival = model.Arrival;
             }
-            if (model.Departure != null)
+            if (model.Departure != DateTime.MinValue)
             {
                 shipment.Departure = model.Departure;
             }
@@ -99,6 +111,11 @@ namespace DeliverIt.Services.Services
             return new ShipmentDTO(shipment);
         }
 
+        /// <summary>
+        /// Delete a shipment.
+        /// </summary>
+        /// <param name="id">ID of the shipment to be deleted.</param>
+        /// <returns>Returns response code and an appropriate message.</returns>
         public bool Delete(int id)
         {
             var shipment = FindShipment(id);
@@ -109,8 +126,12 @@ namespace DeliverIt.Services.Services
             return true;
         }
 
-        //api/shipments/search?warehouseId=
-        //public IActionResult Get([From Query] int warehouseId)
+        /// <summary>
+        /// Filter shipments.
+        /// </summary>
+        /// <param name="filter">Filters for shipments.</param>
+        /// <param name="value">Value of the filter</param>
+        /// <returns>Returns the filtered shipments.</returns>
         public List<ShipmentDTO> GetBy(string filter, string value)
         {
             var allShipments = this.dbContext
@@ -118,8 +139,8 @@ namespace DeliverIt.Services.Services
                               .Include(s => s.Status)
                               .Include(s => s.Warehouse)
                                    .ThenInclude(w => w.Address)
-                              .Include(s=>s.Parcels)
-                                   .ThenInclude(p=>p.Customer);
+                              .Include(s => s.Parcels)
+                                   .ThenInclude(p => p.Customer);
             var shipments = new List<ShipmentDTO>();
 
             if (filter == "warehouse")
@@ -145,13 +166,18 @@ namespace DeliverIt.Services.Services
                     }
                 }
             }
-            if(shipments.Count() == 0)
+            if (shipments.Count() == 0)
             {
                 throw new ArgumentNullException("There are no such shipments.");
             }
             return shipments;
         }
 
+        /// <summary>
+        /// Find a shipment by certain ID.
+        /// </summary>
+        /// <param name="id">ID of the shipment to find.</param>
+        /// <returns>Returns a shipment with certain ID or an appropriate error message.</returns>
         private Shipment FindShipment(int id)
         {
             var shipment = this.dbContext
@@ -159,11 +185,9 @@ namespace DeliverIt.Services.Services
                                .Include(s => s.Status)
                                .Include(s => s.Warehouse)
                                     .ThenInclude(w => w.Address)
-                               .FirstOrDefault(s => s.Id == id);
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("There is no such shipment.");
-            }
+                               .FirstOrDefault(s => s.Id == id)
+                               ?? throw new ArgumentNullException("There is no such shipment.");
+
             if (shipment.IsDeleted)
             {
                 throw new ArgumentNullException("Shipment is deleted.");

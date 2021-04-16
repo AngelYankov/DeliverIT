@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.IO;
+using System.Reflection;
+using System;
 
 namespace DeliverIt.Web
 {
@@ -31,6 +34,10 @@ namespace DeliverIt.Web
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("DeliverIt", new OpenApiInfo { Title = "DeliverIt"});
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.AddDbContext<DeliverItContext>(options =>
