@@ -187,6 +187,7 @@ namespace DeliverIt.Services.Services
                             .Include(p => p.Category)
                             .Include(p => p.Customer)
                             .Include(p => p.Shipment)
+                            .Include(p=>p.Category)
                             .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City);
@@ -209,7 +210,8 @@ namespace DeliverIt.Services.Services
                         foreach (var parcel in allParcels)
                         {
                             if ((parcel.Weight == double.Parse(value1)
-                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false))
+                                && (parcel.Customer.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase) 
+                                && parcel.IsDeleted == false)))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -231,7 +233,7 @@ namespace DeliverIt.Services.Services
                         foreach (var parcel in allParcels)
                         {
                             if ((parcel.Weight == double.Parse(value1)
-                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false))
+                                && (parcel.Category.Name.Equals(value2, StringComparison.OrdinalIgnoreCase)) && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -247,7 +249,8 @@ namespace DeliverIt.Services.Services
                     case null:
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1) && parcel.IsDeleted == false)
+                            if ((parcel.Customer.FirstName.Equals(value1, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value1, StringComparison.OrdinalIgnoreCase))
+                                && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -257,8 +260,8 @@ namespace DeliverIt.Services.Services
                     case "weight":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
-                                && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false)
+                            if ((parcel.Customer.FirstName.Equals(value1, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value1, StringComparison.OrdinalIgnoreCase)
+                                && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -268,8 +271,8 @@ namespace DeliverIt.Services.Services
                     case "warehouse":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
-                                && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            if ((parcel.Customer.FirstName.Equals(value1, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value1, StringComparison.OrdinalIgnoreCase)
+                                && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -279,8 +282,8 @@ namespace DeliverIt.Services.Services
                     case "category":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
-                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            if ((parcel.Customer.FirstName.Equals(value1, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value1, StringComparison.OrdinalIgnoreCase)
+                                && (parcel.Category.Name.Equals(value2, StringComparison.OrdinalIgnoreCase)) && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -318,7 +321,8 @@ namespace DeliverIt.Services.Services
                         foreach (var parcel in allParcels)
                         {
                             if ((parcel.WarehouseId == int.Parse(value1))
-                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false)
+                                && (parcel.Customer.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase)
+                                && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -329,7 +333,7 @@ namespace DeliverIt.Services.Services
                         foreach (var parcel in allParcels)
                         {
                             if ((parcel.WarehouseId == int.Parse(value1))
-                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false)
+                                && (parcel.Category.Name.Equals(value2, StringComparison.OrdinalIgnoreCase)) && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -345,7 +349,7 @@ namespace DeliverIt.Services.Services
                     case null:
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.CategoryId == int.Parse(value1)) && parcel.IsDeleted == false)
+                            if ((parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase)) && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -355,7 +359,7 @@ namespace DeliverIt.Services.Services
                     case "weight":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.CategoryId == int.Parse(value1))
+                            if ((parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase))
                                 && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
@@ -366,8 +370,9 @@ namespace DeliverIt.Services.Services
                     case "customer":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.CategoryId == int.Parse(value1))
-                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false)
+                            if ((parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase))
+                                && (parcel.Customer.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase)
+                                && parcel.IsDeleted == false))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
                                 filteredParcels.Add(parcelDTO);
@@ -377,7 +382,7 @@ namespace DeliverIt.Services.Services
                     case "warehouse":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.CategoryId == int.Parse(value1))
+                            if ((parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase))
                                 && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
