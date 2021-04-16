@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 
 namespace DeliverIt.Services.Services
 {
@@ -73,11 +74,12 @@ namespace DeliverIt.Services.Services
             return this.dbContext.Parcels
                                  .Include(p => p.Category)
                                  .Include(p => p.Customer)
+                                 .Include(p => p.Shipment)
                                  .Include(p => p.Warehouse)
                                     .ThenInclude(w => w.Address)
                                         .ThenInclude(a => a.City)
-                                 .Where(p=>p.IsDeleted == false)
-                                 .Select(p=>new ParcelDTO(p));
+                                 .Where(p => p.IsDeleted == false)
+                                 .Select(p => new ParcelDTO(p));
         }
 
         public ParcelDTO Get(int id)
@@ -88,12 +90,13 @@ namespace DeliverIt.Services.Services
             return parcelDTO;
         }
 
-        public ParcelDTO Update(int id, NewParcelDTO model)
+        public ParcelDTO Update(int id, UpdateParcelDTO model)
         {
             var parcel = FindParcel(id);
             var result = this.dbContext.Parcels
                           .Include(p => p.Category)
                           .Include(p => p.Customer)
+                          .Include(p => p.Shipment)
                           .Include(p => p.Warehouse)
                              .ThenInclude(w => w.Address)
                                 .ThenInclude(a => a.City);
@@ -127,8 +130,8 @@ namespace DeliverIt.Services.Services
             if (model.WarehouseId != 0)
             {
                 var warehouse = this.dbContext.Warehouses
-                                              .Include(w=>w.Address)
-                                                .ThenInclude(a=>a.City)
+                                              .Include(w => w.Address)
+                                                .ThenInclude(a => a.City)
                                               .FirstOrDefault(s => s.Id == model.WarehouseId);
                 if (warehouse == null)
                 {
@@ -155,66 +158,328 @@ namespace DeliverIt.Services.Services
 
             return parcel.IsDeleted;
         }
-        public List<ParcelDTO> GetBy(string filter, string value)
+
+        public List<ParcelDTO> GetBy(string filter1, string value1, string filter2, string value2, string sortBy1, string sortBy2, string sortingValue)
         {
             var allParcels = this.dbContext
                             .Parcels
                             .Include(p => p.Category)
                             .Include(p => p.Customer)
+                            .Include(p => p.Shipment)
                             .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City);
-            var parcels = new List<ParcelDTO>();
-            if (filter == "weight")
+            var filteredParcels = new List<ParcelDTO>();
+            if (filter1 == "weight")
             {
-                foreach (var parcel in allParcels)
+                switch (filter2)
                 {
-                    if ((parcel.Weight == double.Parse(value)) && parcel.IsDeleted == false)
-                    {
-                        var parcelDTO = new ParcelDTO(parcel);
-                        parcels.Add(parcelDTO);
-                    }
+                    case null:
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Weight == double.Parse(value1)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "customer":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Weight == double.Parse(value1)
+                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false))
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "warehouse":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Weight == double.Parse(value1)
+                                && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false))
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "category":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Weight == double.Parse(value1)
+                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false))
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
                 }
             }
-            if (filter == "customer")
+            if (filter1 == "customer")
             {
-                foreach (var parcel in allParcels)
+                switch (filter2)
                 {
-                    if ((parcel.Customer.FirstName == value || parcel.Customer.LastName == value) && parcel.IsDeleted == false)
-                    {
-                        var parcelDTO = new ParcelDTO(parcel);
-                        parcels.Add(parcelDTO);
-                    }
+                    case null:
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "weight":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
+                                && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "warehouse":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
+                                && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "category":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.Customer.FirstName == value1 || parcel.Customer.LastName == value1)
+                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
                 }
             }
-            if (filter == "warehouse")
+            if (filter1 == "warehouse")
             {
-                foreach (var parcel in allParcels)
+                switch (filter2)
                 {
-                    if ((parcel.WarehouseId == int.Parse(value)) && parcel.IsDeleted == false)
-                    {
-                        var parcelDTO = new ParcelDTO(parcel);
-                        parcels.Add(parcelDTO);
-                    }
+                    case null:
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.WarehouseId == int.Parse(value1)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "weight":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.WarehouseId == int.Parse(value1))
+                                && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "customer":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.WarehouseId == int.Parse(value1))
+                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "category":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.WarehouseId == int.Parse(value1))
+                                && (parcel.CategoryId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
                 }
             }
-            if (filter == "category")
+            if (filter1 == "category")
             {
-                foreach (var parcel in allParcels)
+                switch (filter2)
                 {
-                    if ((parcel.CategoryId == int.Parse(value)) && parcel.IsDeleted == false)
-                    {
-                        var parcelDTO = new ParcelDTO(parcel);
-                        parcels.Add(parcelDTO);
-                    }
+                    case null:
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.CategoryId == int.Parse(value1)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "weight":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.CategoryId == int.Parse(value1))
+                                && (parcel.Weight == double.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "customer":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.CategoryId == int.Parse(value1))
+                                && (parcel.Customer.FirstName == value2 || parcel.Customer.LastName == value2) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
+                    case "warehouse":
+                        foreach (var parcel in allParcels)
+                        {
+                            if ((parcel.CategoryId == int.Parse(value1))
+                                && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false)
+                            {
+                                var parcelDTO = new ParcelDTO(parcel);
+                                filteredParcels.Add(parcelDTO);
+                            }
+                        }
+                        break;
                 }
             }
-            if (parcels.Count == 0)
+            if (filteredParcels.Count == 0 && sortBy1 == null)
             {
                 throw new ArgumentNullException("There are no such parcels.");
             }
+            if (filteredParcels.Count != 0)
+            {
+                if (sortBy1 == "weight" && sortBy2 == null)
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = filteredParcels.OrderBy(p => p.Weight).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = filteredParcels.OrderByDescending(p => p.Weight).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "arrival" && sortBy2 == null)
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = filteredParcels.OrderBy(p => p.ParcelArrival).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = filteredParcels.OrderByDescending(p => p.ParcelArrival).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "weight" && sortBy2 == "arrival")
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = filteredParcels.OrderBy(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = filteredParcels.OrderByDescending(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "arrival" && sortBy2 == "weight")
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = filteredParcels.OrderBy(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = filteredParcels.OrderByDescending(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                var allParcelsDTO = new List<ParcelDTO>();
+                foreach (var parcel in allParcels)
+                {
+                    var parcelDTO = new ParcelDTO(parcel);
+                    allParcelsDTO.Add(parcelDTO);
+                }
+                if (sortBy1 == "weight" && sortBy2 == null)
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = allParcelsDTO.OrderBy(p => p.Weight).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = allParcelsDTO.OrderByDescending(p => p.Weight).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "arrival" && sortBy2 == null)
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = allParcelsDTO.OrderBy(p => p.ParcelArrival).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = allParcelsDTO.OrderByDescending(p => p.ParcelArrival).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "weight" && sortBy2 == "arrival")
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = allParcelsDTO.OrderBy(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = allParcelsDTO.OrderByDescending(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
+                            break;
+                    }
+                }
+                if (sortBy1 == "arrival" && sortBy2 == "weight")
+                {
+                    switch (sortingValue)
+                    {
+                        case "asc":
+                            filteredParcels = allParcelsDTO.OrderBy(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
+                            break;
+                        case "desc":
+                            filteredParcels = allParcelsDTO.OrderByDescending(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
+                            break;
+                    }
+                }
+            }
 
-            return parcels;
+            return filteredParcels;
         }
 
         private Parcel FindParcel(int id)

@@ -91,7 +91,7 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
-        [HttpGet("filter")]
+        [HttpGet("filtering")]
         public IActionResult GetBy([FromQuery] string filter, string value)
         {
             try

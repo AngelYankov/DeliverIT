@@ -1,6 +1,7 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -59,7 +60,7 @@ namespace DeliverIt.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] NewParcelDTO model)
+        public IActionResult Update(int id, [FromBody] UpdateParcelDTO model)
         {
             if (model == null)
             {
@@ -89,13 +90,24 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-
-        [HttpGet("filtering")]
-        public IActionResult GetBy([FromQuery] string filter,string value,string filter2, string value2)
+        /// <summary>
+        /// Filtering and sorting of the parcels
+        /// </summary>
+        /// <param name="filter1">"First property to filter parcels by"</param>
+        /// <param name="value1">Value of the first filter</param>
+        /// <param name="filter2">Second property to filter parcels by</param>
+        /// <param name="value2">Value of the second filter</param>
+        /// <param name="sortBy1">First property to sort by</param>
+        /// <param name="sortBy2">Second property to sort by</param>
+        /// <param name="sortingValue">Value to sort by</param>
+        /// <returns>Filtered and/or sorted parcels</returns>
+        [HttpGet("filtering&sorting")]
+        public IActionResult GetBy([FromQuery] string filter1, string value1, string filter2, string value2, 
+                                                                                              string sortBy1, string sortBy2, string sortingValue)
         {
             try
             {
-                var parcelsDTO = this.parcelService.GetBy(filter, value);
+                var parcelsDTO = this.parcelService.GetBy(filter1, value1, filter2, value2, sortBy1, sortBy2, sortingValue);
                 return Ok(parcelsDTO);
             }
             catch (Exception e)
