@@ -19,6 +19,12 @@ namespace DeliverIt.Services.Services
         {
             this.dbContext = dbContext;
         }
+
+        /// <summary>
+        /// Get a city by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the city to get.</param>
+        /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         public CityDTO Get(int id)
         {
             var city = FindCity(id);
@@ -27,20 +33,27 @@ namespace DeliverIt.Services.Services
             return cityDTO;
         }
 
+        /// <summary>
+        /// Get all cities.
+        /// </summary>
+        /// <returns>Returns all cities.</returns>
         public IList<string> GetAll()
         {
             return dbContext.Cities.Select(c => c.Name).ToList();
         }
 
+        /// <summary>
+        /// Find a city with certain ID.
+        /// </summary>
+        /// <param name="id">ID of the city to find.</param>
+        /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         private City FindCity(int id)
         {
             var city = this.dbContext.Cities
                                      .Include(c => c.Country)
-                                     .FirstOrDefault(c => c.Id == id);
-            if (city == null)
-            {
-                throw new ArgumentNullException("There is no such city.");
-            }
+                                     .FirstOrDefault(c => c.Id == id)
+                                     ?? throw new ArgumentNullException("There is no such city.");
+
             return city;
         }
     }
