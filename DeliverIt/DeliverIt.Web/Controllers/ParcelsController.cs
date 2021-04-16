@@ -21,6 +21,11 @@ namespace DeliverIt.Web.Controllers
             this.parcelService = parcelService;
         }
 
+        /// <summary>
+        /// Create a parcel.
+        /// </summary>
+        /// <param name="model">Details of the parcel to be created.</param>
+        /// <returns>Returns the created parcel or an appropriate error message.</returns>
         [HttpPost("")]
         public IActionResult Create([FromBody] NewParcelDTO model)
         {
@@ -39,12 +44,21 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all parcels.
+        /// </summary>
+        /// <returns>Returns all parcels.</returns>
         [HttpGet("")]
         public IActionResult GetAll()
         {
             return Ok(this.parcelService.GetAll());
         }
 
+        /// <summary>
+        /// Get a parcel by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the parcel to get.</param>
+        /// <returns>Returns a parcel with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -59,6 +73,12 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a parcel.
+        /// </summary>
+        /// <param name="id">ID of the parcel to update.</param>
+        /// <param name="model">Details of the parcel to be updated.</param>
+        /// <returns>Returns the updated parcel or an appropriate error message.</returns>
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateParcelDTO model)
         {
@@ -77,6 +97,11 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a parcel.
+        /// </summary>
+        /// <param name="id">ID of the parcel to delete.</param>
+        /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -90,17 +115,18 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
+
         /// <summary>
-        /// Filtering and sorting of the parcels
+        /// Filter and/or sort parcels.
         /// </summary>
-        /// <param name="filter1">"First property to filter parcels by"</param>
+        /// <param name="filter1">weight/customer/warehouse/category</param>
         /// <param name="value1">Value of the first filter</param>
-        /// <param name="filter2">Second property to filter parcels by</param>
+        /// <param name="filter2">weight/customer/warehouse/category</param>
         /// <param name="value2">Value of the second filter</param>
-        /// <param name="sortBy1">First property to sort by</param>
-        /// <param name="sortBy2">Second property to sort by</param>
-        /// <param name="sortingValue">Value to sort by</param>
-        /// <returns>Filtered and/or sorted parcels</returns>
+        /// <param name="sortBy1">weight/arrival</param>
+        /// <param name="sortBy2">weight/arrival</param>
+        /// <param name="sortingValue">asc/desc</param>
+        /// <returns>Returns filtered and/or sorted parcels or an appropriate error message.</returns>
         [HttpGet("filtering&sorting")]
         public IActionResult GetBy([FromQuery] string filter1, string value1, string filter2, string value2, 
                                                                                               string sortBy1, string sortBy2, string sortingValue)

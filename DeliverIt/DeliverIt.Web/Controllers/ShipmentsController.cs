@@ -21,6 +21,11 @@ namespace DeliverIt.Web.Controllers
             this.shipmentService = shipmentService;
         }
 
+        /// <summary>
+        /// Create a shipment.
+        /// </summary>
+        /// <param name="model">Details of the shipment to be created.</param>
+        /// <returns>Returns the created shipment or an appropriate error message.</returns>
         [HttpPost("")]
         public IActionResult Create([FromBody] NewShipmentDTO model)
         {
@@ -39,12 +44,21 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all shipments.
+        /// </summary>
+        /// <returns>Returns all shipments.</returns>
         [HttpGet("")]
         public IActionResult GetAll()
         {
             return Ok(this.shipmentService.GetAll());
         }
 
+        /// <summary>
+        /// Get a shipment by a certain ID.
+        /// </summary>
+        /// <param name="id">ID of the shipment to get.</param>
+        /// <returns>Returns a shipment with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -59,6 +73,12 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a shipment.
+        /// </summary>
+        /// <param name="id">ID of the shipment to be updated.</param>
+        /// <param name="model">Details of the shipment to be updated.</param>
+        /// <returns>Returns the updated shipment or an appropriate error message.</returns>
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateShipmentDTO model)
         {
@@ -77,6 +97,11 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a shipment.
+        /// </summary>
+        /// <param name="id">ID of the shipment to be deleted.</param>
+        /// <returns>Returns response code and an appropriate message.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -91,6 +116,12 @@ namespace DeliverIt.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Filter shipments.
+        /// </summary>
+        /// <param name="filter">warehouse/customer</param>
+        /// <param name="value">id/first_name or last_name</param>
+        /// <returns>Returns filtered shipments or an appropriate error message.</returns>
         [HttpGet("filtering")]
         public IActionResult GetBy([FromQuery] string filter, string value)
         {
@@ -103,7 +134,6 @@ namespace DeliverIt.Web.Controllers
             {
                 return BadRequest(e.Message);
             }
-            
         }
     }
 }
