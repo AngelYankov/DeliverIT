@@ -49,7 +49,7 @@ namespace DeliverIt.Services.Services
         private Country FindCountry(int id)
         {
             var country = this.dbContext.Countries.FirstOrDefault(c => c.Id == id)
-                ??throw new ArgumentNullException("There in no such country.");
+                ??throw new ArgumentNullException(Exceptions.InvalidCountry);
 
             return country;
         }

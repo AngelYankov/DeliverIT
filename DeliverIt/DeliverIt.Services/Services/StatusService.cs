@@ -26,7 +26,7 @@ namespace DeliverIt.Services.Services
         public StatusDTO Get(int id)
         {
             var status = dbContext.Statuses.FirstOrDefault(s => s.Id == id)
-                ?? throw new ArgumentNullException();
+                ?? throw new ArgumentNullException(Exceptions.InvalidStatus);
 
             StatusDTO statusDTO = new StatusDTO(status);
             return statusDTO;

@@ -83,7 +83,7 @@ namespace DeliverIt.Services.Services
             return this.dbContext.Addresses
                                 .Include(a => a.City)
                                 .FirstOrDefault(a => a.Id == id)
-                                ?? throw new ArgumentException("There is no such address.");
+                                ?? throw new ArgumentException(Exceptions.InvalidAddress);
         }
         private Customer FindCustomer(int id)
         {
@@ -92,10 +92,10 @@ namespace DeliverIt.Services.Services
                                .Include(c => c.Address)
                                     .ThenInclude(a => a.City)
                                .FirstOrDefault(c => c.Id == id)
-                               ?? throw new ArgumentException("There is no such customer.");
+                               ?? throw new ArgumentException(Exceptions.InvalidCustomer);
             if (customer.IsDeleted)
             {
-                throw new ArgumentException("Customer has been already deleted.");
+                throw new ArgumentException(Exceptions.DeletedCustomer);
             }
             return customer;
         }

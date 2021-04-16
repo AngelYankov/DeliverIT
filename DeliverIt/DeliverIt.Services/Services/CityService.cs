@@ -52,7 +52,7 @@ namespace DeliverIt.Services.Services
             var city = this.dbContext.Cities
                                      .Include(c => c.Country)
                                      .FirstOrDefault(c => c.Id == id)
-                                     ?? throw new ArgumentNullException("There is no such city.");
+                                     ?? throw new ArgumentNullException(Exceptions.InvalidCity);
 
             return city;
         }
