@@ -87,7 +87,7 @@ namespace DeliverIt.Services.Services
             warehouse.IsDeleted = true;
             warehouse.DeletedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
-            return true;
+            return warehouse.IsDeleted;
         }
         /// <summary>
         /// Find an address by ID.

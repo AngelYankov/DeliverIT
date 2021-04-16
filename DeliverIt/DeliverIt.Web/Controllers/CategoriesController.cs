@@ -1,4 +1,5 @@
 ﻿using DeliverIt.Services.ModelsServices;
+using DeliverIt.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,46 +10,70 @@ namespace DeliverIt.Web.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService categoryService;
-        public CategoriesController(ICategoryService categoryService)
+        private readonly IAuthHelper authHelper;
+
+        public CategoriesController(ICategoryService categoryService, IAuthHelper authHelper)
         {
             this.categoryService = categoryService;
+            this.authHelper = authHelper;
         }
         /// <summary>
         /// Get all categories.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <returns>Returns all categories.</returns>
         [HttpGet("")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromHeader] string authorization)
         {
-            return Ok(this.categoryService.GetAll());
+            try
+            {
+                this.authHelper.TryGetEmployee(authorization);
+                return Ok(this.categoryService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Create a new category.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="name">Name of new category.</param>
         /// <returns>Returns new category or an appropriate error message.</returns>
         [HttpPost("{name}")]
-        public IActionResult Create(string name)
+        public IActionResult Create([FromHeader] string authorization,string name)
         {
-            if(name == null)
+            try
             {
-                return BadRequest();
-            }
+                this.authHelper.TryGetEmployee(authorization);
+                if (name == null)
+                {
+                    return BadRequest();
+                }
 
-            var category = this.categoryService.Create(name);
-            return Created("post",category);
+                var category = this.categoryService.Create(name);
+                return Created("post", category);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
         /// <summary>
         /// Update existing category by ID.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="name">New name of category.</param>
         /// <returns>Returns updated category or an appropriate error message.</returns>
         [HttpPut("{id}/{name}")]
-        public IActionResult Update(int id, string name)
+        public IActionResult Update([FromHeader] string authorization, int id, string name)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 var category = this.categoryService.Update(id, name);
                 return Ok(category);
             }
@@ -60,13 +85,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete a category.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromHeader] string authorization,int id)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 this.categoryService.Delete(id);
                 return NoContent();
             }

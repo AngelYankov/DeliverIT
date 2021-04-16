@@ -94,7 +94,7 @@ namespace DeliverIt.Services.Services
             employee.IsDeleted = true;
             employee.DeletedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
-            return true;
+            return employee.IsDeleted;
         }
         //TODO
         public IEnumerable<Employee> SearchBy(string filter, string value)
@@ -125,6 +125,18 @@ namespace DeliverIt.Services.Services
                 throw new ArgumentException(Exceptions.DeletedEmployee);
             }
             return employee;
+        }
+        /// <summary>
+        /// Get an employee with certain username
+        /// </summary>
+        /// <param name="username">Username to check for</param>
+        public void GetEmployee(string username)
+        {
+            var employee = this.dbContext
+                .Employees
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
+                ?? throw new ArgumentException("Invalid username");
         }
     }
 }

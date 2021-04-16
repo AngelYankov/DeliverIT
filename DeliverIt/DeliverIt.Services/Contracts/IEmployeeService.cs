@@ -15,8 +15,7 @@ namespace DeliverIt.Services.Contracts
         EmployeeDTO Create(NewEmployeeDTO model);
         EmployeeDTO Update(int id, UpdateEmployeeDTO model);
         bool Delete(int id);
-        //api/customers?searchBy=email&email=abv.bg
+        void GetEmployee(string username);
         IEnumerable<Employee> SearchBy(string filter, string value);
-        //to do filtering
     }
 }

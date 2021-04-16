@@ -122,8 +122,7 @@ namespace DeliverIt.Services.Services
             shipment.IsDeleted = true;
             shipment.DeletedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
-
-            return true;
+            return shipment.IsDeleted;
         }
 
         /// <summary>

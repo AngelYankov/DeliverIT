@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -10,18 +11,29 @@ namespace DeliverIt.Web.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly IAddressService addressService;
-        public AddressesController(IAddressService addressService)
+        private readonly IAuthHelper authHelper;
+
+        public AddressesController(IAddressService addressService, IAuthHelper authHelper)
         {
             this.addressService = addressService;
+            this.authHelper = authHelper;
         }
         /// <summary>
         /// Get all addresses.
         /// </summary>
         /// <returns>Returns all addresses.</returns>
         [HttpGet("")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromHeader] string authorization)
         {
-            return Ok(this.addressService.GetAll());
+            try
+            {
+                this.authHelper.TryGetEmployee(authorization);
+                return Ok(this.addressService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Get certain address.
@@ -49,29 +61,32 @@ namespace DeliverIt.Web.Controllers
         [HttpPost("")]
         public IActionResult Create([FromBody] NewAddressDTO model)
         {
-            
+
             try
             {
-                var address =this.addressService.Create(model);
+                var address = this.addressService.Create(model);
                 return Created("post", address);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-           
+
         }
         /// <summary>
         /// Update certain address by ID
         /// </summary>
+        /// <param name="authorization">Username authorization</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="model">Data to be updated with.</param>
         /// <returns>Returns updated address or an appropriate error message</returns>
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] NewAddressDTO model)
+        public IActionResult Update([FromHeader] string authorization, int id, [FromBody] NewAddressDTO model)
         {
             try
             {
+                //this.authHelper.TryGetEmployee(authorization);
+                //registered customer and employees can change the address
                 var address = this.addressService.Update(id, model);
                 return Ok(address);
             }

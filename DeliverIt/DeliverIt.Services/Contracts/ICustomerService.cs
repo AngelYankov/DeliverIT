@@ -13,8 +13,7 @@ namespace DeliverIt.Services.Contracts
         CustomerDTO Create(NewCustomerDTO customer);
         CustomerDTO Update(int id, UpdateCustomerDTO customer);
         bool Delete(int id);
-        //api/customers?searchBy=email&email=abv.bg
+        void GetCustomer(string username);
         IEnumerable<Customer> SearchBy(string filter, string value);
-        //to do filtering
     }
 }

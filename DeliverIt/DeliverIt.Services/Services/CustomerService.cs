@@ -96,7 +96,7 @@ namespace DeliverIt.Services.Services
             customer.IsDeleted = true;
             customer.DeletedOn = DateTime.UtcNow;
             dbContext.SaveChanges();
-            return true;
+            return customer.IsDeleted;
         }
         //TODO
         public IEnumerable<Customer> SearchBy(string filter, string value)
@@ -128,6 +128,18 @@ namespace DeliverIt.Services.Services
                 throw new ArgumentException(Exceptions.DeletedCustomer);
             }
             return customer;
+        }
+        /// <summary>
+        /// Get a customer with certain username
+        /// </summary>
+        /// <param name="username">Username to check for</param>
+        public void GetCustomer(string username)
+        {
+            var customer = this.dbContext
+                .Customers
+                .Where(c=>c.IsDeleted==false)
+                .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
+                ?? throw new ArgumentException("Invalid username");
         }
     }
 }

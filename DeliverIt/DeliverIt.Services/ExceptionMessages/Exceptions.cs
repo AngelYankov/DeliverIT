@@ -18,12 +18,12 @@ namespace DeliverIt.Services
         public const string InvalidStatus = "There is no such status.";
         public const string InvalidShipment = "There is no such shipment.";
         public const string InvalidShipments = "There are no such shipments.";
-        public const string DeletedCategory = "Category has been deleted.";
-        public const string DeletedCustomer = "Customer has been deleted.";
-        public const string DeletedEmployee = "Employee has been deleted.";
-        public const string DeletedParcel = "Parcel has been deleted.";
-        public const string DeletedShipment = "Shipment has been deleted.";
-        public const string DeletedWarehouse = "Warehouse has been deleted.";
+        public const string DeletedCategory = "Category has been already deleted.";
+        public const string DeletedCustomer = "Customer has been already deleted.";
+        public const string DeletedEmployee = "Employee has been already deleted.";
+        public const string DeletedParcel = "Parcel has been already deleted.";
+        public const string DeletedShipment = "Shipment has been already deleted.";
+        public const string DeletedWarehouse = "Warehouse has been already deleted.";
         public const string TakenAddress = "Address is already taken.";
     }
 }
