@@ -141,5 +141,18 @@ namespace DeliverIt.Services.Services
                 .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
                 ?? throw new ArgumentException(Exceptions.InvalidUsername);
         }
+        /// <summary>
+        /// Get all customers count
+        /// </summary>
+        /// <returns>Returns the number of customers.</returns>
+        public int GetAllCount()
+        {
+            var allCustomersCount = this.dbContext.Customers.Count();
+            if (allCustomersCount==0)
+            {
+                throw new ArgumentException(Exceptions.NoCustomers);
+            }
+            return allCustomersCount;
+        }
     }
 }

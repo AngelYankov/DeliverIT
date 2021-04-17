@@ -26,5 +26,6 @@ namespace DeliverIt.Services
         public const string DeletedWarehouse = "Warehouse has been already deleted.";
         public const string TakenAddress = "Address is already taken.";
         public const string InvalidUsername = "Invalid username.";
+        public const string NoCustomers = "There are no customers.";
     }
 }

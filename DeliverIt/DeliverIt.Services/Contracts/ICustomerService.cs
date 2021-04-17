@@ -15,5 +15,6 @@ namespace DeliverIt.Services.Contracts
         bool Delete(int id);
         void GetCustomer(string username);
         IEnumerable<Customer> SearchBy(string filter, string value);
+        int GetAllCount();
     }
 }

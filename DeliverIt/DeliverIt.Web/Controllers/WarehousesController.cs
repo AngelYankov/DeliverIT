@@ -2,6 +2,7 @@
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
+using DeliverIt.Web.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,9 +17,12 @@ namespace DeliverIt.Web.Controllers
     public class WarehousesController : ControllerBase
     {
         private readonly IWarehouseService warehouseService;
-        public WarehousesController(IWarehouseService warehouseService)
+        private readonly IAuthHelper authHelper;
+
+        public WarehousesController(IWarehouseService warehouseService, IAuthHelper authHelper)
         {
             this.warehouseService = warehouseService;
+            this.authHelper = authHelper;
         }
         /// <summary>
         /// Get all warehouses.
@@ -32,13 +36,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get warehouse by ID.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns warehouse with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get([FromHeader] string authorization, int id)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 var warehouse = this.warehouseService.Get(id);
                 return Ok(warehouse);
             }
@@ -50,14 +56,16 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update certain warehouse data.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="model">Data to be updated.</param>
         /// <returns>Returns updated warehouse or an appropriate error message.</returns>
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] NewWarehouseDTO model)
+        public IActionResult Update([FromHeader] string authorization, int id, [FromBody] NewWarehouseDTO model)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 var warehouse = this.warehouseService.Update(id, model);
                 return Ok(warehouse);
             }
@@ -69,13 +77,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Create a warehouse.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="model">Data of warehouse to be created with.</param>
         /// <returns>Returns created warehouse or an appropriate error message.</returns>
         [HttpPost("")]
-        public IActionResult Create([FromBody] NewWarehouseDTO model)
+        public IActionResult Create([FromHeader] string authorization, [FromBody] NewWarehouseDTO model)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 var warehouse = this.warehouseService.Create(model);
                 return Created("post", warehouse);
             }
@@ -87,13 +97,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete a warehouse.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID of warehouse to search for.</param>
         /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromHeader] string authorization, int id)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 this.warehouseService.Delete(id);
                 return NoContent();
             }

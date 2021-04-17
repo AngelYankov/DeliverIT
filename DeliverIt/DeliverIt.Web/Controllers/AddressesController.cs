@@ -23,28 +23,22 @@ namespace DeliverIt.Web.Controllers
         /// </summary>
         /// <returns>Returns all addresses.</returns>
         [HttpGet("")]
-        public IActionResult GetAll([FromHeader] string authorization)
+        public IActionResult GetAll()
         {
-            try
-            {
-                this.authHelper.TryGetEmployee(authorization);
-                return Ok(this.addressService.GetAll());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(this.addressService.GetAll());
         }
         /// <summary>
         /// Get certain address.
         /// </summary>
+        /// <param name="authorization">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns address with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get([FromHeader] string authorization, int id)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorization);
                 var address = this.addressService.Get(id);
                 return Ok(address);
             }
@@ -85,8 +79,7 @@ namespace DeliverIt.Web.Controllers
         {
             try
             {
-                //this.authHelper.TryGetEmployee(authorization);
-                //registered customer and employees can change the address
+                this.authHelper.TryGetEmployee(authorization);
                 var address = this.addressService.Update(id, model);
                 return Ok(address);
             }
