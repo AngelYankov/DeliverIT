@@ -22,9 +22,9 @@ namespace DeliverIt.Web.Helpers
             {
                 this.customerService.GetCustomer(authorization);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new ArgumentException("Invalid username.");
+                throw new ArgumentException(e.Message);
             }
         }
         public void TryGetEmployee(string authorization)
@@ -33,9 +33,9 @@ namespace DeliverIt.Web.Helpers
             {
                 this.employeeService.GetEmployee(authorization);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new ArgumentException("Invalid username.");
+                throw new ArgumentException(e.Message);
             }
         }
     }

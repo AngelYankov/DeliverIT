@@ -15,7 +15,7 @@ namespace DeliverIt.Services.Contracts
         EmployeeDTO Create(NewEmployeeDTO model);
         EmployeeDTO Update(int id, UpdateEmployeeDTO model);
         bool Delete(int id);
-        void GetEmployee(string username);
+        Employee GetEmployee(string username);
         IEnumerable<Employee> SearchBy(string filter, string value);
     }
 }

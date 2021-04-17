@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using System.Reflection;
 using System;
+using DeliverIt.Web.Helpers;
 
 namespace DeliverIt.Web
 {
@@ -54,6 +55,7 @@ namespace DeliverIt.Web
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IAuthHelper, AuthHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

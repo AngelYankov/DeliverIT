@@ -1,4 +1,5 @@
 ﻿using DeliverIt.Services.Contracts;
+using DeliverIt.Web.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,31 +14,44 @@ namespace DeliverIt.Web.Controllers
     public class StatusesController : ControllerBase
     {
         private readonly IStatusService statusService;
-        public StatusesController(IStatusService statusService)
+        private readonly IAuthHelper authHelper;
+        public StatusesController(IStatusService statusService, IAuthHelper authHelper)
         {
             this.statusService = statusService;
+            this.authHelper = authHelper;
         }
 
         /// <summary>
         /// Get all statuses.
         /// </summary>
+        /// <param name="authorizationUsername">Username to authorize user.</param>
         /// <returns>Returns all statuses.</returns>
         [HttpGet("")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromHeader] string authorizationUsername)
         {
-            return Ok(this.statusService.GetAll());
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationUsername);
+                return Ok(this.statusService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
         /// Get a status by a certain ID.
         /// </summary>
+        /// <param name="authorizationUsername">Username to authorize user.</param>
         /// <param name="id">ID of the status to get.</param>
         /// <returns>Returns a status with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get([FromHeader] string authorizationUsername, int id)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var status = this.statusService.Get(id);
                 return Ok(status);
 

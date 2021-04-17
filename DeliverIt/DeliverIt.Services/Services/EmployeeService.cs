@@ -130,13 +130,14 @@ namespace DeliverIt.Services.Services
         /// Get an employee with certain username
         /// </summary>
         /// <param name="username">Username to check for</param>
-        public void GetEmployee(string username)
+        public Employee GetEmployee(string username)
         {
             var employee = this.dbContext
                 .Employees
                 .Where(c => c.IsDeleted == false)
                 .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
-                ?? throw new ArgumentException("Invalid username");
+                ?? throw new ArgumentException(Exceptions.InvalidUsername);
+            return employee;
         }
     }
 }

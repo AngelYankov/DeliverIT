@@ -139,7 +139,7 @@ namespace DeliverIt.Services.Services
                 .Customers
                 .Where(c=>c.IsDeleted==false)
                 .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
-                ?? throw new ArgumentException("Invalid username");
+                ?? throw new ArgumentException(Exceptions.InvalidUsername);
         }
     }
 }
