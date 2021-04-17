@@ -187,7 +187,7 @@ namespace DeliverIt.Services.Services
                             .Include(p => p.Category)
                             .Include(p => p.Customer)
                             .Include(p => p.Shipment)
-                            .Include(p=>p.Category)
+                            .Include(p => p.Category)
                             .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City);
@@ -210,7 +210,7 @@ namespace DeliverIt.Services.Services
                         foreach (var parcel in allParcels)
                         {
                             if ((parcel.Weight == double.Parse(value1)
-                                && (parcel.Customer.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase) 
+                                && (parcel.Customer.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) || parcel.Customer.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase)
                                 && parcel.IsDeleted == false)))
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
@@ -509,6 +509,61 @@ namespace DeliverIt.Services.Services
         }
 
         /// <summary>
+        /// Gets the parcels of a certain customer
+        /// </summary>
+        /// <param name="filter">The parcels the customer wants to see past and/or future</param>
+        /// <returns></returns>
+        public List<ParcelDTO> GetCustomerParcels(string username, string filter)
+        {
+            var allCustomerParcels = this.dbContext
+                            .Parcels
+                            .Include(p => p.Category)
+                            .Include(p => p.Customer)
+                            .Include(p => p.Shipment)
+                            .Include(p => p.Category)
+                            .Include(p => p.Warehouse)
+                                .ThenInclude(w => w.Address)
+                                    .ThenInclude(a => a.City)
+                            .Where(p => (p.Customer.FirstName + "." + p.Customer.LastName) == username);
+            var filteredParcels = new List<ParcelDTO>();
+            if (filter == "past")
+            {
+                foreach (var parcel in allCustomerParcels)
+                {
+                    if (parcel.Shipment.Arrival < DateTime.UtcNow)
+                    {
+                        var pastParcel = new ParcelDTO(parcel);
+                        filteredParcels.Add(pastParcel);
+                    }
+                }
+            }
+            if (filter == "future")
+            {
+                foreach (var parcel in allCustomerParcels)
+                {
+                    if (parcel.Shipment.Arrival >= DateTime.UtcNow)
+                    {
+                        var futureParcel = new ParcelDTO(parcel);
+                        filteredParcels.Add(futureParcel);
+                    }
+                }
+            }
+            if(filter == null)
+            {
+                foreach(var parcel in allCustomerParcels)
+                {
+                    var customerParcel = new ParcelDTO(parcel);
+                    filteredParcels.Add(customerParcel);
+                }
+            }
+            if (filteredParcels.Count == 0)
+            {
+                throw new ArgumentNullException(Exceptions.InvalidParcels);
+            }
+            return filteredParcels;
+        }
+
+        /// <summary>
         /// Find a parcel with certain ID.
         /// </summary>
         /// <param name="id">ID of the parcel to get.</param>
@@ -519,7 +574,7 @@ namespace DeliverIt.Services.Services
                              .Parcels
                              .Include(p => p.Category)
                              .Include(p => p.Customer)
-                             .Include(s=>s.Shipment)
+                             .Include(s => s.Shipment)
                              .Include(p => p.Warehouse)
                                 .ThenInclude(w => w.Address)
                                     .ThenInclude(a => a.City)

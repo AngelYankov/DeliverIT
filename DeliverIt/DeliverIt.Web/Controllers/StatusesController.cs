@@ -24,7 +24,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all statuses.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all statuses.</returns>
         [HttpGet("")]
         public IActionResult GetAll([FromHeader] string authorizationUsername)
@@ -43,7 +43,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get a status by a certain ID.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID of the status to get.</param>
         /// <returns>Returns a status with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]

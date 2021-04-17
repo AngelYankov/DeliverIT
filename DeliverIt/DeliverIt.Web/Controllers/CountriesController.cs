@@ -21,7 +21,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all countries.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all countries.</returns>
         [HttpGet("")]
         public IActionResult GetAll([FromHeader] string authorizationUsername)
@@ -40,7 +40,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get a country by a certain ID.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID of the country to get.</param>
         /// <returns>Returns a city with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
