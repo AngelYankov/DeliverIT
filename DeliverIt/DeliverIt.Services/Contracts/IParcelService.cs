@@ -16,5 +16,6 @@ namespace DeliverIt.Services.Contracts
         ParcelDTO Update(int id, UpdateParcelDTO model);
         bool Delete(int id);
         List<ParcelDTO> GetBy(string filter1, string value1, string filter2, string value2, string sortBy1, string sortBy2, string sortingValue);
+        List<ParcelDTO> GetCustomerParcels(string username, string filter);
     }
 }

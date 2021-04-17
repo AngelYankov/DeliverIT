@@ -27,7 +27,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Create a parcel.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="model">Details of the parcel to be created.</param>
         /// <returns>Returns the created parcel or an appropriate error message.</returns>
         [HttpPost("")]
@@ -48,7 +48,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all parcels.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all parcels.</returns>
         [HttpGet("")]
         public IActionResult GetAll([FromHeader] string authorizationUsername)
@@ -67,7 +67,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get a parcel by a certain ID.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID of the parcel to get.</param>
         /// <returns>Returns a parcel with certain ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
@@ -88,7 +88,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update a parcel.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID of the parcel to update.</param>
         /// <param name="model">Details of the parcel to be updated.</param>
         /// <returns>Returns the updated parcel or an appropriate error message.</returns>
@@ -110,7 +110,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete a parcel.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID of the parcel to delete.</param>
         /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
@@ -131,7 +131,7 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Filter and/or sort parcels.
         /// </summary>
-        /// <param name="authorizationUsername">Username to authorize user.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="filter1">weight/customer/warehouse/category</param>
         /// <param name="value1">Value of the first filter</param>
         /// <param name="filter2">weight/customer/warehouse/category</param>
@@ -150,6 +150,27 @@ namespace DeliverIt.Web.Controllers
                 this.authHelper.TryGetEmployee(authorizationUsername);
                 var parcelsDTO = this.parcelService.GetBy(filter1, value1, filter2, value2, sortBy1, sortBy2, sortingValue);
                 return Ok(parcelsDTO);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the parcels of a certain customer
+        /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
+        /// <param name="filter">past/future</param>
+        /// <returns>Returns the past and/or future parcels of a certain customer or an appropriate error message.</returns>
+        [HttpGet("customerParcels")]
+        public IActionResult GetCustomerParcels([FromHeader] string authorizationUsername, string filter)
+        {
+            try
+            {
+                this.authHelper.TryGetCustomer(authorizationUsername);
+                var customerParcels = this.parcelService.GetCustomerParcels(authorizationUsername, filter);
+                return Ok(customerParcels);
             }
             catch (Exception e)
             {
