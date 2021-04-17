@@ -20,14 +20,14 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all categories.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all categories.</returns>
         [HttpGet("")]
-        public IActionResult GetAll([FromHeader] string authorization)
+        public IActionResult GetAll([FromHeader] string authorizationUsername)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 return Ok(this.categoryService.GetAll());
             }
             catch (Exception e)
@@ -38,15 +38,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Create a new category.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="name">Name of new category.</param>
         /// <returns>Returns new category or an appropriate error message.</returns>
         [HttpPost("{name}")]
-        public IActionResult Create([FromHeader] string authorization,string name)
+        public IActionResult Create([FromHeader] string authorizationUsername, string name)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 if (name == null)
                 {
                     return BadRequest();
@@ -64,16 +64,16 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update existing category by ID.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="name">New name of category.</param>
         /// <returns>Returns updated category or an appropriate error message.</returns>
         [HttpPut("{id}/{name}")]
-        public IActionResult Update([FromHeader] string authorization, int id, string name)
+        public IActionResult Update([FromHeader] string authorizationUsername, int id, string name)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var category = this.categoryService.Update(id, name);
                 return Ok(category);
             }
@@ -85,15 +85,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete a category.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromHeader] string authorization,int id)
+        public IActionResult Delete([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 this.categoryService.Delete(id);
                 return NoContent();
             }

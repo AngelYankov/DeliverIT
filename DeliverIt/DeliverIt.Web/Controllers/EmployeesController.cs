@@ -27,14 +27,14 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all employees.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all employees.</returns>
         [HttpGet("")]
-        public IActionResult GetAll([FromHeader] string authorization)
+        public IActionResult GetAll([FromHeader] string authorizationUsername)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var employees = this.employeeService.GetAll();
                 return Ok(employees);
             }
@@ -46,15 +46,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get an employee by ID.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns employee with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get([FromHeader] string authorization, int id)
+        public IActionResult Get([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var employee = this.employeeService.Get(id);
                 return Ok(employee);
             }
@@ -66,15 +66,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Create new employee.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="model">Data to be created with.</param>
         /// <returns>Returns new employee or an appropriate error message.</returns>
         [HttpPost("")]
-        public IActionResult Create([FromHeader] string authorization, [FromBody] NewEmployeeDTO model)
+        public IActionResult Create([FromHeader] string authorizationUsername, [FromBody] NewEmployeeDTO model)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var employee = this.employeeService.Create(model);
                 return Created("post", employee);
             }
@@ -86,16 +86,16 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update an employee.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="model">Data to be updated.</param>
         /// <returns>Returns updated employee or an appropriate error message.</returns>
         [HttpPut("{id}")]
-        public IActionResult Update([FromHeader] string authorization, int id, [FromBody] UpdateEmployeeDTO model)
+        public IActionResult Update([FromHeader] string authorizationUsername, int id, [FromBody] UpdateEmployeeDTO model)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var employee = this.employeeService.Update(id, model);
                 return Ok(employee);
             }
@@ -107,15 +107,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete an employee.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns no content or an appropriate error message.</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromHeader] string authorization,int id)
+        public IActionResult Delete([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var employee = this.employeeService.Delete(id);
                 return NoContent();
             }

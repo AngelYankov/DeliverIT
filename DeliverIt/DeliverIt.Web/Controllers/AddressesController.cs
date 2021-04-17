@@ -30,15 +30,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get certain address.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns address with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get([FromHeader] string authorization, int id)
+        public IActionResult Get([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var address = this.addressService.Get(id);
                 return Ok(address);
             }
@@ -70,16 +70,16 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update certain address by ID
         /// </summary>
-        /// <param name="authorization">Username authorization</param>
+        /// <param name="authorizationUsername">Username authorization</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="model">Data to be updated with.</param>
         /// <returns>Returns updated address or an appropriate error message</returns>
         [HttpPut("{id}")]
-        public IActionResult Update([FromHeader] string authorization, int id, [FromBody] NewAddressDTO model)
+        public IActionResult Update([FromHeader] string authorizationUsername, int id, [FromBody] NewAddressDTO model)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var address = this.addressService.Update(id, model);
                 return Ok(address);
             }

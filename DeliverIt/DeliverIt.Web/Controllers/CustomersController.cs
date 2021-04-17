@@ -45,14 +45,14 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all customers.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns all customers.</returns>
         [HttpGet("")]
-        public IActionResult GetAll([FromHeader] string authorization)
+        public IActionResult GetAll([FromHeader] string authorizationUsername)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 return Ok(this.customerService.GetAll());
             }
             catch (Exception e)
@@ -63,15 +63,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get customer by ID.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns customer with that ID or an appropriate error message.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get([FromHeader] string authorization, int id)
+        public IActionResult Get([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var customer = this.customerService.Get(id);
                 return Ok(customer);
             }
@@ -102,16 +102,16 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Update existing customer's data.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <param name="model">Data to be updated.</param>
         /// <returns>Returns updated customer or an appropriate error message.</returns>
         [HttpPut("{id}")]
-        public IActionResult Update([FromHeader] string authorization, int id, [FromBody] UpdateCustomerDTO model)
+        public IActionResult Update([FromHeader] string authorizationUsername, int id, [FromBody] UpdateCustomerDTO model)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var customer = this.customerService.Update(id, model);
                 return Ok(customer);
             }
@@ -124,15 +124,15 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Delete a customer.
         /// </summary>
-        /// <param name="authorization">Username to validate.</param>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <param name="id">ID to search for.</param>
         /// <returns>Returns no contect or an appropriate error message.</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromHeader] string authorization, int id)
+        public IActionResult Delete([FromHeader] string authorizationUsername, int id)
         {
             try
             {
-                this.authHelper.TryGetEmployee(authorization);
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 this.customerService.Delete(id);
                 return NoContent();
             }
