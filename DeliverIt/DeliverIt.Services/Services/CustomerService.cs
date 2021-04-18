@@ -110,6 +110,7 @@ namespace DeliverIt.Services.Services
                                 .FirstOrDefault(a => a.Id == id)
                                 ?? throw new ArgumentException(Exceptions.InvalidAddress);
         }
+
         /// <summary>
         /// Finds a customer with ID.
         /// </summary>
@@ -129,6 +130,7 @@ namespace DeliverIt.Services.Services
             }
             return customer;
         }
+
         /// <summary>
         /// Get a customer with certain username
         /// </summary>
@@ -137,10 +139,11 @@ namespace DeliverIt.Services.Services
         {
             var customer = this.dbContext
                 .Customers
-                .Where(c=>c.IsDeleted==false)
+                .Where(c => c.IsDeleted == false)
                 .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)
                 ?? throw new ArgumentException(Exceptions.InvalidUsername);
         }
+
         /// <summary>
         /// Get all customers count
         /// </summary>
@@ -148,7 +151,7 @@ namespace DeliverIt.Services.Services
         public int GetAllCount()
         {
             var allCustomersCount = this.dbContext.Customers.Count();
-            if (allCustomersCount==0)
+            if (allCustomersCount == 0)
             {
                 throw new ArgumentException(Exceptions.NoCustomers);
             }

@@ -61,6 +61,20 @@ namespace DeliverIt.Services.Services
         }
 
         /// <summary>
+        /// Get all shipments count
+        /// </summary>
+        /// <returns>Returns the number of shipments.</returns>
+        public int GetAllCount()
+        {
+            var allShipmentsCount = this.dbContext.Shipments.Where(s=>s.IsDeleted==false).Count();
+            if (allShipmentsCount == 0)
+            {
+                throw new ArgumentException(Exceptions.NoShipments);
+            }
+            return allShipmentsCount;
+        }
+
+        /// <summary>
         /// Get a shipment by a certain ID.
         /// </summary>
         /// <param name="id">ID of the shipment to get.</param>

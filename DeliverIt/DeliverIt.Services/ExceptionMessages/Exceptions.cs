@@ -27,5 +27,6 @@ namespace DeliverIt.Services
         public const string TakenAddress = "Address is already taken.";
         public const string InvalidUsername = "Invalid username.";
         public const string NoCustomers = "There are no customers.";
+        public const string NoShipments = "There are no shipments.";
     }
 }

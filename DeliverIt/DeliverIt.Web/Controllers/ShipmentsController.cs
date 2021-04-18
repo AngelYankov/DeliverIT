@@ -66,6 +66,24 @@ namespace DeliverIt.Web.Controllers
         }
 
         /// <summary>
+        /// Get all shipments count.
+        /// </summary>
+        /// <returns>Returns number of shipments.</returns>
+        [HttpGet("shipmentCount")]
+        public IActionResult GetCount()
+        {
+            try
+            {
+                var count = this.shipmentService.GetAllCount();
+                return Ok(count);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
         /// Get a shipment by a certain ID.
         /// </summary>
         /// <param name="authorizationUsername">Username to validate.</param>

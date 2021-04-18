@@ -16,5 +16,6 @@ namespace DeliverIt.Services.Contracts
         ShipmentDTO Update(int id, UpdateShipmentDTO shipment);
         bool Delete(int id);
         List<ShipmentDTO> GetBy(string filter, string value);
+        int GetAllCount();
     }
 }

@@ -24,11 +24,12 @@ namespace DeliverIt.Web.Controllers
             this.customerService = customerService;
             this.authHelper = authHelper;
         }
-        /*/// <summary>
+
+        /// <summary>
         /// Get all customers count.
         /// </summary>
         /// <returns>Returns number of customers.</returns>
-        [HttpGet("")]
+        [HttpGet("customerCount")]
         public IActionResult GetCount()
         {
             try
@@ -40,8 +41,8 @@ namespace DeliverIt.Web.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
 
-        }*/
         /// <summary>
         /// Get all customers.
         /// </summary>
