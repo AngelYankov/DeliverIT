@@ -66,11 +66,8 @@ namespace DeliverIt.Services.Services
         /// <returns>Returns the number of shipments.</returns>
         public int GetAllCount()
         {
-            var allShipmentsCount = this.dbContext.Shipments.Where(s=>s.IsDeleted==false).Count();
-            if (allShipmentsCount == 0)
-            {
-                throw new ArgumentException(Exceptions.NoShipments);
-            }
+            var allShipmentsCount = this.dbContext.Shipments.Where(s=>s.IsDeleted==false && s.Arrival > DateTime.UtcNow).Count();
+           
             return allShipmentsCount;
         }
 
