@@ -199,6 +199,7 @@ namespace DeliverIt.Data
                     Id = 1,
                     FirstName = "Stefan",
                     LastName = "Popov",
+                    Email = "stefan.popov@gmail.com",
                     AddressId = 1
                 },
                 new Customer()
@@ -206,6 +207,7 @@ namespace DeliverIt.Data
                     Id = 2,
                     FirstName = "Georgi",
                     LastName = "Ivanov",
+                    Email = "georgi.ivanov@gmail.com",
                     AddressId = 2
                 },
                 new Customer()
@@ -213,6 +215,7 @@ namespace DeliverIt.Data
                     Id = 3,
                     FirstName = "Peter",
                     LastName = "Crouch",
+                    Email = "peter.crouch@gmail.com",
                     AddressId = 3
                 },
                 new Customer()
@@ -220,6 +223,7 @@ namespace DeliverIt.Data
                     Id = 4,
                     FirstName = "Steven",
                     LastName = "Tyler",
+                    Email = "steven.tyler@gmail.com",
                     AddressId = 4
                 },
                 new Customer()
@@ -227,6 +231,7 @@ namespace DeliverIt.Data
                     Id = 5,
                     FirstName = "Sven",
                     LastName = "Jorgensson",
+                    Email = "sven.jorgensson@gmail.com",
                     AddressId = 5
                 },
                 new Customer()
@@ -234,6 +239,7 @@ namespace DeliverIt.Data
                     Id = 6,
                     FirstName = "Ragnar",
                     LastName = "Lothbrok",
+                    Email = "ragnar.lothbrok@gmail.com",
                     AddressId = 6
                 },
             };
@@ -244,6 +250,7 @@ namespace DeliverIt.Data
                     Id = 1,
                     FirstName = "Petar",
                     LastName = "Shapkov",
+                    Email = "peter.shapkov@gmail.com",
                     AddressId = 7
                 },
                 new Employee()
@@ -251,6 +258,7 @@ namespace DeliverIt.Data
                     Id = 2,
                     FirstName = "Tyler",
                     LastName = "Johnson",
+                    Email = "tyler.johnson@gmail.com",
                     AddressId = 8
                 },
                 new Employee()
@@ -258,6 +266,7 @@ namespace DeliverIt.Data
                     Id = 3,
                     FirstName = "Eric",
                     LastName = "Berg",
+                    Email = "eric.berg@gmail.com",
                     AddressId = 9
                 },
             };

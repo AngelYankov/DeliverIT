@@ -96,11 +96,49 @@ namespace DeliverIt.Services.Services
             this.dbContext.SaveChanges();
             return employee.IsDeleted;
         }
-        //TODO
-        public IEnumerable<Employee> SearchBy(string filter, string value)
+        /// <summary>
+        /// Search by certain filter
+        /// </summary>
+        /// <param name="filter">Filter</param>
+        /// <param name="value">value of the filter</param>
+        /// <param name="order">Asc or Desc</param>
+        /// <returns>Returns all filtered employees</returns>
+        public IEnumerable<EmployeeDTO> SearchBy(string filter, string value, string order)
         {
-            throw new NotImplementedException();
+            var allEmployees = this.dbContext.Employees
+                                             .Include(e => e.Address)
+                                             .ThenInclude(a => a.City)
+                                             .Where(e => e.IsDeleted == false)
+                                             .Select(e=> new EmployeeDTO(e))
+                                             .ToList();
+            switch (filter)
+            {
+                case "firstName":
+                    if (order == "desc")
+                    {
+                        return allEmployees.Where(e => e.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(e => e.FirstName);
+                    }
+                    else return allEmployees.Where(e => e.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderBy(e => e.FirstName);
+                case "lastName":
+                    if (order == "desc")
+                    {
+                        return allEmployees.Where(e => e.LastName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(e => e.LastName);
+                    }
+                    else return allEmployees.Where(e=> e.LastName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderBy(e => e.LastName);
+                case "email":
+                    if (order == "desc")
+                    {
+                        return allEmployees.Where(e => e.Email != null && e.Email.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(e => e.Email);
+                    }
+                    else return allEmployees.Where(e => e.Email != null && e.Email.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderBy(e => e.Email);
+                default: throw new ArgumentException("Invalid filter.");
+            }
         }
+        /// <summary>
+        /// Find an address by ID
+        /// </summary>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns the address or an appropriate error message.</returns>
         private Address FindAddress(int id)
         {
             return this.dbContext.Addresses

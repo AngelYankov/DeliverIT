@@ -142,5 +142,20 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpGet("filtering&sorting")]
+        public IActionResult GetBy([FromHeader] string authorizationName,[FromQuery]string filter, string value, string order)
+        {
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationName);
+                var filtered= this.customerService.SearchBy(filter, value, order);
+                return Ok(filtered);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

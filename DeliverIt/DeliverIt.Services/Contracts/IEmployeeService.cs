@@ -16,6 +16,6 @@ namespace DeliverIt.Services.Contracts
         EmployeeDTO Update(int id, UpdateEmployeeDTO model);
         bool Delete(int id);
         Employee GetEmployee(string username);
-        IEnumerable<Employee> SearchBy(string filter, string value);
+        IEnumerable<EmployeeDTO> SearchBy(string filter, string value,string order);
     }
 }

@@ -14,7 +14,7 @@ namespace DeliverIt.Services.Contracts
         CustomerDTO Update(int id, UpdateCustomerDTO customer);
         bool Delete(int id);
         void GetCustomer(string username);
-        IEnumerable<Customer> SearchBy(string filter, string value);
+        IEnumerable<CustomerDTO> SearchBy(string filter, string value,string order);
         int GetAllCount();
     }
 }
