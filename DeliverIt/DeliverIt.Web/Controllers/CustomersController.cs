@@ -32,15 +32,8 @@ namespace DeliverIt.Web.Controllers
         [HttpGet("customerCount")]
         public IActionResult GetCount()
         {
-            try
-            {
-                var count = this.customerService.GetAllCount();
-                return Ok(count);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var count = this.customerService.GetAllCount();
+            return Ok(count);
         }
 
         /// <summary>

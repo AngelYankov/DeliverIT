@@ -151,10 +151,7 @@ namespace DeliverIt.Services.Services
         public int GetAllCount()
         {
             var allCustomersCount = this.dbContext.Customers.Count();
-            if (allCustomersCount == 0)
-            {
-                throw new ArgumentException(Exceptions.NoCustomers);
-            }
+           
             return allCustomersCount;
         }
     }

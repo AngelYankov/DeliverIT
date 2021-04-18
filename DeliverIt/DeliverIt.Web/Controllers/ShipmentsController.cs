@@ -68,12 +68,14 @@ namespace DeliverIt.Web.Controllers
         /// <summary>
         /// Get all shipments count.
         /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
         /// <returns>Returns number of shipments.</returns>
         [HttpGet("shipmentCount")]
-        public IActionResult GetCount()
+        public IActionResult GetCount([FromHeader] string authorizationUsername)
         {
             try
             {
+                this.authHelper.TryGetEmployee(authorizationUsername);
                 var count = this.shipmentService.GetAllCount();
                 return Ok(count);
             }
