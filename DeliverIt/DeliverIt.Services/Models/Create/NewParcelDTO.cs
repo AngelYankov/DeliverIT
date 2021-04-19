@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DeliverIt.Data.Models;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace DeliverIt.Services.Models.Create
 {
     public class NewParcelDTO
     {
+        [JsonIgnore]
+        public int Id { get; set; }
         public int CustomerId { get; set; }
         public int WarehouseId { get; set; }
         public int CategoryId { get; set; }
