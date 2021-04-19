@@ -1,4 +1,5 @@
 ﻿using DeliverIt.Data.Models;
+using Newtonsoft.Json;
 
 namespace DeliverIt.Services.Models
 {
@@ -8,7 +9,10 @@ namespace DeliverIt.Services.Models
         {
             City = city.Name;
             Country = city.Country.Name;
+            Id = city.Id;
         }
+        [JsonIgnore]
+        public int Id { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
     }

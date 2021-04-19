@@ -24,45 +24,7 @@ namespace DeliverIt.Web.Controllers
             this.employeeService = employeeService;
             this.authHelper = authHelper;
         }
-        /// <summary>
-        /// Get all employees.
-        /// </summary>
-        /// <param name="authorizationUsername">Username to validate.</param>
-        /// <returns>Returns all employees.</returns>
-        [HttpGet("")]
-        public IActionResult GetAll([FromHeader] string authorizationUsername)
-        {
-            try
-            {
-                this.authHelper.TryGetEmployee(authorizationUsername);
-                var employees = this.employeeService.GetAll();
-                return Ok(employees);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        /// <summary>
-        /// Get an employee by ID.
-        /// </summary>
-        /// <param name="authorizationUsername">Username to validate.</param>
-        /// <param name="id">ID to search for.</param>
-        /// <returns>Returns employee with that ID or an appropriate error message.</returns>
-        [HttpGet("{id}")]
-        public IActionResult Get([FromHeader] string authorizationUsername, int id)
-        {
-            try
-            {
-                this.authHelper.TryGetEmployee(authorizationUsername);
-                var employee = this.employeeService.Get(id);
-                return Ok(employee);
-            }
-            catch (Exception e)
-            {
-                return NotFound(e.Message);
-            }
-        }
+
         /// <summary>
         /// Create new employee.
         /// </summary>
@@ -83,6 +45,48 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        /// <summary>
+        /// Get all employees.
+        /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
+        /// <returns>Returns all employees.</returns>
+        [HttpGet("")]
+        public IActionResult GetAll([FromHeader] string authorizationUsername)
+        {
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationUsername);
+                var employees = this.employeeService.GetAll();
+                return Ok(employees);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get an employee by ID.
+        /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
+        /// <param name="id">ID to search for.</param>
+        /// <returns>Returns employee with that ID or an appropriate error message.</returns>
+        [HttpGet("{id}")]
+        public IActionResult Get([FromHeader] string authorizationUsername, int id)
+        {
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationUsername);
+                var employee = this.employeeService.Get(id);
+                return Ok(employee);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+        
         /// <summary>
         /// Update an employee.
         /// </summary>
@@ -104,6 +108,7 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
+
         /// <summary>
         /// Delete an employee.
         /// </summary>
@@ -124,6 +129,15 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        /// <summary>
+        /// Filter and sort employees.
+        /// </summary>
+        /// <param name="authorizationName">Username to validate.</param>
+        /// <param name="filter">firstName/lastName/email</param>
+        /// <param name="value">Value of the filter.</param>
+        /// <param name="order">asc/desc</param>
+        /// <returns></returns>
         [HttpGet("filtering&sorting")]
         public IActionResult GetBy([FromHeader] string authorizationName, [FromQuery] string filter, string value, string order)
         {

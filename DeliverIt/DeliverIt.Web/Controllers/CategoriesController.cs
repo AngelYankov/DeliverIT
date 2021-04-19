@@ -17,6 +17,32 @@ namespace DeliverIt.Web.Controllers
             this.categoryService = categoryService;
             this.authHelper = authHelper;
         }
+
+        /// <summary>
+        /// Create a new category.
+        /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
+        /// <param name="name">Name of new category.</param>
+        /// <returns>Returns new category or an appropriate error message.</returns>
+        [HttpPost("{name}")]
+        public IActionResult Create([FromHeader] string authorizationUsername, string name)
+        {
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationUsername);
+                if (name == null)
+                {
+                    return BadRequest();
+                }
+                var category = this.categoryService.Create(name);
+                return Created("post", category);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         /// <summary>
         /// Get all categories.
         /// </summary>
@@ -35,32 +61,7 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
-        /// <summary>
-        /// Create a new category.
-        /// </summary>
-        /// <param name="authorizationUsername">Username to validate.</param>
-        /// <param name="name">Name of new category.</param>
-        /// <returns>Returns new category or an appropriate error message.</returns>
-        [HttpPost("{name}")]
-        public IActionResult Create([FromHeader] string authorizationUsername, string name)
-        {
-            try
-            {
-                this.authHelper.TryGetEmployee(authorizationUsername);
-                if (name == null)
-                {
-                    return BadRequest();
-                }
 
-                var category = this.categoryService.Create(name);
-                return Created("post", category);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-            
-        }
         /// <summary>
         /// Update existing category by ID.
         /// </summary>
@@ -82,6 +83,7 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
+
         /// <summary>
         /// Delete a category.
         /// </summary>

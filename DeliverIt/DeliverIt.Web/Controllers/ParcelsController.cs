@@ -138,17 +138,17 @@ namespace DeliverIt.Web.Controllers
         /// <param name="value2">Value of the second filter</param>
         /// <param name="sortBy1">weight/arrival</param>
         /// <param name="sortBy2">weight/arrival</param>
-        /// <param name="sortingValue">asc/desc</param>
+        /// <param name="order">asc/desc</param>
         /// <returns>Returns filtered and/or sorted parcels or an appropriate error message.</returns>
         [HttpGet("filtering&sorting")]
         public IActionResult GetBy([FromHeader] string authorizationUsername, 
                                    [FromQuery] string filter1, string value1, string filter2, string value2, 
-                                               string sortBy1, string sortBy2, string sortingValue)
+                                               string sortBy1, string sortBy2, string order)
         {
             try
             {
                 this.authHelper.TryGetEmployee(authorizationUsername);
-                var parcelsDTO = this.parcelService.GetBy(filter1, value1, filter2, value2, sortBy1, sortBy2, sortingValue);
+                var parcelsDTO = this.parcelService.GetBy(filter1, value1, filter2, value2, sortBy1, sortBy2, order);
                 return Ok(parcelsDTO);
             }
             catch (Exception e)

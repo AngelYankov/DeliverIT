@@ -24,6 +24,28 @@ namespace DeliverIt.Web.Controllers
             this.warehouseService = warehouseService;
             this.authHelper = authHelper;
         }
+
+        /// <summary>
+        /// Create a warehouse.
+        /// </summary>
+        /// <param name="authorizationUsername">Username to validate.</param>
+        /// <param name="model">Data of warehouse to be created with.</param>
+        /// <returns>Returns created warehouse or an appropriate error message.</returns>
+        [HttpPost("")]
+        public IActionResult Create([FromHeader] string authorizationUsername, [FromBody] NewWarehouseDTO model)
+        {
+            try
+            {
+                this.authHelper.TryGetEmployee(authorizationUsername);
+                var warehouse = this.warehouseService.Create(model);
+                return Created("post", warehouse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         /// <summary>
         /// Get all warehouses.
         /// </summary>
@@ -33,6 +55,7 @@ namespace DeliverIt.Web.Controllers
         {
             return Ok(this.warehouseService.GetAll());
         }
+
         /// <summary>
         /// Get warehouse by ID.
         /// </summary>
@@ -53,6 +76,7 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
+
         /// <summary>
         /// Update certain warehouse data.
         /// </summary>
@@ -74,26 +98,7 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-        /// <summary>
-        /// Create a warehouse.
-        /// </summary>
-        /// <param name="authorizationUsername">Username to validate.</param>
-        /// <param name="model">Data of warehouse to be created with.</param>
-        /// <returns>Returns created warehouse or an appropriate error message.</returns>
-        [HttpPost("")]
-        public IActionResult Create([FromHeader] string authorizationUsername, [FromBody] NewWarehouseDTO model)
-        {
-            try
-            {
-                this.authHelper.TryGetEmployee(authorizationUsername);
-                var warehouse = this.warehouseService.Create(model);
-                return Created("post", warehouse);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+       
         /// <summary>
         /// Delete a warehouse.
         /// </summary>

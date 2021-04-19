@@ -18,6 +18,26 @@ namespace DeliverIt.Web.Controllers
             this.addressService = addressService;
             this.authHelper = authHelper;
         }
+
+        /// <summary>
+        /// Create a new address
+        /// </summary>
+        /// <param name="model">Data of new address.</param>
+        /// <returns>Returns created address or an appropriate error message.</returns>
+        [HttpPost("")]
+        public IActionResult Create([FromBody] NewAddressDTO model)
+        {
+            try
+            {
+                var address = this.addressService.Create(model);
+                return Created("post", address);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         /// <summary>
         /// Get all addresses.
         /// </summary>
@@ -27,6 +47,7 @@ namespace DeliverIt.Web.Controllers
         {
             return Ok(this.addressService.GetAll());
         }
+
         /// <summary>
         /// Get certain address.
         /// </summary>
@@ -47,26 +68,7 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-        /// <summary>
-        /// Create a new address
-        /// </summary>
-        /// <param name="model">Data of new address.</param>
-        /// <returns>Returns created address or an appropriate error message.</returns>
-        [HttpPost("")]
-        public IActionResult Create([FromBody] NewAddressDTO model)
-        {
-
-            try
-            {
-                var address = this.addressService.Create(model);
-                return Created("post", address);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-        }
+        
         /// <summary>
         /// Update certain address by ID
         /// </summary>

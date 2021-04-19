@@ -26,14 +26,22 @@ namespace DeliverIt.Web.Controllers
         }
 
         /// <summary>
-        /// Get all customers count.
+        /// Create new customer.
         /// </summary>
-        /// <returns>Returns number of customers.</returns>
-        [HttpGet("customerCount")]
-        public IActionResult GetCount()
+        /// <param name="model">Data of new customer.</param>
+        /// <returns>Returns created customer or an appropriate error message.</returns>
+        [HttpPost("")]
+        public IActionResult Create([FromBody] NewCustomerDTO model)
         {
-            var count = this.customerService.GetAllCount();
-            return Ok(count);
+            try
+            {
+                var customer = this.customerService.Create(model);
+                return Created("post", customer);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -54,6 +62,7 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         /// <summary>
         /// Get customer by ID.
         /// </summary>
@@ -74,25 +83,18 @@ namespace DeliverIt.Web.Controllers
                 return NotFound(e.Message);
             }
         }
-        /// <summary>
-        /// Create new customer.
-        /// </summary>
-        /// <param name="model">Data of new customer.</param>
-        /// <returns>Returns created customer or an appropriate error message.</returns>
-        [HttpPost("")]
-        public IActionResult Create([FromBody] NewCustomerDTO model)
-        {
-            try
-            {
-                var customer = this.customerService.Create(model);
-                return Created("post", customer);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
 
+        /// <summary>
+        /// Get all customers count.
+        /// </summary>
+        /// <returns>Returns number of customers.</returns>
+        [HttpGet("customerCount")]
+        public IActionResult GetCount()
+        {
+            var count = this.customerService.GetAllCount();
+            return Ok(count);
         }
+
         /// <summary>
         /// Update existing customer's data.
         /// </summary>
@@ -135,13 +137,22 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        /// <summary>
+        /// Filter and sort customers.
+        /// </summary>
+        /// <param name="authorizationName">Username to validate.</param>
+        /// <param name="filter">firstName/lastName/email</param>
+        /// <param name="value">Value of the filter.</param>
+        /// <param name="order">asc/desc</param>
+        /// <returns></returns>
         [HttpGet("filtering&sorting")]
-        public IActionResult GetBy([FromHeader] string authorizationName,[FromQuery]string filter, string value, string order)
+        public IActionResult GetBy([FromHeader] string authorizationName, [FromQuery] string filter, string value, string order)
         {
             try
             {
                 this.authHelper.TryGetEmployee(authorizationName);
-                var filtered= this.customerService.SearchBy(filter, value, order);
+                var filtered = this.customerService.SearchBy(filter, value, order);
                 return Ok(filtered);
             }
             catch (Exception e)
@@ -149,6 +160,5 @@ namespace DeliverIt.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
-
     }
 }
