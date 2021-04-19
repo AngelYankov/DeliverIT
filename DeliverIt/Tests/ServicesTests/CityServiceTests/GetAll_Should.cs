@@ -30,6 +30,7 @@ namespace Tests.ServicesTests.CityServiceTests
                 var result = sut.GetAll();
 
                 Assert.AreEqual(cities.Count, result.Count);
+                Assert.AreEqual(string.Join(",", cities.Select(c => c.Name)), string.Join(",", result));
 
             }
         }
