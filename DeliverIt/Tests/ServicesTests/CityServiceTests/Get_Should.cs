@@ -19,12 +19,11 @@ namespace Tests.ServicesTests.CityServiceTests
         {
             var options = Utils.GetOptions(nameof(Return_Correct_City));
             var cities = Utils.SeedCities();
-            var countries = Utils.SeedCountries();
 
             using (var arrangeContext = new DeliverItContext(options))
             {
                 arrangeContext.Cities.AddRange(cities);
-                arrangeContext.Countries.AddRange(countries);
+                arrangeContext.Countries.AddRange(Utils.SeedCountries());
                 arrangeContext.SaveChanges();
             }
             var cityDTO = new CityDTO(cities.First());
