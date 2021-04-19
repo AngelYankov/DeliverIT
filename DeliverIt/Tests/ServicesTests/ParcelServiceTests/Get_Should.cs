@@ -16,22 +16,16 @@ namespace Tests.ServicesTests.ParcelServiceTests
         public void Return_Correct_Parcel()
         {
             var options = Utils.GetOptions(nameof(Return_Correct_Parcel));
-            var customers = Utils.SeedCustomers();
-            var warehouses = Utils.SeedWarehouses();
-            var cities = Utils.SeedCities();
-            var categories = Utils.SeedCategories();
-            var addresses = Utils.SeedAddresses();
-            var shipments = Utils.SeedShipments();
             var parcels = Utils.SeedParcels();
 
             using (var arrangeContext = new DeliverItContext(options))
             {
-                arrangeContext.Customers.AddRange(customers);
-                arrangeContext.Addresses.AddRange(addresses);
-                arrangeContext.Cities.AddRange(cities);
-                arrangeContext.Categories.AddRange(categories);
-                arrangeContext.Warehouses.AddRange(warehouses);
-                arrangeContext.Shipments.AddRange(shipments);
+                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
+                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
+                arrangeContext.Cities.AddRange(Utils.SeedCities());
+                arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Parcels.AddRange(parcels);
                 arrangeContext.SaveChanges();
             }
