@@ -173,9 +173,9 @@ namespace DeliverIt.Services.Services
         /// Get a customer with certain username
         /// </summary>
         /// <param name="username">Username to check for</param>
-        public void GetCustomer(string username)
+        public Customer GetCustomer(string username)
         {
-            var customer = this.dbContext
+            return this.dbContext
                 .Customers
                 .Where(c => c.IsDeleted == false)
                 .FirstOrDefault(c => (c.FirstName + "." + c.LastName).ToLower() == username)

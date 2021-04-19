@@ -1,4 +1,5 @@
-﻿using DeliverIt.Services.Contracts;
+﻿using DeliverIt.Data.Models;
+using DeliverIt.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,22 +17,24 @@ namespace DeliverIt.Web.Helpers
             this.customerService = customerService;
             this.employeeService = employeeService;
         }
-        public void TryGetCustomer(string authorization)
+        public Customer TryGetCustomer(string authorization)
         {
             try
             {
-                this.customerService.GetCustomer(authorization);
+                var customer = this.customerService.GetCustomer(authorization);
+                return customer;
             }
             catch (Exception e)
             {
                 throw new ArgumentException(e.Message);
             }
         }
-        public void TryGetEmployee(string authorization)
+        public Employee TryGetEmployee(string authorization)
         {
             try
             {
-                this.employeeService.GetEmployee(authorization);
+                var employee = this.employeeService.GetEmployee(authorization);
+                return employee;
             }
             catch (Exception e)
             {
