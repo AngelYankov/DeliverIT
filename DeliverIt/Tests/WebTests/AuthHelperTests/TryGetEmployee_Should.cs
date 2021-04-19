@@ -11,7 +11,7 @@ using System.Text;
 namespace Tests.WebTests.AuthHelperTests
 {
     [TestClass]
-    public class GetEmployee_Should
+    public class TryGetEmployee_Should
     {
         [TestMethod]
         public void ReturnCorrectUser()
