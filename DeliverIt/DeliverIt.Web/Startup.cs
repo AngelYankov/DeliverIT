@@ -43,7 +43,7 @@ namespace DeliverIt.Web
 
             services.AddDbContext<DeliverItContext>(options =>
             {
-                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DeliverIt;Integrated Security=True;");
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICountryService, CountryService>();

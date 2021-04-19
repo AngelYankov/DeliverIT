@@ -14,9 +14,12 @@ namespace DeliverIt.Services.Services
     public class WarehouseService : IWarehouseService
     {
         private readonly DeliverItContext dbContext;
-        public WarehouseService(DeliverItContext dbContext)
+        private readonly IAddressService addressService;
+
+        public WarehouseService(DeliverItContext dbContext, IAddressService addressService)
         {
             this.dbContext = dbContext;
+            this.addressService = addressService;
         }
         /// <summary>
         /// Create a warehouse.
@@ -26,9 +29,9 @@ namespace DeliverIt.Services.Services
         public WarehouseDTO Create(NewWarehouseDTO model)
         {
             var warehouse = new Warehouse();
-            var adddress = FindAddress(model.AddressId);
+            var address = this.addressService.Get(model.AddressId);
             warehouse.AddressId = model.AddressId;
-            warehouse.Address = adddress;
+            warehouse.Address = address.Address;
             warehouse.CreatedOn = DateTime.UtcNow;
             this.dbContext.Warehouses.Add(warehouse);
             this.dbContext.SaveChanges();
@@ -65,9 +68,9 @@ namespace DeliverIt.Services.Services
         public WarehouseDTO Update(int id, NewWarehouseDTO model)
         {
             var warehouse = FindWarehouse(id);
-            var address = FindAddress(model.AddressId);
+            var address = this.addressService.Get(model.AddressId);
             var warehouseWIthId = this.dbContext.Warehouses.Include(w => w.Address).FirstOrDefault(w => w.AddressId == model.AddressId);
-            if (warehouseWIthId!=null)
+            if (warehouseWIthId != null)
             {
                 throw new ArgumentException(Exceptions.TakenAddress);
             }
@@ -88,18 +91,6 @@ namespace DeliverIt.Services.Services
             warehouse.DeletedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
             return warehouse.IsDeleted;
-        }
-        /// <summary>
-        /// Find an address by ID.
-        /// </summary>
-        /// <param name="id">ID to search for.</param>
-        /// <returns>Returns adress with that ID or an appropriate error message.</returns>
-        private Address FindAddress(int id)
-        {
-            return this.dbContext.Addresses
-                                .Include(a => a.City)
-                                .FirstOrDefault(a => a.Id == id)
-                                ?? throw new ArgumentException(Exceptions.InvalidAddress);
         }
         /// <summary>
         /// Find a warehouse by ID.
