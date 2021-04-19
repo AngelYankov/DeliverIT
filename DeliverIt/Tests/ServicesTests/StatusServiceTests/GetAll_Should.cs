@@ -4,6 +4,7 @@ using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tests.ServicesTests.StatusServiceTests
@@ -29,6 +30,7 @@ namespace Tests.ServicesTests.StatusServiceTests
                 var result = sut.GetAll();
 
                 Assert.AreEqual(statuses.Count, result.Count);
+                Assert.AreEqual(string.Join(",", statuses.Select(s => s.Name)), string.Join(",", result));
             }
         }
     }

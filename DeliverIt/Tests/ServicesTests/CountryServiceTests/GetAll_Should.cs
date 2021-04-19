@@ -5,6 +5,7 @@ using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tests.ServicesTests.CountryServiceTests
@@ -30,7 +31,7 @@ namespace Tests.ServicesTests.CountryServiceTests
                 var result = sut.GetAll();
 
                 Assert.AreEqual(countries.Count, result.Count);
-                Assert.IsInstanceOfType(countries, (Type)result);
+                Assert.AreEqual(string.Join(",",countries.Select(c=>c.Name)), string.Join(",",result));
             }
         }
     }
