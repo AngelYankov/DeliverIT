@@ -12,6 +12,7 @@ namespace DeliverIt.Services.Models
         }
         [JsonIgnore]
         public int Id { get; set; }
+        
         public string Status { get; set; }
     }
 }

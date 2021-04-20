@@ -28,5 +28,7 @@ namespace DeliverIt.Services
         public const string InvalidUsername = "Invalid username.";
         public const string NoCustomers = "There are no customers.";
         public const string NoShipments = "There are no shipments.";
+        public const string InvalidWeight = "The weight should be between 0.1 and 500 kg.";
+
     }
 }
