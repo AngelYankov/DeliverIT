@@ -15,40 +15,32 @@ using System.Text;
 namespace Tests.ServicesTests.WarehouseServiceTests
 {
     [TestClass]
-    public class Create_Should
+    public class Update_Should
     {
         [TestMethod]
-        public void ReturnCreatedWarehouse()
+        public void ReturnUpdatedWarehouse()
         {
-            var options = Utils.GetOptions(nameof(ReturnCreatedWarehouse));
-            
+            var options = Utils.GetOptions(nameof(ReturnUpdatedWarehouse));
+            var mockService = new Mock<IAddressService>();
             var newWarehouseDTO = new NewWarehouseDTO()
             {
-                AddressId = 1
-            };
-            var warehouse = new Warehouse()
-            {
-                AddressId = 1,
-                CreatedOn = DateTime.UtcNow,
+                AddressId = 3
             };
             using (var arrContext = new DeliverItContext(options))
             {
+                arrContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrContext.Cities.AddRange(Utils.SeedCities());
-                arrContext.Warehouses.Add(warehouse);
                 arrContext.SaveChanges();
             }
             using (var actContext = new DeliverItContext(options))
             {
-                var address = actContext.Addresses.Include(a=>a.City).FirstOrDefault(a => a.Id == 1);
-                var mockService = new Mock<IAddressService>();
-                mockService.Setup(a => a.Get(It.IsAny<int>())).Returns(new AddressDTO(address));
-                var sut = new WarehouseService(actContext,mockService.Object);
-                var result = sut.Create(newWarehouseDTO);
+                var sut = new WarehouseService(actContext, mockService.Object);
+                var result = sut.Update(1, newWarehouseDTO);
+                var warehouse = actContext.Warehouses.First(w => w.Id == 1);
                 Assert.AreEqual(warehouse.Address.StreetName + ", " + warehouse.Address.City.Name, result.Address);
-                Assert.IsInstanceOfType(result, typeof(WarehouseDTO));
-                Assert.IsTrue(actContext.Warehouses.Contains(warehouse));
             }
+            //TODO
         }
     }
 }
