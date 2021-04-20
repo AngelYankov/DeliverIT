@@ -6,6 +6,7 @@ using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tests.ServicesTests.AddressServiceTests
@@ -30,19 +31,41 @@ namespace Tests.ServicesTests.AddressServiceTests
             };
             using (var arrContext = new DeliverItContext(options))
             {
-                arrContext.Addresses.Add(address);
                 arrContext.AddRange(Utils.SeedCities());
+                arrContext.Addresses.Add(address);
+                arrContext.SaveChanges();
             }
-            var addressDTO = new AddressDTO(address);
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new AddressService(actContext);
                 var result = sut.Create(newAddressDTO);
-                Assert.AreEqual(addressDTO.Id, result.Id);
-                Assert.AreEqual(addressDTO.StreetAddress, result.StreetAddress);
-                Assert.AreEqual(addressDTO.Address.City.Id, result.Address.City.Id);
+                Assert.AreEqual(address.StreetName, result.Address.StreetName);
+                Assert.AreEqual(address.City.Id, result.Address.City.Id);
+                Assert.IsInstanceOfType(result, typeof(AddressDTO));
+                Assert.AreEqual(actContext.Addresses.Count(), 2);
+                Assert.IsTrue(address.City.Addresses.Contains(address));
             }
-            //todo
+        }
+        [TestMethod]
+        public void Throw_When_InvalidCity()
+        {
+            var options = Utils.GetOptions(nameof(Throw_When_InvalidCity));
+            var newAddressDTO = new NewAddressDTO()
+            {
+                StreetName = "Ivan Vazov",
+                CityId = 100,
+            };
+            
+            using (var arrContext = new DeliverItContext(options))
+            {
+                arrContext.AddRange(Utils.SeedCities());
+                arrContext.SaveChanges();
+            }
+            using (var actContext = new DeliverItContext(options))
+            {
+                var sut = new AddressService(actContext);
+                Assert.ThrowsException<ArgumentException>(() => sut.Create(newAddressDTO));
+            }
         }
     }
 }

@@ -18,22 +18,21 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void ReturnsAddressById()
         {
             var options = Utils.GetOptions(nameof(ReturnsAddressById));
-            var addresses = Utils.SeedAddresses();
 
             using (var arrangeContext = new DeliverItContext(options))
             {
-                arrangeContext.Addresses.AddRange(addresses);
+                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
             }
-            var addressDTO = new AddressDTO(addresses.First());
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new AddressService(actContext);
                 var result = sut.Get(1);
-                Assert.AreEqual(addressDTO.StreetAddress, result.StreetAddress);
-                Assert.AreEqual(addressDTO.Id, result.Id);
-                Assert.AreEqual(addressDTO.Address.Id, result.Address.Id);
+                var address = actContext.Addresses.FirstOrDefault(a => a.Id == 1);
+                Assert.AreEqual(address.StreetName+","+address.City.Name, result.StreetAddress);
+                Assert.AreEqual(address.Id, result.Id);
+                Assert.AreEqual(address.Id, result.Address.Id);
             }
         }
         [TestMethod]
@@ -43,7 +42,7 @@ namespace Tests.ServicesTests.AddressServiceTests
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new AddressService(actContext);
-                Assert.ThrowsException<ArgumentException>(() =>sut.Get(1));
+                Assert.ThrowsException<ArgumentException>(() => sut.Get(1));
             }
         }
     }

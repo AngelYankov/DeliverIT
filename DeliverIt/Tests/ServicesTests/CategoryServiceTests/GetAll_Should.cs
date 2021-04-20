@@ -20,12 +20,13 @@ namespace Tests.ServicesTests.CategoryServiceTests
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Categories.AddRange(categories);
+                arrContext.SaveChanges();
             }
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new CategoryService(actContext);
                 var result = sut.GetAll();
-                Assert.AreEqual(string.Join(",", categories.Select(c => c.Name)),string.Join(",",result));
+                Assert.AreEqual(string.Join(",", actContext.Categories.Select(c => c.Name)),string.Join(",",result));
             }
         }
     }

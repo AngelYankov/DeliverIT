@@ -31,7 +31,7 @@ namespace Tests.ServicesTests.CategoryServiceTests
                 var sut = new CategoryService(actContext);
                 var result = sut.Create("Test category");
                 Assert.AreEqual(result, category.Name);
-                Assert.AreEqual(actContext.Categories.ToList().Count(),2);
+                Assert.AreEqual(actContext.Categories.Count(),2);
             }
         }
     }

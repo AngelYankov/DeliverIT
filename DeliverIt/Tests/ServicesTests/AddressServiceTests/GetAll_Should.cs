@@ -27,8 +27,8 @@ namespace Tests.ServicesTests.AddressServiceTests
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new AddressService(actContext);
-                var result = sut.GetAll().ToList();
-                Assert.AreEqual(addresses.Count, result.Count);
+                var result = sut.GetAll();
+                Assert.AreEqual(actContext.Addresses.Count(), result.Count());
                 Assert.AreEqual(string.Join(",", addresses.Select(a=>new AddressDTO(a))), string.Join(",", result));
             }
         }
