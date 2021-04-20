@@ -15,10 +15,12 @@ namespace DeliverIt.Services.Services
     public class CustomerService : ICustomerService
     {
         private readonly DeliverItContext dbContext;
+        private readonly IAddressService addressService;
 
-        public CustomerService(DeliverItContext dbContext)
+        public CustomerService(DeliverItContext dbContext,IAddressService addressService)
         {
             this.dbContext = dbContext;
+            this.addressService = addressService;
         }
         /// <summary>
         /// Create a customer
@@ -27,7 +29,7 @@ namespace DeliverIt.Services.Services
         /// <returns>Returns new customer or an appropriate error message.</returns>
         public CustomerDTO Create(NewCustomerDTO model)
         {
-            var address = FindAddress(model.AddressId);
+            var address = this.addressService.GetBaseForTest(model.AddressId);
             var customer = new Customer();
             address.Customers.Add(customer);
             customer.FirstName = model.FirstName;
@@ -78,7 +80,7 @@ namespace DeliverIt.Services.Services
             customer.Email = model.Email ?? customer.Email;
             if (model.AddressId != 0)
             {
-                FindAddress(model.AddressId);
+                this.addressService.GetBaseForTest(model.AddressId);
                 customer.AddressId = model.AddressId;
                 customer.ModifiedOn = DateTime.UtcNow;
             }
@@ -136,19 +138,6 @@ namespace DeliverIt.Services.Services
                 default: throw new ArgumentException("Invalid filter.");
             }
         }
-         /// <summary>
-         /// Find an address by ID
-         /// </summary>
-         /// <param name="id">ID to search for.</param>
-         /// <returns>Returns the address or an appropriate error message.</returns>
-        private Address FindAddress(int id)
-        {
-            return this.dbContext.Addresses
-                                .Include(a => a.City)
-                                .FirstOrDefault(a => a.Id == id)
-                                ?? throw new ArgumentException(Exceptions.InvalidAddress);
-        }
-
         /// <summary>
         /// Finds a customer with ID.
         /// </summary>

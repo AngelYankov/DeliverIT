@@ -11,6 +11,6 @@ namespace DeliverIt.Services.Contracts
         IEnumerable<AddressDTO> GetAll();
         AddressDTO Create(NewAddressDTO address);
         AddressDTO Update(int id,NewAddressDTO address);
-
+        Address GetBaseForTest(int id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
+using DeliverIt.Services;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
@@ -21,7 +22,6 @@ namespace Tests.ServicesTests.WarehouseServiceTests
         public void ReturnUpdatedWarehouse()
         {
             var options = Utils.GetOptions(nameof(ReturnUpdatedWarehouse));
-            var mockService = new Mock<IAddressService>();
             var newWarehouseDTO = new NewWarehouseDTO()
             {
                 AddressId = 3
@@ -35,12 +35,41 @@ namespace Tests.ServicesTests.WarehouseServiceTests
             }
             using (var actContext = new DeliverItContext(options))
             {
-                var sut = new WarehouseService(actContext, mockService.Object);
-                var result = sut.Update(1, newWarehouseDTO);
-                var warehouse = actContext.Warehouses.First(w => w.Id == 1);
+                var sutHelp = new AddressService(actContext);
+                var sut = new WarehouseService(actContext, sutHelp);
+                var warehouse = actContext.Warehouses.FirstOrDefault(w => w.Id == 2);
+                var result = sut.Update(2, newWarehouseDTO);
                 Assert.AreEqual(warehouse.Address.StreetName + ", " + warehouse.Address.City.Name, result.Address);
             }
-            //TODO
+        }
+        [TestMethod]
+        public void Throw_When_InvalidWarehouseId()
+        {
+            var options = Utils.GetOptions(nameof(Throw_When_InvalidWarehouseId));
+            using (var actContext = new DeliverItContext(options))
+            {
+                var sutHelp = new AddressService(actContext);
+                var sut = new WarehouseService(actContext, sutHelp);
+                Assert.ThrowsException<ArgumentException>(() => sut.Update(5, new NewWarehouseDTO()));
+            }
+        }
+        [TestMethod]
+        public void Throw_When_InvalidAddressId()
+        {
+            var options = Utils.GetOptions(nameof(Throw_When_InvalidAddressId));
+            var newWarehouseDTO = new NewWarehouseDTO()
+            {
+                AddressId = 1
+            };
+            using (var actContext = new DeliverItContext(options))
+            {
+                var sutHelp = new AddressService(actContext);
+                var sut = new WarehouseService(actContext, sutHelp);
+                var warehouse = actContext.Warehouses.FirstOrDefault(w => w.Id == 2);
+                var address = actContext.Addresses.FirstOrDefault(a => a.Id == 1);
+                address.Warehouse = warehouse;
+                Assert.ThrowsException<ArgumentException>(() => sut.Update(2, newWarehouseDTO));
+            }
         }
     }
 }

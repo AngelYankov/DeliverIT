@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tests
 {
@@ -138,7 +139,7 @@ namespace Tests
                 {
                     Id = 1,
                     StreetName = "Georgi Rakovski 1",
-                    CityID = 1
+                    CityID = 1,
                 },
                 new Address()
                 {

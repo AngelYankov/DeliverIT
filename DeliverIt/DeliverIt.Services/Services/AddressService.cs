@@ -48,6 +48,15 @@ namespace DeliverIt.Services.Services
             return new AddressDTO(address);
         }
         /// <summary>
+        /// Get an Address by ID
+        /// </summary>
+        /// <param name="id">Id to search for.</param>
+        /// <returns>Returns the address with that Id.</returns>
+        public Address GetBaseForTest(int id)
+        {
+            return FindAddress(id);
+        }
+        /// <summary>
         /// Get all addresses.
         /// </summary>
         /// <returns>Returns all addresses.</returns>

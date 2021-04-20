@@ -15,9 +15,12 @@ namespace DeliverIt.Services.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly DeliverItContext dbContext;
-        public EmployeeService(DeliverItContext deliverItContext)
+        private readonly IAddressService addressService;
+
+        public EmployeeService(DeliverItContext deliverItContext,IAddressService addressService)
         {
             this.dbContext = deliverItContext;
+            this.addressService = addressService;
         }
         /// <summary>
         /// Creae an employee
@@ -26,10 +29,10 @@ namespace DeliverIt.Services.Services
         /// <returns>Returns new employee or an appropriate error message.</returns>
         public EmployeeDTO Create(NewEmployeeDTO model)
         {
-            var address = FindAddress(model.AddressId);
+            var address = this.addressService.GetBaseForTest(model.AddressId);
             var employee = new Employee();
             employee.FirstName = model.FirstName;
-            employee.LastName = model.FirstName;
+            employee.LastName = model.LastName;
             employee.Email = model.Email;
             employee.AddressId = model.AddressId;
             employee.CreatedOn = DateTime.UtcNow;
@@ -76,7 +79,7 @@ namespace DeliverIt.Services.Services
             employee.Email = model.Email ?? employee.Email;
             if (model.AddressId != 0)
             {
-                FindAddress(model.AddressId);
+                this.addressService.GetBaseForTest(model.AddressId);
                 employee.AddressId = model.AddressId;
                 employee.ModifiedOn = DateTime.UtcNow;
             }
@@ -135,17 +138,6 @@ namespace DeliverIt.Services.Services
             }
         }
         /// <summary>
-        /// Find an address by ID
-        /// </summary>
-        /// <param name="id">ID to search for.</param>
-        /// <returns>Returns the address or an appropriate error message.</returns>
-        private Address FindAddress(int id)
-        {
-            return this.dbContext.Addresses
-                                .Include(a => a.City)
-                                .FirstOrDefault(a => a.Id == id)
-                                ?? throw new ArgumentException(Exceptions.InvalidAddress);
-        }/// <summary>
          /// Find an employee with ID.
          /// </summary>
          /// <param name="id">ID to search for.</param>

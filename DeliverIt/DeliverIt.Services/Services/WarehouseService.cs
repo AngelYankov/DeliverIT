@@ -74,7 +74,7 @@ namespace DeliverIt.Services.Services
             {
                 throw new ArgumentException(Exceptions.TakenAddress);
             }
-            warehouse.AddressId = address.Id;
+            warehouse.AddressId = model.AddressId;
             warehouse.ModifiedOn = DateTime.UtcNow;
             this.dbContext.SaveChanges();
             return new WarehouseDTO(warehouse);
