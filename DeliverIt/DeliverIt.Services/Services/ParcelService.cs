@@ -49,7 +49,11 @@ namespace DeliverIt.Services.Services
                 ?? throw new ArgumentNullException(Exceptions.InvalidShipment);
 
             newParcel.ShipmentId = dto.ShipmentId;
-
+            
+            if(dto.Weight < 0.1 || dto.Weight > 500)
+            {
+                throw new ArgumentOutOfRangeException(Exceptions.InvalidWeight);
+            }
             newParcel.Weight = dto.Weight;
             newParcel.CreatedOn = DateTime.UtcNow;
 

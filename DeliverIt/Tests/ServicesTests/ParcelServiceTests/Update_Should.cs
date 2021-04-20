@@ -1,36 +1,33 @@
 ﻿using DeliverIt.Data;
-using DeliverIt.Data.Models;
-using DeliverIt.Services.Models;
-using DeliverIt.Services.Models.Create;
+using DeliverIt.Services.Models.Update;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Tests.ServicesTests.ParcelServiceTests
 {
     [TestClass]
-    public class Create_Should
+    public class Update_Should
     {
         [TestMethod]
-        public void Return_Created_Parcel()
+        public void Return_Updated_Parcel()
         {
-            var options = Utils.GetOptions(nameof(Return_Created_Parcel));
+            var options = Utils.GetOptions(nameof(Return_Updated_Parcel));
 
-            var newParcelDTO = new NewParcelDTO()
+            var updateParcelDTO = new UpdateParcelDTO()
             {
-                Id = 1,
-                CategoryId = 1,
                 CustomerId = 1,
-                WarehouseId = 1,
                 ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
                 Weight = 1
             };
 
             using (var arrangeContext = new DeliverItContext(options))
             {
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
@@ -43,100 +40,33 @@ namespace Tests.ServicesTests.ParcelServiceTests
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new ParcelService(actContext);
-                var result = sut.Create(newParcelDTO);
+                var result = sut.Update(1, updateParcelDTO);
 
-                Assert.AreEqual(1, actContext.Parcels.ToList().Count());
-                Assert.AreEqual(newParcelDTO.Id, result.Id);
-                Assert.AreEqual(newParcelDTO.CustomerId, result.CustomerId);
-                Assert.AreEqual(newParcelDTO.CategoryId, result.CategoryId);
-                Assert.AreEqual(newParcelDTO.ShipmentId, result.ShipmentId);
-                Assert.AreEqual(newParcelDTO.WarehouseId, result.WarehouseId);
+                Assert.AreEqual(updateParcelDTO.CustomerId, result.CustomerId);
+                Assert.AreEqual(updateParcelDTO.WarehouseId, result.WarehouseId);
+                Assert.AreEqual(updateParcelDTO.CategoryId, result.CategoryId);
+                Assert.AreEqual(updateParcelDTO.Weight, result.Weight);
+                Assert.AreEqual(updateParcelDTO.ShipmentId, result.ShipmentId);
             }
         }
 
         [TestMethod]
-        public void Throws_When_InputParcelCustomerId_NotFound()
+        public void Throws_When_UpdateInputCategoryId_NotFound()
         {
-            var options = Utils.GetOptions(nameof(Throws_When_InputParcelCustomerId_NotFound));
+            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputCategoryId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
+            var updateParcelDTO = new UpdateParcelDTO()
             {
-                Id = 1,
-                CategoryId = 1,
                 CustomerId = 1,
-                WarehouseId = 1,
                 ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
                 Weight = 1
             };
 
             using (var arrangeContext = new DeliverItContext(options))
             {
-                arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
-                arrangeContext.Categories.AddRange(Utils.SeedCategories());
-                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
-                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
-                arrangeContext.Cities.AddRange(Utils.SeedCities());
-                arrangeContext.SaveChanges();
-            }
-
-            using (var actContext = new DeliverItContext(options))
-            {
-                var sut = new ParcelService(actContext);
-
-                Assert.ThrowsException<ArgumentNullException>(() => sut.Create(newParcelDTO));
-            }
-        }
-
-        [TestMethod]
-        public void Throws_When_InputParcelWarehouseId_NotFound()
-        {
-            var options = Utils.GetOptions(nameof(Throws_When_InputParcelWarehouseId_NotFound));
-
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
-
-            using (var arrangeContext = new DeliverItContext(options))
-            {
-                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
-                arrangeContext.Categories.AddRange(Utils.SeedCategories());
-                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
-                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
-                arrangeContext.Cities.AddRange(Utils.SeedCities());
-                arrangeContext.SaveChanges();
-            }
-
-            using (var actContext = new DeliverItContext(options))
-            {
-                var sut = new ParcelService(actContext);
-
-                Assert.ThrowsException<ArgumentNullException>(() => sut.Create(newParcelDTO));
-            }
-        }
-
-        [TestMethod]
-        public void Throws_When_InputParcelCategoryId_NotFound()
-        {
-            var options = Utils.GetOptions(nameof(Throws_When_InputParcelCategoryId_NotFound));
-
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
-
-            using (var arrangeContext = new DeliverItContext(options))
-            {
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
@@ -149,27 +79,27 @@ namespace Tests.ServicesTests.ParcelServiceTests
             {
                 var sut = new ParcelService(actContext);
 
-                Assert.ThrowsException<ArgumentNullException>(() => sut.Create(newParcelDTO));
+                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
             }
         }
 
         [TestMethod]
-        public void Throws_When_InputParcelShipmentId_NotFound()
+        public void Throws_When_UpdateInputShipmentId_NotFound()
         {
-            var options = Utils.GetOptions(nameof(Throws_When_InputParcelShipmentId_NotFound));
+            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputShipmentId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
+            var updateParcelDTO = new UpdateParcelDTO()
             {
-                Id = 1,
-                CategoryId = 1,
                 CustomerId = 1,
-                WarehouseId = 1,
                 ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
                 Weight = 1
             };
 
             using (var arrangeContext = new DeliverItContext(options))
             {
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
@@ -182,32 +112,98 @@ namespace Tests.ServicesTests.ParcelServiceTests
             {
                 var sut = new ParcelService(actContext);
 
-                Assert.ThrowsException<ArgumentNullException>(() => sut.Create(newParcelDTO));
+                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
             }
         }
 
         [TestMethod]
-        public void Throws_When_InputParcelWeight_NotValid()
+        public void Throws_When_UpdateInputWarehouseId_NotFound()
         {
-            var options = Utils.GetOptions(nameof(Throws_When_InputParcelWeight_NotValid));
+            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputWarehouseId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
+            var updateParcelDTO = new UpdateParcelDTO()
             {
-                Id = 1,
-                CategoryId = 1,
                 CustomerId = 1,
-                WarehouseId = 1,
                 ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
+                Weight = 1
+            };
+
+            using (var arrangeContext = new DeliverItContext(options))
+            {
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
+                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
+                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
+                arrangeContext.Cities.AddRange(Utils.SeedCities());
+                arrangeContext.SaveChanges();
+            }
+
+            using (var actContext = new DeliverItContext(options))
+            {
+                var sut = new ParcelService(actContext);
+
+                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
+            }
+        }
+
+        [TestMethod]
+        public void Throws_When_UpdateInputCustomerId_NotFound()
+        {
+            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputCustomerId_NotFound));
+
+            var updateParcelDTO = new UpdateParcelDTO()
+            {
+                CustomerId = 1,
+                ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
+                Weight = 1
+            };
+
+            using (var arrangeContext = new DeliverItContext(options))
+            {
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
+                arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
+                arrangeContext.Cities.AddRange(Utils.SeedCities());
+                arrangeContext.SaveChanges();
+            }
+
+            using (var actContext = new DeliverItContext(options))
+            {
+                var sut = new ParcelService(actContext);
+
+                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
+            }
+        }
+
+       /* [TestMethod]
+        public void Throws_When_UpdateInputWieght_NotValid()
+        {
+            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputWieght_NotValid));
+
+            var updateParcelDTO = new UpdateParcelDTO()
+            {
+                CustomerId = 1,
+                ShipmentId = 1,
+                WarehouseId = 1,
+                CategoryId = 1,
                 Weight = 0
             };
 
             using (var arrangeContext = new DeliverItContext(options))
             {
-                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
+                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
+                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
-                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
             }
@@ -216,8 +212,8 @@ namespace Tests.ServicesTests.ParcelServiceTests
             {
                 var sut = new ParcelService(actContext);
 
-                Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.Create(newParcelDTO));
+                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
             }
-        }
+        }*/
     }
 }
