@@ -182,9 +182,9 @@ namespace DeliverIt.Services.Services
         /// <param name="value2">Value of the second filter.</param>
         /// <param name="sortBy1">First sort option for parcels.</param>
         /// <param name="sortBy2">Second sort option for parcels.</param>
-        /// <param name="sortingValue">Value of sorting order.</param>
+        /// <param name="order">Value of sorting order.</param>
         /// <returns></returns>
-        public List<ParcelDTO> GetBy(string filter1, string value1, string filter2, string value2, string sortBy1, string sortBy2, string sortingValue)
+        public List<ParcelDTO> GetBy(string filter1, string value1, string filter2, string value2, string sortBy1, string sortBy2, string order)
         {
             var allParcels = this.dbContext
                             .Parcels
@@ -386,7 +386,7 @@ namespace DeliverIt.Services.Services
                     case "warehouse":
                         foreach (var parcel in allParcels)
                         {
-                            if ((parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase))
+                            if (parcel.Category.Name.Equals(value1, StringComparison.OrdinalIgnoreCase)
                                 && (parcel.WarehouseId == int.Parse(value2)) && parcel.IsDeleted == false)
                             {
                                 var parcelDTO = new ParcelDTO(parcel);
@@ -404,7 +404,7 @@ namespace DeliverIt.Services.Services
             {
                 if (sortBy1 == "weight" && sortBy2 == null)
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = filteredParcels.OrderBy(p => p.Weight).ToList();
@@ -416,7 +416,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "arrival" && sortBy2 == null)
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = filteredParcels.OrderBy(p => p.ParcelArrival).ToList();
@@ -428,7 +428,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "weight" && sortBy2 == "arrival")
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = filteredParcels.OrderBy(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
@@ -440,7 +440,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "arrival" && sortBy2 == "weight")
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = filteredParcels.OrderBy(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
@@ -461,7 +461,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "weight" && sortBy2 == null)
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = allParcelsDTO.OrderBy(p => p.Weight).ToList();
@@ -473,7 +473,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "arrival" && sortBy2 == null)
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = allParcelsDTO.OrderBy(p => p.ParcelArrival).ToList();
@@ -485,7 +485,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "weight" && sortBy2 == "arrival")
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = allParcelsDTO.OrderBy(p => p.Weight).ThenBy(p => p.ParcelArrival).ToList();
@@ -497,7 +497,7 @@ namespace DeliverIt.Services.Services
                 }
                 if (sortBy1 == "arrival" && sortBy2 == "weight")
                 {
-                    switch (sortingValue)
+                    switch (order)
                     {
                         case "asc":
                             filteredParcels = allParcelsDTO.OrderBy(p => p.ParcelArrival).ThenBy(p => p.Weight).ToList();
