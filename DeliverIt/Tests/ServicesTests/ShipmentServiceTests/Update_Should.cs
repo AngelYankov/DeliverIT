@@ -2,6 +2,7 @@
 using DeliverIt.Services.Models.Update;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 
 namespace Tests.ServicesTests.ShipmentServiceTests
@@ -14,13 +15,11 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Return_Updated_Shipment));
 
-            var updateShipmentDTO = new UpdateShipmentDTO()
-            {
-                WarehouseId = 1,
-                StatusId = 1,
-                Departure = DateTime.UtcNow.AddDays(1),
-                Arrival = DateTime.UtcNow.AddDays(2)
-            };
+            var updateShipmentDTO = new Mock<UpdateShipmentDTO>().Object;
+            updateShipmentDTO.WarehouseId = 1;
+            updateShipmentDTO.StatusId = 1;
+            updateShipmentDTO.Departure = DateTime.UtcNow.AddDays(1);
+            updateShipmentDTO.Arrival = DateTime.UtcNow.AddDays(2);
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -48,14 +47,11 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_UpdateShipmentInputWarehouseId_NotFound));
 
-            var updateShipmentDTO = new UpdateShipmentDTO()
-            {
-                WarehouseId = 1,
-                StatusId = 1,
-                Departure = DateTime.UtcNow.AddDays(1),
-                Arrival = DateTime.UtcNow.AddDays(2)
-
-            };
+            var updateShipmentDTO = new Mock<UpdateShipmentDTO>().Object;
+            updateShipmentDTO.WarehouseId = 1;
+            updateShipmentDTO.StatusId = 1;
+            updateShipmentDTO.Departure = DateTime.UtcNow.AddDays(1);
+            updateShipmentDTO.Arrival = DateTime.UtcNow.AddDays(2);
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -77,14 +73,11 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_UpdateShipmentInputStatusId_NotFound));
 
-            var updateShipmentDTO = new UpdateShipmentDTO()
-            {
-                WarehouseId = 1,
-                StatusId = 1,
-                Departure = DateTime.UtcNow.AddDays(1),
-                Arrival = DateTime.UtcNow.AddDays(2)
-
-            };
+            var updateShipmentDTO = new Mock<UpdateShipmentDTO>().Object;
+            updateShipmentDTO.WarehouseId = 1;
+            updateShipmentDTO.StatusId = 1;
+            updateShipmentDTO.Departure = DateTime.UtcNow.AddDays(1);
+            updateShipmentDTO.Arrival = DateTime.UtcNow.AddDays(2);
 
             using (var arrangeContext = new DeliverItContext(options))
             {

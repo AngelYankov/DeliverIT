@@ -2,6 +2,7 @@
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -15,12 +16,10 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Return_Created_Shipment));
 
-            var newShipmentDTO = new NewShipmentDTO()
-            {
-                Id = 1,
-                WarehouseId = 1,
-                StatusId = 1
-            };
+            var newShipmentDTO = new Mock<NewShipmentDTO>().Object;
+            newShipmentDTO.Id = 1;
+            newShipmentDTO.WarehouseId = 1;
+            newShipmentDTO.StatusId = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -47,12 +46,10 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputShipmentWarehouseId_NotFound));
 
-            var newShipmentDTO = new NewShipmentDTO()
-            {
-                Id = 1,
-                WarehouseId = 1,
-                StatusId = 1
-            };
+            var newShipmentDTO = new Mock<NewShipmentDTO>().Object;
+            newShipmentDTO.Id = 1;
+            newShipmentDTO.WarehouseId = 1;
+            newShipmentDTO.StatusId = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -74,12 +71,10 @@ namespace Tests.ServicesTests.ShipmentServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputShipmentStatusId_NotFound));
 
-            var newShipmentDTO = new NewShipmentDTO()
-            {
-                Id = 1,
-                WarehouseId = 1,
-                StatusId = 1
-            };
+            var newShipmentDTO = new Mock<NewShipmentDTO>().Object;
+            newShipmentDTO.Id = 1;
+            newShipmentDTO.WarehouseId = 1;
+            newShipmentDTO.StatusId = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
