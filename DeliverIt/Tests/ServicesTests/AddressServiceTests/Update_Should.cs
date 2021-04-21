@@ -3,6 +3,7 @@ using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -15,13 +16,10 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void ReturnUpdatedAddress()
         {
             var options = Utils.GetOptions(nameof(ReturnUpdatedAddress));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Orel",
-                CityId = 1,
-                WarehouseId=1
-            };
-
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Orel";
+            newAddressDTO.CityId = 1;
+            newAddressDTO.WarehouseId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Addresses.AddRange(Utils.SeedAddresses());
@@ -32,7 +30,7 @@ namespace Tests.ServicesTests.AddressServiceTests
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new AddressService(actContext);
-                var result = sut.Update(1,newAddressDTO);
+                var result = sut.Update(1, newAddressDTO);
                 var address = actContext.Addresses.FirstOrDefault(a => a.Id == 1);
                 Assert.AreEqual(address.Id, result.Id);
                 Assert.AreEqual(address.StreetName, result.Address.StreetName);
@@ -45,12 +43,10 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void Throw_When_InvalidCityId()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidCityId));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Orel",
-                CityId = 100,
-                WarehouseId = 1
-            };
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Orel";
+            newAddressDTO.CityId = 100;
+            newAddressDTO.WarehouseId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Addresses.AddRange(Utils.SeedAddresses());
@@ -67,12 +63,10 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void Throw_When_InvalidAddressId()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidAddressId));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Orel",
-                CityId = 1,
-                WarehouseId = 1
-            };
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Orel";
+            newAddressDTO.CityId = 1;
+            newAddressDTO.WarehouseId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Addresses.AddRange(Utils.SeedAddresses());
@@ -89,12 +83,10 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void Throw_When_InvalidWarehouseId()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidWarehouseId));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Orel",
-                CityId = 1,
-                WarehouseId = 100
-            };
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Orel";
+            newAddressDTO.CityId = 1;
+            newAddressDTO.WarehouseId = 100;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Addresses.AddRange(Utils.SeedAddresses());

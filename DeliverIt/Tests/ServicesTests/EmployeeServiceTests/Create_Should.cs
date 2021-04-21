@@ -4,6 +4,7 @@ using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -16,20 +17,16 @@ namespace Tests.ServicesTests.EmployeeServiceTests
         public void ReturnNewEmployee()
         {
             var options = Utils.GetOptions(nameof(ReturnNewEmployee));
-            var newEmployeeDTO = new NewEmployeeDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
-            var employee = new Employee()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
+            var newEmployeeDTO = new Mock<NewEmployeeDTO>().Object;
+            newEmployeeDTO.FirstName = "John";
+            newEmployeeDTO.LastName = "Smith";
+            newEmployeeDTO.Email = "john.smith@gmail.com";
+            newEmployeeDTO.AddressId = 1;
+            var employee = new Mock<Employee>().Object;
+            employee.FirstName = "John";
+            employee.LastName = "Smith";
+            employee.Email = "john.smith@gmail.com";
+            employee.AddressId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Employees.Add(employee);
@@ -54,13 +51,11 @@ namespace Tests.ServicesTests.EmployeeServiceTests
         public void Throw_When_InvalidAddress()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidAddress));
-            var newEmployeeDTO = new NewEmployeeDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 13
-            };
+            var newEmployeeDTO = new Mock<NewEmployeeDTO>().Object;
+            newEmployeeDTO.FirstName = "John";
+            newEmployeeDTO.LastName = "Smith";
+            newEmployeeDTO.Email = "john.smith@gmail.com";
+            newEmployeeDTO.AddressId = 13;
             using (var actContext = new DeliverItContext(options))
             {
                 var sutHelp = new AddressService(actContext);

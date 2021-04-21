@@ -2,6 +2,7 @@
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Linq;
 
 namespace Tests.ServicesTests.CategoryServiceTests
@@ -13,16 +14,13 @@ namespace Tests.ServicesTests.CategoryServiceTests
         public void ReturnNameOfCreatedCategory()
         {
             var options = Utils.GetOptions(nameof(ReturnNameOfCreatedCategory));
-            var category = new Category()
-            {
-                Name = "Test category"
-            };
+            var category = new Mock<Category>().Object;
+            category.Name = "Test category";
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Categories.Add(category);
                 arrContext.SaveChanges();
             }
-
             using (var actContext = new DeliverItContext(options))
             {
                 var sut = new CategoryService(actContext);

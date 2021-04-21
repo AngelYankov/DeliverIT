@@ -2,6 +2,7 @@
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -14,10 +15,8 @@ namespace Tests.ServicesTests.WarehouseServiceTests
         public void ReturnUpdatedWarehouse()
         {
             var options = Utils.GetOptions(nameof(ReturnUpdatedWarehouse));
-            var newWarehouseDTO = new NewWarehouseDTO()
-            {
-                AddressId = 3
-            };
+            var newWarehouseDTO = new Mock<NewWarehouseDTO>().Object;
+            newWarehouseDTO.AddressId = 3;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Warehouses.AddRange(Utils.SeedWarehouses());
@@ -49,10 +48,8 @@ namespace Tests.ServicesTests.WarehouseServiceTests
         public void Throw_When_InvalidAddressId()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidAddressId));
-            var newWarehouseDTO = new NewWarehouseDTO()
-            {
-                AddressId = 1
-            };
+            var newWarehouseDTO = new Mock<NewWarehouseDTO>().Object;
+            newWarehouseDTO.AddressId = 1;
             using (var actContext = new DeliverItContext(options))
             {
                 var sutHelp = new AddressService(actContext);

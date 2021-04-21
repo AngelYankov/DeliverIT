@@ -4,6 +4,7 @@ using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -16,17 +17,12 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void ReturnCreatedCustomer()
         {
             var options = Utils.GetOptions(nameof(ReturnCreatedCustomer));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Ivan Vazov",
-                CityId = 1,
-            };
-            var address = new Address()
-            {
-                StreetName = "Ivan Vazov",
-                CityID = 1,
-                CreatedOn = DateTime.UtcNow
-            };
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Ivan Vazov";
+            newAddressDTO.CityId = 1;
+            var address = new Mock<Address>().Object;
+            address.StreetName = "Ivan Vazov";
+            address.CityID = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.AddRange(Utils.SeedCities());
@@ -48,12 +44,9 @@ namespace Tests.ServicesTests.AddressServiceTests
         public void Throw_When_InvalidCity()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidCity));
-            var newAddressDTO = new NewAddressDTO()
-            {
-                StreetName = "Ivan Vazov",
-                CityId = 100,
-            };
-            
+            var newAddressDTO = new Mock<NewAddressDTO>().Object;
+            newAddressDTO.StreetName = "Ivan Vazov";
+            newAddressDTO.CityId = 100;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.AddRange(Utils.SeedCities());

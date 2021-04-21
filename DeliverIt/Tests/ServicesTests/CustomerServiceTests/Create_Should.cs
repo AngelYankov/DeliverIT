@@ -4,6 +4,7 @@ using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -16,20 +17,16 @@ namespace Tests.ServicesTests.CustomerServiceTests
         public void ReturnNewCustomer()
         {
             var options = Utils.GetOptions(nameof(ReturnNewCustomer));
-            var newCustomerDTO = new NewCustomerDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
-            var customer = new Customer()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
+            var newCustomerDTO = new Mock<NewCustomerDTO>().Object;
+            newCustomerDTO.FirstName = "John";
+            newCustomerDTO.LastName = "Smith";
+            newCustomerDTO.Email = "john.smith@gmail.com";
+            newCustomerDTO.AddressId = 1;
+            var customer = new Mock<Customer>().Object;
+            customer.FirstName = "John";
+            customer.LastName = "Smith";
+            customer.Email = "john.smith@gmail.com";
+            customer.AddressId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Customers.Add(customer);
@@ -54,13 +51,11 @@ namespace Tests.ServicesTests.CustomerServiceTests
         public void Throw_When_InvalidAddress()
         {
             var options = Utils.GetOptions(nameof(Throw_When_InvalidAddress));
-            var newCustomerDTO = new NewCustomerDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 13
-            };
+            var newCustomerDTO = new Mock<NewCustomerDTO>().Object;
+            newCustomerDTO.FirstName = "John";
+            newCustomerDTO.LastName = "Smith";
+            newCustomerDTO.Email = "john.smith@gmail.com";
+            newCustomerDTO.AddressId = 13;
             using (var actContext = new DeliverItContext(options))
             {
                 var sutHelp = new AddressService(actContext);

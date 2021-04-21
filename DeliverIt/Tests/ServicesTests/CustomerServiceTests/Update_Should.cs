@@ -17,13 +17,11 @@ namespace Tests.ServicesTests.CustomerServiceTests
         public void ReturnUpdatedCustomer()
         {
             var options = Utils.GetOptions(nameof(ReturnUpdatedCustomer));
-            var updateCustomerDTO = new UpdateCustomerDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
+            var updateCustomerDTO = new Mock<UpdateCustomerDTO>().Object;
+            updateCustomerDTO.FirstName = "John";
+            updateCustomerDTO.LastName = "Smith";
+            updateCustomerDTO.Email = "john.smith@gmail.com";
+            updateCustomerDTO.AddressId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Customers.AddRange(Utils.SeedCustomers());
@@ -60,13 +58,11 @@ namespace Tests.ServicesTests.CustomerServiceTests
         public void Update_Throw_When_InvalidAddressId()
         {
             var options = Utils.GetOptions(nameof(Update_Throw_When_InvalidAddressId));
-            var updateCustomerDTO = new UpdateCustomerDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 20
-            };
+            var updateCustomerDTO = new Mock<UpdateCustomerDTO>().Object;
+            updateCustomerDTO.FirstName = "John";
+            updateCustomerDTO.LastName = "Smith";
+            updateCustomerDTO.Email = "john.smith@gmail.com";
+            updateCustomerDTO.AddressId = 20;
             using (var actContext = new DeliverItContext(options))
             {
                 var sutHelp = new AddressService(actContext);

@@ -17,13 +17,11 @@ namespace Tests.ServicesTests.EmployeeServiceTests
         public void ReturnUpdatedEmployee()
         {
             var options = Utils.GetOptions(nameof(ReturnUpdatedEmployee));
-            var updateEmployeeDTO = new UpdateEmployeeDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 1
-            };
+            var updateEmployeeDTO = new Mock<UpdateEmployeeDTO>().Object;
+            updateEmployeeDTO.FirstName = "John";
+            updateEmployeeDTO.LastName = "Smith";
+            updateEmployeeDTO.Email = "john.smith@gmail.com";
+            updateEmployeeDTO.AddressId = 1;
             using (var arrContext = new DeliverItContext(options))
             {
                 arrContext.Employees.AddRange(Utils.SeedEmployees());
@@ -60,13 +58,11 @@ namespace Tests.ServicesTests.EmployeeServiceTests
         public void Update_Throw_When_InvalidAddressId()
         {
             var options = Utils.GetOptions(nameof(Update_Throw_When_InvalidAddressId));
-            var updateEmployeerDTO = new UpdateEmployeeDTO()
-            {
-                FirstName = "John",
-                LastName = "Smith",
-                Email = "john.smith@gmail.com",
-                AddressId = 20
-            };
+            var updateEmployeerDTO = new Mock<UpdateEmployeeDTO>().Object;
+            updateEmployeerDTO.FirstName = "John";
+            updateEmployeerDTO.LastName = "Smith";
+            updateEmployeerDTO.Email = "john.smith@gmail.com";
+            updateEmployeerDTO.AddressId = 20;
             using (var actContext = new DeliverItContext(options))
             {
                 var sutHelp = new AddressService(actContext);
