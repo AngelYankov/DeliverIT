@@ -1,9 +1,6 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DeliverIt.Web.Helpers
 {

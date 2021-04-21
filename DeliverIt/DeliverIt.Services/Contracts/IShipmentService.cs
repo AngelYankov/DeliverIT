@@ -1,10 +1,7 @@
-﻿using DeliverIt.Data.Models;
-using DeliverIt.Services.Models;
+﻿using DeliverIt.Services.Models;
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Models.Update;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeliverIt.Services.Contracts
 {

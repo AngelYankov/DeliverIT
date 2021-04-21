@@ -1,11 +1,7 @@
 ﻿using DeliverIt.Services.Contracts;
 using DeliverIt.Web.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DeliverIt.Web.Controllers
 {

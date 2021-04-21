@@ -1,5 +1,4 @@
-﻿using DeliverIt.Data.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace DeliverIt.Services.Models.Create
