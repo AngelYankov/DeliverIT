@@ -24,6 +24,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Parcels.AddRange(parcels);

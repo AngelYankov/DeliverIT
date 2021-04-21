@@ -23,6 +23,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());

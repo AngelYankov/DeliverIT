@@ -15,6 +15,7 @@ namespace DeliverIt.Services.Models
             WarehouseAddress = parcel.Warehouse.Address.StreetName;
             WarehouseCity = parcel.Warehouse.Address.City.Name;
             ParcelArrival = parcel.Shipment.Arrival.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            ShipmentStatus = parcel.Shipment.Status.Name;
             Category = parcel.Category.Name;
             Weight = parcel.Weight;
             CustomerId = parcel.CustomerId;
@@ -38,6 +39,7 @@ namespace DeliverIt.Services.Models
         [JsonIgnore]
         public int CategoryId { get; set; }
         public string Category { get; set; }
+        public string ShipmentStatus { get; set; }
         public double Weight { get; set; }
     }
 }
