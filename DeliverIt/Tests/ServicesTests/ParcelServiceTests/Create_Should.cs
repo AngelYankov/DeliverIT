@@ -2,6 +2,7 @@
 using DeliverIt.Services.Models.Create;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -15,15 +16,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Return_Created_Parcel));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -56,15 +55,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputParcelCustomerId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -90,15 +87,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputParcelWarehouseId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -124,15 +119,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputParcelCategoryId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -158,15 +151,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputParcelShipmentId_NotFound));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 1
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 1;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
@@ -192,15 +183,13 @@ namespace Tests.ServicesTests.ParcelServiceTests
         {
             var options = Utils.GetOptions(nameof(Throws_When_InputParcelWeight_NotValid));
 
-            var newParcelDTO = new NewParcelDTO()
-            {
-                Id = 1,
-                CategoryId = 1,
-                CustomerId = 1,
-                WarehouseId = 1,
-                ShipmentId = 1,
-                Weight = 0
-            };
+            var newParcelDTO = new Mock<NewParcelDTO>().Object;
+            newParcelDTO.Id = 1;
+            newParcelDTO.CategoryId = 1;
+            newParcelDTO.CustomerId = 1;
+            newParcelDTO.WarehouseId = 1;
+            newParcelDTO.ShipmentId = 1;
+            newParcelDTO.Weight = 0;
 
             using (var arrangeContext = new DeliverItContext(options))
             {
