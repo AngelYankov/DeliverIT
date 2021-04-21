@@ -17,7 +17,7 @@ namespace DeliverIt.Services.Services
         private readonly DeliverItContext dbContext;
         private readonly IAddressService addressService;
 
-        public CustomerService(DeliverItContext dbContext,IAddressService addressService)
+        public CustomerService(DeliverItContext dbContext, IAddressService addressService)
         {
             this.dbContext = dbContext;
             this.addressService = addressService;
@@ -107,36 +107,63 @@ namespace DeliverIt.Services.Services
         /// <param name="value">Value of the filter</param>
         /// <param name="order">Asc or Desc</param>
         /// <returns>Returns all filtered customers.</returns>
-        public IEnumerable<CustomerDTO> SearchBy(string filter, string value, string order)
+        public IEnumerable<CustomerDTO> SearchBy(string filter, string value,string filter2,string value2, string order)
         {
             var allCustomers = this.dbContext.Customers
                                              .Include(c => c.Address)
                                              .ThenInclude(a => a.City)
                                              .Where(c => c.IsDeleted == false)
-                                             .Select(c => new CustomerDTO(c))
                                              .ToList();
+            var filtered = new List<Customer>();
             switch (filter)
             {
                 case "firstName":
+                    var temp = new List<Customer>().AsEnumerable();
+                    if (filter2 == "lastName")
+                    {
+                        temp = allCustomers.Where(c => c.IsDeleted == false && c.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase) && c.LastName.Equals(value2, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (filter2==null)
+                    {
+                        temp = allCustomers.Where(c => c.IsDeleted == false && c.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase));
+                    }
                     if (order == "desc")
                     {
-                        return allCustomers.Where(c => c.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(c => c.FirstName);
+                        filtered.AddRange(temp.OrderByDescending(c=>c.FirstName).ThenByDescending(c=>c.LastName));
                     }
-                    else return allCustomers.Where(c => c.FirstName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderBy(c => c.FirstName);
+                    else filtered.AddRange(temp.OrderBy(c => c.FirstName).ThenBy(c=>c.LastName));
+                    break;
                 case "lastName":
+                    var temp2 = new List<Customer>().AsEnumerable();
+                    if (filter2 == "firstName")
+                    {
+                        temp2 = allCustomers.Where(c => c.IsDeleted == false && c.FirstName.Equals(value2, StringComparison.OrdinalIgnoreCase) && c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (filter2 == null)
+                    {
+                        temp2 = allCustomers.Where(c => c.IsDeleted == false && c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase));
+                    }
                     if (order == "desc")
                     {
-                        return allCustomers.Where(c => c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(c => c.LastName);
+                        filtered.AddRange(temp2.OrderByDescending(c => c.LastName).ThenByDescending(c=>c.FirstName));
                     }
-                    else return allCustomers.Where(c => c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase)).OrderBy(c => c.LastName);
+                    else filtered.AddRange(temp2.OrderBy(c => c.LastName).ThenBy(c=>c.FirstName));
+                    break;
                 case "email":
+                    var temp3 = allCustomers.Where(c => c.IsDeleted == false && c.Email != null && c.Email.Contains(value, StringComparison.OrdinalIgnoreCase));
                     if (order == "desc")
                     {
-                        return allCustomers.Where(c => c.Email != null && c.Email.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderByDescending(c => c.Email);
+                        filtered.AddRange(temp3.OrderByDescending(c => c.Email));
                     }
-                    else return allCustomers.Where(c => c.Email != null && c.Email.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderBy(c => c.Email);
-                default: throw new ArgumentException("Invalid filter.");
+                    else filtered.AddRange(temp3.OrderBy(c => c.Email));
+                    break;
+                default: throw new ArgumentException(Exceptions.InvalidCustomer);
             }
+            if (filtered.Count()==0)
+            {
+                throw new ArgumentException(Exceptions.InvalidFilteredCustomers);
+            }
+            return filtered.Select(c => new CustomerDTO(c));
         }
         /// <summary>
         /// Finds a customer with ID.
@@ -178,7 +205,7 @@ namespace DeliverIt.Services.Services
         public int GetAllCount()
         {
             var allCustomersCount = this.dbContext.Customers.Count();
-           
+
             return allCustomersCount;
         }
     }

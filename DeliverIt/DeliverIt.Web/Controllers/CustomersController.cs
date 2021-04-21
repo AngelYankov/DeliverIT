@@ -143,16 +143,18 @@ namespace DeliverIt.Web.Controllers
         /// </summary>
         /// <param name="authorizationName">Username to validate.</param>
         /// <param name="filter">firstName/lastName/email</param>
-        /// <param name="value">Value of the filter.</param>
+        /// <param name="value">Value of filter.</param>
+        /// <param name="filter2">firstName/LastName.</param>
+        /// <param name="value2">Value of filter.</param>
         /// <param name="order">asc/desc</param>
         /// <returns></returns>
         [HttpGet("filtering&sorting")]
-        public IActionResult GetBy([FromHeader] string authorizationName, [FromQuery] string filter, string value, string order)
+        public IActionResult GetBy([FromHeader] string authorizationName, [FromQuery] string filter, string value, string filter2, string value2, string order)
         {
             try
             {
                 this.authHelper.TryGetEmployee(authorizationName);
-                var filtered = this.customerService.SearchBy(filter, value, order);
+                var filtered = this.customerService.SearchBy(filter, value,filter2,value2, order);
                 return Ok(filtered);
             }
             catch (Exception e)

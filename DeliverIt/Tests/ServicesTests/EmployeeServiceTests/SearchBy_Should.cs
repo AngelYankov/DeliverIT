@@ -58,6 +58,38 @@ namespace Tests.ServicesTests.EmployeeServiceTests
             string filter = "lastName";
             string value = "shapkov";
             string order = "desc";
+            using (var arrContext = new DeliverItContext(options))
+            {
+                arrContext.Employees.AddRange(Utils.SeedEmployees());
+                arrContext.Addresses.AddRange(Utils.SeedAddresses());
+                arrContext.Cities.AddRange(Utils.SeedCities());
+                arrContext.SaveChanges();
+            }
+            using (var actContext = new DeliverItContext(options))
+            {
+                var mock = new Mock<IAddressService>();
+                var sut = new EmployeeService(actContext, mock.Object);
+                var result = sut.SearchBy(filter, value, order);
+                var filtered = actContext.Employees
+                    .Where(c => c.LastName.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(c => c.LastName);
+                Assert.AreEqual(string.Join(", ", filtered.Select(c => new EmployeeDTO(c))), string.Join(", ", result));
+            }
+        }
+        [TestMethod]
+        public void ReturnFilteredEmployeesBy2Criteria()
+        {
+            var options = Utils.GetOptions(nameof(ReturnFilteredEmployeesBy2Criteria));
+            string filter = "lastName";
+            string value = "shapkov";
+            string order = "desc";
+            using (var arrContext = new DeliverItContext(options))
+            {
+                arrContext.Employees.AddRange(Utils.SeedEmployees());
+                arrContext.Addresses.AddRange(Utils.SeedAddresses());
+                arrContext.Cities.AddRange(Utils.SeedCities());
+                arrContext.SaveChanges();
+            }
             using (var actContext = new DeliverItContext(options))
             {
                 var mock = new Mock<IAddressService>();

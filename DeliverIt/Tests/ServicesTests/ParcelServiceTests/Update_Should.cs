@@ -3,8 +3,6 @@ using DeliverIt.Services.Models.Update;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tests.ServicesTests.ParcelServiceTests
 {
@@ -30,6 +28,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
@@ -69,6 +68,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
@@ -102,6 +102,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
@@ -135,6 +136,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Parcels.AddRange(Utils.SeedParcels());
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
@@ -169,6 +171,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
@@ -181,39 +184,5 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
             }
         }
-
-       /* [TestMethod]
-        public void Throws_When_UpdateInputWieght_NotValid()
-        {
-            var options = Utils.GetOptions(nameof(Throws_When_UpdateInputWieght_NotValid));
-
-            var updateParcelDTO = new UpdateParcelDTO()
-            {
-                CustomerId = 1,
-                ShipmentId = 1,
-                WarehouseId = 1,
-                CategoryId = 1,
-                Weight = 0
-            };
-
-            using (var arrangeContext = new DeliverItContext(options))
-            {
-                arrangeContext.Parcels.AddRange(Utils.SeedParcels());
-                arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
-                arrangeContext.Customers.AddRange(Utils.SeedCustomers());
-                arrangeContext.Shipments.AddRange(Utils.SeedShipments());
-                arrangeContext.Categories.AddRange(Utils.SeedCategories());
-                arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
-                arrangeContext.Cities.AddRange(Utils.SeedCities());
-                arrangeContext.SaveChanges();
-            }
-
-            using (var actContext = new DeliverItContext(options))
-            {
-                var sut = new ParcelService(actContext);
-
-                Assert.ThrowsException<ArgumentNullException>(() => sut.Update(1, updateParcelDTO));
-            }
-        }*/
     }
 }

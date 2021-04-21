@@ -35,6 +35,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
@@ -74,6 +75,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
@@ -107,6 +109,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
                 arrangeContext.SaveChanges();
@@ -139,6 +142,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
             {
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
@@ -172,6 +176,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
             {
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());
@@ -206,6 +211,7 @@ namespace Tests.ServicesTests.ParcelServiceTests
                 arrangeContext.Customers.AddRange(Utils.SeedCustomers());
                 arrangeContext.Warehouses.AddRange(Utils.SeedWarehouses());
                 arrangeContext.Categories.AddRange(Utils.SeedCategories());
+                arrangeContext.Statuses.AddRange(Utils.SeedStatuses());
                 arrangeContext.Addresses.AddRange(Utils.SeedAddresses());
                 arrangeContext.Shipments.AddRange(Utils.SeedShipments());
                 arrangeContext.Cities.AddRange(Utils.SeedCities());

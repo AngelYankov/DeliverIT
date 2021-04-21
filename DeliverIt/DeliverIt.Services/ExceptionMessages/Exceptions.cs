@@ -29,6 +29,8 @@ namespace DeliverIt.Services
         public const string NoCustomers = "There are no customers.";
         public const string NoShipments = "There are no shipments.";
         public const string InvalidWeight = "The weight should be between 0.1 and 500 kg.";
+        public const string InvalidFilter = "Invalid filter";
+        public const string InvalidFilteredCustomers = "There are no such customers.";
 
     }
 }
