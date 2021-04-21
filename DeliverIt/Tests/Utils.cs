@@ -1,10 +1,8 @@
 using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Tests
 {

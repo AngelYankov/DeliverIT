@@ -4,10 +4,7 @@ using DeliverIt.Services.Models;
 using DeliverIt.Services.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Tests.ServicesTests.WarehouseServiceTests
 {

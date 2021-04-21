@@ -1,12 +1,8 @@
 ﻿using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
-using DeliverIt.Services.Models;
 using DeliverIt.Web.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tests.WebTests.AuthHelperTests
 {

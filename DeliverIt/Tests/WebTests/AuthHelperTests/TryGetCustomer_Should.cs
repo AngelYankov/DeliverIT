@@ -3,9 +3,6 @@ using DeliverIt.Services.Contracts;
 using DeliverIt.Web.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tests.WebTests.AuthHelperTests
 {
