@@ -2,6 +2,7 @@ using DeliverIt.Data;
 using DeliverIt.Services.Contracts;
 using DeliverIt.Services.ModelsServices;
 using DeliverIt.Services.Services;
+using DeliverIt.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.IO;
 using System.Reflection;
-using System;
-using DeliverIt.Web.Helpers;
 
 namespace DeliverIt.Web
 {

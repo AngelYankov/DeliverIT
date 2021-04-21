@@ -1,7 +1,5 @@
-﻿using DeliverIt.Data.Audit;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliverIt.Data.Models
 {

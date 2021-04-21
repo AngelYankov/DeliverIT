@@ -1,12 +1,10 @@
 ﻿using DeliverIt.Data;
 using DeliverIt.Data.Models;
 using DeliverIt.Services.Contracts;
+using DeliverIt.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using DeliverIt.Services.Models;
 
 namespace DeliverIt.Services.Services
 {

@@ -1,5 +1,4 @@
-﻿using DeliverIt.Data.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DeliverIt.Services.ModelsServices
 {

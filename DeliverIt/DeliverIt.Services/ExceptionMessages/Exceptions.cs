@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DeliverIt.Services
+﻿namespace DeliverIt.Services
 {
     public static class Exceptions
     {
